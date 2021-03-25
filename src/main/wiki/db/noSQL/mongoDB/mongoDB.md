@@ -42,7 +42,7 @@ db.users.insertOne(
         "email": "george@goo.com",
         "age": 22,
         "hasCar": false,
-        "birthday":new Date('1996-11-27')
+        "birthday": new Date('1996-11-27')
     }
 )
 
@@ -62,14 +62,14 @@ db.users.insertMany([
         "email": "bob@goo.com",
         "age": 37,
         "hasCar": false,
-        "birthday":new Date('1996-11-27')
+        "birthday": new Date('1996-11-27')
     },
     {
         "name": "Carl",
         "email": "carl@goo.com",
         "age": 32,
         "hasCar": false,
-        "birthday":new Date('1993-10-20')
+        "birthday": new Date('1993-10-20')
     }
 ])
 
@@ -133,11 +133,11 @@ db.users.find({$or: [{age: 22}, {email: "jack@goo.com"}]}, {_id: 0})
 ```
 
 #### Выбока на значение больше чем (\$gt) и меньше чем (\$lt)
-- `\$gt` - больше чем;
-- `\$lt` - меньше чем;
-- `\$lte` - меньше или равно;
-- `\$gte` - больше или равно;
-- `\$eq` - равно
+- \$gt - больше чем;
+- \$lt - меньше чем;
+- \$lte - меньше или равно;
+- \$gte - больше или равно;
+- \$eq - равно
 ```javascript
 // запрос
 db.users.find({$or: [{age: 22}, {email: "jack@goo.com"}]}, {_id: 0})
