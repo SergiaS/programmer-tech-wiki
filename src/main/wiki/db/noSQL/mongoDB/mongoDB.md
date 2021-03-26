@@ -391,7 +391,7 @@ db.articles.find(
     }
 })
 ```
-```json
+```javascript
 // response
 {
     "_id": ObjectId(
