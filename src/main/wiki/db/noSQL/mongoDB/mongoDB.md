@@ -1,7 +1,8 @@
+## MongoDB
+
 Любой объект, который будет записан  в коллекцию - это будет JavaScript объект.
 
-## Intro
-### Прежде чем использовать конкретные команды, необходимо сначала указать коллекцию, с которой будем работать.
+> Прежде чем использовать конкретные команды, необходимо сначала указать коллекцию, с которой будем работать.
 
 #### Использует конкретную таблицу:
 ```javascript
@@ -461,20 +462,21 @@ db.users.aggregate([
 ```
 
 ## Articles
-[a link] (https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/)
+[Install MongoDB Community Edition on Windows](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/)
+
 
 ### Run MongoDB Community Edition from the Command Interpreter
 You can run MongoDB Community Edition from the Windows command prompt/interpreter (cmd.exe).
 Open a Windows command prompt/interpreter (cmd.exe) as an __Administrator__.
 
-## Start your MongoDB database
+### Start your MongoDB database
 To start MongoDB, run `mongod.exe`
 ```shell
 "C:\Program Files\MongoDB\Server\4.4\bin\mongod.exe" --dbpath="c:\data\db"
 ```
 *The --dbpath option points to your database directory.*
 
-## Connect to MongoDB 
+### Connect to MongoDB 
 ```shell
 "C:\Program Files\MongoDB\Server\4.4\bin\mongo.exe"
 ```
