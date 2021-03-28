@@ -1,11 +1,11 @@
 ## MongoDB
 
-<detail>
+<details>
 <summary>"Click to expand"</summary>
 
-- [Источник: Гоша Дударь]()
-  * [Вступление]()
-    * [Сначала выбираем конкретную таблицу]()
+- [Источник: Гоша Дударь](#источник-гоша-дударь)
+  * [Вступление](#вступление)
+    * [Сначала выбираем конкретную таблицу](#сначала-выбираем-конкретную-таблицу)
     * [После создания БД нужно создать коллекцию](#после-создания-бд-нужно-создать-коллекцию)
     * [Удалить коллекцию](#удалить-коллекцию) 
     * [Команда для добавления одной конкретной записи](#команда-для-добавления-одной-конкретной-записи) 
@@ -49,8 +49,8 @@
     * [Работа с коллекциями](#работа-с-коллекциями)
     * [Работа с индексами](#работа-с-индексами)
     * [Работа с документами](#работа-с-документами)
-  
-</detail>
+
+</details>
 
 # Источник: Гоша Дударь
 Любой объект, который будет записан  в коллекцию - это будет JavaScript объект.
@@ -535,11 +535,11 @@ To start MongoDB, run `mongod.exe`
 ```shell
 "C:\Program Files\MongoDB\Server\4.4\bin\mongo.exe"
 ```
-<p align="center"> + + + NEXT + + +</p>
+<p style="color:blueviolet; text-align: center; font-weight: bold">+ + + NEXT + + +</p>
 
 > When Mongo sees that database doesn't exist, it will create it for us<br>
 > ### SOURCE: [GitHub](https://github.com/eugenp/tutorials/blob/master/persistence-modules/java-mongodb/src/main/java/com/baeldung/MongoExample.java) and article - **[A Guide to MongoDB with Java](https://www.baeldung.com/java-mongodb)**
-<p align="center"> + + + NEXT + + +</p>
+<p style="color:blueviolet; text-align: center; font-weight: bold">+ + + NEXT + + +</p>
 
 > ### [Java и MongoDB: базовые операции](https://alexkosarev.name/2019/01/30/java-and-mongo-basic-operations/)
 
@@ -709,4 +709,4 @@ try (var mongoClient = MongoClients.create()) {
     todoCollection.deleteMany(new Document("done", true));
 }
 ```
-<p align="center"> + + + NEXT + + +</p>
+<p style="color:blueviolet; text-align: center; font-weight: bold">+ + + NEXT + + +</p>
