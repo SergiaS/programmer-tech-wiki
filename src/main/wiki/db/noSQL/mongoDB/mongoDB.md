@@ -461,9 +461,8 @@ db.users.aggregate([
 ])
 ```
 
-## Articles
-[Install MongoDB Community Edition on Windows](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/)
-
+## Articles and interesting quotes
+> [Install MongoDB Community Edition on Windows](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/)
 
 ### Run MongoDB Community Edition from the Command Interpreter
 You can run MongoDB Community Edition from the Windows command prompt/interpreter (cmd.exe).
@@ -480,4 +479,169 @@ To start MongoDB, run `mongod.exe`
 ```shell
 "C:\Program Files\MongoDB\Server\4.4\bin\mongo.exe"
 ```
+<center> + + + NEXT + + +</center>
 
+> When Mongo sees that database doesn't exist, it will create it for us<br>
+> ### SOURCE: [GitHub](https://github.com/eugenp/tutorials/blob/master/persistence-modules/java-mongodb/src/main/java/com/baeldung/MongoExample.java) and article - **[A Guide to MongoDB with Java](https://www.baeldung.com/java-mongodb)**
+<center> + + + NEXT + + +</center>
+
+> ### [Java и MongoDB: базовые операции](https://alexkosarev.name/2019/01/30/java-and-mongo-basic-operations/)
+
+### Подключение к MongoDB
+- `MongoClients.create()`.
+```java
+try (var mongoClient = MongoClients.create()) {
+    // statements
+}
+```
+
+### Работа с базами данных:
+- Получение списка баз данных: `MongoClient.listDatabases()` и `MongoClient.listDatabaseNames()`.
+```java
+try (var mongoClient = MongoClients.create()) {
+    mongoClient.listDatabases()
+        .forEach((Consumer<Document>) System.out::println);
+    // show dbs
+    // Document{{name=test, sizeOnDisk=1.385336832E9, empty=false}}
+    mongoClient.listDatabaseNames()
+        .forEach((Consumer<String>) System.out::println);
+    // test
+}
+```
+- Создание и получение базы данных: `MongoClient.get()`.
+```java
+try (var mongoClient = MongoClients.create()) {
+    // use test
+    var database = mongoClient.getDatabase("test")
+}
+```
+- Удаление базы данных: `MongoDatabase.drop()`.
+```java
+try (var mongoClient = MongoClients.create()) {
+    // db.dropDatabase()
+    var database = mongoClient.getDatabase("test")
+    database.drop();
+}
+```
+
+### Работа с коллекциями
+- Получение списка коллекций: `MongoDatabase.listCollections()` и `MongoDatabase.listCollectionNames()`.
+```java
+try (var mongoClient = MongoClients.create()) {
+    var database = mongoClient.getDatabase("test");
+    // show collections
+    database.listCollectionNames()
+            .forEach((Consumer<String>) System.out::println);
+    // todo
+    database.listCollections()
+            .forEach((Consumer<Document>) System.out::println);
+    // Document{{name=todo, type=collection, options=Document{{}}, 
+    //  info=Document{{readOnly=false, uuid=ec6302c9-3b3a-4c61-9bf0-27f54044c193}}, 
+    //  idIndex=Document{{v=2, key=Document{{_id=1}}, name=_id_, ns=newtest.todo}}}}
+}
+```
+- Создание и получение коллекции: `MongoDatabase.getCollection()`. Также коллекция может быть создана при помощи метода `MongoDatabase.createCollection()`.
+```java
+try (var mongoClient = MongoClients.create()) {
+    var database = mongoClient.getDatabase("test");
+    // db.createCollection("todo")
+    // database.createCollection("todo")
+    var todoCollection = database.getCollection("todo");
+}
+```
+- Удаление коллекции: `MongoCollection.drop()`.
+```java
+try (var mongoClient = MongoClients.create()) {
+    var database = mongoClient.getDatabase("test");
+    var todoCollection = database.getCollection("todo");
+    // db.getCollection("todo").drop()
+    todoCollection.drop();
+}
+```
+
+### Работа с индексами
+- Получение списка индесов: `MongoCollection.listIndexes()`.
+```java
+try (var mongoClient = MongoClients.create()) {
+    var database = mongoClient.getDatabase("test");
+    var todoCollection = database.getCollection("todo");
+    // db.getCollection("todo").getIndexes()
+    todoCollection.listIndexes()
+        .forEach((Consumer<Document>) System.out::println);
+}
+
+// Document{{v=2, key=Document{{_id=1}}, name=_id_, ns=test.todo}}
+```
+- Создание индекса: `MongoCollection.createIndex()`
+```java
+try (var mongoClient = MongoClients.create()) {
+    var database = mongoClient.getDatabase("test");
+    var todoCollection = database.getCollection("todo");
+    // db.getCollection("todo").createIndex({dateCreated: 1}, {name: "idxDateCreated"})
+    todoCollection.createIndex(new Document("dateCreated", 1), 
+        new IndexOptions().name("idxDateCreated"));
+}
+```
+- Удаление индекса: `MongoCollection.dropIndex()`
+```java
+try (var mongoClient = MongoClients.create()) {
+    var database = mongoClient.getDatabase("test");
+    var todoCollection = database.getCollection("todo");
+    // db.getCollection("todo").dropIndex("idxDateCreated")
+    todoCollection.dropIndex("idxDateCreated");
+}
+```
+
+### Работа с документами
+Данные в коллекциях MongoDB хранятся в виде документов. Формат хранения — `BSON`, или Binary JSON, очень похожий на стандартный JSON, но имеющий свои особенности.
+
+
+- Создание документа: `MongoCollection.insertOne()` или `MongoCollection.insertMany()`.
+```java
+try (var mongoClient = MongoClients.create()) {
+    var database = mongoClient.getDatabase("test");
+    var todoCollection = database.getCollection("todo");
+    // db.getCollection("todo").insert({_id: ObjectId(), task: "Drink some coffee", 
+    //  dateCreated: ISODate(), done: falsedb})
+    var todoDocument = new Document(Map.of("_id", new ObjectId(), 
+        "task", "Drink some coffee", "dateCreated", LocalDateTime.now(), 
+        "done", false));
+        
+    todoCollection.insertOne(todoDocument);
+    // Document{{_id=5c516a862384dd4e9dc1277e, task=Drink some coffee, 
+    //  done=false, dateCreated=Tue Jan 29 19:12:38 YEKT 2019}}
+}
+```
+
+- Поиск по документам: `MongoCollection.find()`. Дополнительные методы `findOneAndUpdate()`, `findOneAndReplace()` и `findOneAndDelete()`.
+```java
+try (var mongoClient = MongoClients.create()) {
+    var database = mongoClient.getDatabase("test");
+    var todoCollection = database.getCollection("todo");
+    // db.getCollection("todo").find({task: {$regex: "coffee"}})
+    todoCollection.find(new Document("task", new Document("$regex", "coffee")))
+        .forEach((Consumer<Document>) System.out::println);
+    // Document{{_id=5c516a862384dd4e9dc1277e, task=Drink some coffee, 
+    //  done=false, dateCreated=Tue Jan 29 19:12:38 YEKT 2019}}
+}
+```
+
+- Изменение документов: `MongoCollection.updateOne()` и `MongoCollection.updateMany()`.
+```java
+try (var mongoClient = MongoClients.create()) {
+    var database = mongoClient.getDatabase("test");
+    var todoCollection = database.getCollection("todo");
+    // db.todo.update({_id: ObjectId('5c516a862384dd4e9dc1277e')}, 
+    //    {$set: {done: true}, $currentDate: {dateDone: true}, $unset: {dateCreated: true}})
+    todoCollection.updateOne(new Document("_id", new ObjectId("5c516a862384dd4e9dc1277e")),
+        new Document(Map.of("$set", new Document("done", true),
+            "$currentDate", new Document("dateDone", true),
+            "$unset", new Document("dateCreated", true))));
+    
+    // Document{{_id=5c516a862384dd4e9dc1277e, task=Drink some coffee, done=true, 
+    //  dateDone=Tue Jan 29 19:40:10 YEKT 2019}}
+}
+```
+
+- Удаление документов: `MongoCollection.deleteOne()` и `MongoCollection.deleteMany()`.
+<center> + + + NEXT + + +</center>
