@@ -1,10 +1,64 @@
 ## MongoDB
 
+<detail>
+<summary>"Click to expand"</summary>
+
+- [Источник: Гоша Дударь]()
+  * [Вступление]()
+    * [Сначала выбираем конкретную таблицу]()
+    * [После создания БД нужно создать коллекцию](#после-создания-бд-нужно-создать-коллекцию)
+    * [Удалить коллекцию](#удалить-коллекцию) 
+    * [Команда для добавления одной конкретной записи](#команда-для-добавления-одной-конкретной-записи) 
+    * [Команда для добавления нескольких записей](#команда-для-добавления-нескольких-записей)
+  * [Выборка](#выборка)
+    * [Выборка всех данных из нужной коллекции](#выборка-всех-данных-из-нужной-коллекции)
+    * [Выборка первых нескольких записей из нужной коллекции](#выборка-первых-нескольких-записей-из-нужной-коллекции)
+    * [Выборка первых нескольких записей](#выборка-первых-нескольких-записей)
+    * [Выборка с сортировкой](#выборка-с-сортировкой)
+    * [Выборка ИЛИ - по любому из указанных значений](#выборка-или---по-любому-из-указанных-значений)
+    * [Выбока на значение больше чем ($gt) и меньше чем ($lt)](#выбока-на-значение-больше-чем-gt-и-меньше-чем-lt)
+    * [Выборка одно из значений в ($in) одном элементе (столбце)](#выборка-одно-из-значений-в-in-одном-элементе-столбце)
+    * [Выборка любого из значений кроме ($nin - not in) одном элементе (столбце)](#выборка-любого-из-значений-кроме-nin---not-in-одном-элементе-столбце)
+    * [Выборка всех объектов с конкретным полем - child: {$exists: true}](#выборка-всех-объектов-с-конкретным-полем---child-exists-true)
+    * [Выборка с объектами содержащие внутренний массив favColor с рамером 2](#выборка-с-объектами-содержащие-внутренний-массив-favcolor-с-рамером-2)
+    * [Выбираем все элементы, у которых есть поле favColor с индексом](#выбираем-все-элементы-у-которых-есть-поле-favcolor-и-в-этом-поле-первый-элемент-по-индексу-будет-равен-конкретному-значению)
+    * [Выбираем все элементы, у которых есть поле favColor и в этом поле элементы меньше/больше/равно значению](#выбираем-все-элементы-у-которых-есть-поле-favcolor-и-в-этом-поле-элементы-меньшебольшеравно-значению)
+  * [Обновление](#обновление)
+    * [updateOne - обновит только первый объект](#updateone---обновит-только-первый-объект)
+    * [updateMany - обновит все объекты с указаным фильтром](#updatemany---обновит-все-объекты-с-указаным-фильтром)
+    * [Обновление нескольких значений при найденном фильтре](#обновление-нескольких-значений-при-найденном-фильтре)
+    * [Функция замены объекта - replaceOne](#помимо-обновления-полей-существует-функция-замены-объекта---replaceone)
+  * [Удаление](#удаление)
+    * [Удалить все записи у которых age >= 22 && age < 38](#удалить-все-записи-у-которых-age--22--age--38)
+  * [Объединенные запросы](#объединенные-запросы)
+    * [Функция `bulkWrite()`](#функция-bulkwrite)
+  * [Поиск в тексте на частичное совпадение](#поиск-в-тексте-на-частичное-совпадение)
+  * [Моментальная обработка данных](#моментальная-обработка-данных)
+    * [Функция `count()`](#функция-count)
+    * [Функция `distinct()`](#функция-distinct)
+    * [Агрегация](#агрегация)
+- [Articles and interesting quotes](#articles-and-interesting-quotes)
+  * Install MongoDB Community Edition on Windows
+    * [Run MongoDB Community Edition from the Command Interpreter](#run-mongodb-community-edition-from-the-command-interpreter)
+    * [Start your MongoDB database](#start-your-mongodb-database)
+    * [Connect to MongoDB](#connect-to-mongodb)
+  * [A Guide to MongoDB with Java](#source-github-and-article---a-guide-to-mongodb-with-java)
+  * [Java и MongoDB: базовые операции](#java-и-mongodb-базовые-операции)
+    * [Подключение к MongoDB](#подключение-к-mongodb)
+    * [Работа с базами данных](#работа-с-базами-данных)
+    * [Работа с коллекциями](#работа-с-коллекциями)
+    * [Работа с индексами](#работа-с-индексами)
+    * [Работа с документами](#работа-с-документами)
+  
+</detail>
+
+# Источник: Гоша Дударь
 Любой объект, который будет записан  в коллекцию - это будет JavaScript объект.
 
+## Вступление
 > Прежде чем использовать конкретные команды, необходимо сначала указать коллекцию, с которой будем работать.
 
-#### Использует конкретную таблицу:
+#### Сначала выбираем конкретную таблицу:
 ```javascript
 // запрос
 use itproger
@@ -55,7 +109,8 @@ db.users.insertOne(
 }
 ```
 
-#### Команда для добавления нескольких записей. *Квадратные скобки обязательны!*
+#### Команда для добавления нескольких записей.
+*Квадратные скобки обязательны!*
 ```javascript
 // запрос
 db.users.insertMany([
@@ -117,7 +172,7 @@ db.users.find({}, {_id: 0}).limit(2)
 { /* some_response */ }
 ```
 
-#### Выборка с сортировкой.
+#### Выборка с сортировкой
 Внутри функции указываем по какому полю сортируем, значение 1 указывает сортировку по возростанию, -1 - по убыванию. Можно указывать несколько сортировок через запятую.
 ```javascript
 // запрос
@@ -232,7 +287,8 @@ db.users.updateMany({age: 25}, {$set: {age: 30}})
 }
 ```
 
-#### Обновление нескольких значений при найденном фильтре. Т.е. необязательно менять теже самые данные, которые были указаны в фильтре
+#### Обновление нескольких значений при найденном фильтре.
+Т.е. необязательно менять теже самые данные, которые были указаны в фильтре
 ```javascript
 // запрос
 db.users.updateMany({age: 30}, {$set: {name: "User", email: "test@com.go"}})
@@ -277,15 +333,15 @@ db.users.deleteMany({
 ```
 
 ## Объединенные запросы
-#### Функция bulkWrite()
+#### Функция *bulkWrite()*
 Позволяет объединить несколько команд.
 - поскольку команд несколько, то квадратные скобки необходимы;
 - каждая команда помещается в фигурные скобки.
 - для каждой команды необъодимо прописывать `document`
 - пустой `filter { ... }` удалит все объекты в БД
 
-Пример запроса:
 ```javascript
+// запрос
 db.users.bulkWrite([
     {
         insertOne: {
@@ -330,8 +386,8 @@ db.users.bulkWrite([
 ])
 ```
 
-Пример ответа:
 ```json
+// ответ
 {
     "acknowledged": true,
     "deletedCount": 1,
@@ -461,7 +517,7 @@ db.users.aggregate([
 ])
 ```
 
-## Articles and interesting quotes
+# Articles and interesting quotes
 > [Install MongoDB Community Edition on Windows](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/)
 
 ### Run MongoDB Community Edition from the Command Interpreter
@@ -479,11 +535,11 @@ To start MongoDB, run `mongod.exe`
 ```shell
 "C:\Program Files\MongoDB\Server\4.4\bin\mongo.exe"
 ```
-<center> + + + NEXT + + +</center>
+<p align="center"> + + + NEXT + + +</p>
 
 > When Mongo sees that database doesn't exist, it will create it for us<br>
 > ### SOURCE: [GitHub](https://github.com/eugenp/tutorials/blob/master/persistence-modules/java-mongodb/src/main/java/com/baeldung/MongoExample.java) and article - **[A Guide to MongoDB with Java](https://www.baeldung.com/java-mongodb)**
-<center> + + + NEXT + + +</center>
+<p align="center"> + + + NEXT + + +</p>
 
 > ### [Java и MongoDB: базовые операции](https://alexkosarev.name/2019/01/30/java-and-mongo-basic-operations/)
 
@@ -627,6 +683,7 @@ try (var mongoClient = MongoClients.create()) {
 ```
 
 - Изменение документов: `MongoCollection.updateOne()` и `MongoCollection.updateMany()`.
+
 ```java
 try (var mongoClient = MongoClients.create()) {
     var database = mongoClient.getDatabase("test");
@@ -644,4 +701,12 @@ try (var mongoClient = MongoClients.create()) {
 ```
 
 - Удаление документов: `MongoCollection.deleteOne()` и `MongoCollection.deleteMany()`.
-<center> + + + NEXT + + +</center>
+```java
+try (var mongoClient = MongoClients.create()) {
+    var database = mongoClient.getDatabase("test");
+    var todoCollection = database.getCollection("todo");
+    // db.todo.remove({done: true})
+    todoCollection.deleteMany(new Document("done", true));
+}
+```
+<p align="center"> + + + NEXT + + +</p>
