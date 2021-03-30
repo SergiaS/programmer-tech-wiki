@@ -1,19 +1,20 @@
 # MongoRepository<T, ID>
-<details>
-<summary>Open Menu</summary>
+`T` - модель.
+`ID` - тип получаемого ид.
 
-- [Paging and Sorting](#paging-and-sorting-example)
+<details>
+<summary><b>Open Menu</b></summary>
+
+- [Paging and Sorting](#paging-and-sorting)
+  * [Example](#-1-example)
 - [How to create methods that can fire out custom queries?](#how-to-create-methods-that-can-fire-out-custom-queries)
-   * [Query by Example Executor]()
-   * [Query by Method Names]()
-   * [Query by Based on JSON]()
+  * [Query by Example Executor](#-1-query-by-example-executor)
+  * [Query by Method Names](#-2-query-by-method-names)
+  * [Query by Based on JSON](#-3-query-by-based-on-json)
 
 </details>
 
-<p><a name="pagingAndSorting"></a></p>
-
-
-# Paging and Sorting example:
+# Paging and Sorting:
 ## ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png) 1. <a href="https://youtu.be/Alh03DoBo3M?t=1447">Example</a>
 
 ```java
