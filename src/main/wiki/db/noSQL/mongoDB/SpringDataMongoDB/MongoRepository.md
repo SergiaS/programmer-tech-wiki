@@ -49,6 +49,70 @@ public interface EmployeeRepository extends MongoRepository<Employee, String> {
 }
 ```
 
+## ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png) 2. <a href="https://youtu.be/pW1abAOXiMo?t=1300">Example</a>
+В следующем примере говорим чтобы все объекты в БД умещаются на 20 страниц, нам нужны поля `title, shortDescription, pageCount`, отсортировать позиции по `pageCount` и показать 19 страницу:    
+`.../page?pageSize=20&fields=title,shortDescription,pageCount&sortBy=pageCount&pageno=19`
+- `pageSize` - общее кол-во объектов в БД делится на указанное число.
+- `sortBy` - сортировка по указанному полю, за который отвечает объект `new BasicDBObject(sortBy, 1)`.
+- `pageno` - выводит список объектов соответствующей страницы, в коде это пропуск первых позиций по формуле `skip(pageNo * pageSize)`.
+- `fields` - будет отображать только указанные поля, все остальные будут скрыты. Благодаря этому можно получать только те поля, которые нужны, и таким образом уменьшить размер JSON в разы!
+- Дополнительно в ответе в мапе будут добавлены 2 поля с данными: `"No. Of Pages": 21.0` и `"No. Of Elements": 432`.
+
+```java
+// controller
+@GetMapping("/page")
+public Map<String, Object> getAllBooksByPage(
+        @RequestParam(value = "pageno", defaultValue = "0") int pageNo,
+        @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+        @RequestParam(value = "fields", defaultValue = "title, pageCount") String[] fields,
+        @RequestParam(value = "sortBy", defaultValue = "id") String sortBy) {
+    return booksService.getAllBooksByPage(pageNo, pageSize, fields, sortBy);
+}
+
+// service
+public Map<String, Object> getAllBooksByPage(int pageNo, int pageSize, String[] fields, String sortBy) {
+    Map<String, Object> response = new HashMap<>();
+    response.put("data", repository.getAllBooksByPage(pageNo, pageSize, fields, sortBy));
+    long count = repository.countOfElements();
+    response.put("No. Of Elements", count);
+    response.put("No. Of Pages", Math.ceil(count / pageSize));
+    return response;
+}
+
+// repository
+public List<Object> getAllBooksByPage(int pageNo, int pageSize, String[] fields, String sortBy) {
+    MongoClient mongoClient = getMongoClient();
+    MongoDatabase database = mongoClient.getDatabase("test");
+    MongoCollection<Document> collection = database.getCollection("books");
+
+    BasicDBObject projection = new BasicDBObject("_id", 0); // skip id
+    for (String field : fields) {
+        projection.append(field, 1);
+    }
+
+    BasicDBObject sort = new BasicDBObject(sortBy, 1);
+
+    FindIterable<Document> findIterable = collection.find()
+            .projection(projection)
+            .sort(sort)
+            .skip(pageNo * pageSize)
+            .limit(pageSize);
+
+    List<Object> booksResponse = new ArrayList<>();
+    for (Document doc : findIterable) {
+        booksResponse.add(doc);
+    }
+    return booksResponse;
+}
+
+public long countOfElements() {
+    MongoClient mongoClient = getMongoClient(); // 1
+    MongoDatabase database = mongoClient.getDatabase("test"); // 2
+    MongoCollection<Document> collection = database.getCollection("books"); // 3
+    return collection.countDocuments(); // 4
+}
+```
+
 # How to create methods that can fire out custom queries?
 Поскольку `MongoRepository<T, ID>` это интерфейс в котором нельзя написать реализацию методов с различными запросами, существует 3 способа как написать запросы:
 
