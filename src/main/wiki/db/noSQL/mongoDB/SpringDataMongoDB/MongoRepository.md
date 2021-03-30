@@ -1,15 +1,21 @@
-## MongoRepository<T, ID>
+# MongoRepository<T, ID>
 <details>
 <summary>Open Menu</summary>
 
-
+- [Paging and Sorting](#paging-and-sorting-example)
+- [How to create methods that can fire out custom queries?](#how-to-create-methods-that-can-fire-out-custom-queries)
+   * [Query by Example Executor]()
+   * [Query by Method Names]()
+   * [Query by Based on JSON]()
 
 </details>
 
+<p><a name="pagingAndSorting"></a></p>
 
 
+# Paging and Sorting example:
+## ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png) 1. <a href="https://youtu.be/Alh03DoBo3M?t=1447">Example</a>
 
-### Paging and Sorting in one example:
 ```java
 // controller
 @GetMapping("/page")
@@ -42,11 +48,11 @@ public interface EmployeeRepository extends MongoRepository<Employee, String> {
 }
 ```
 
-### How to create methods that can fire out (выполнять/запускать) custom queries?
+# How to create methods that can fire out custom queries?
 Поскольку `MongoRepository<T, ID>` это интерфейс в котором нельзя написать реализацию методов с различными запросами, существует 3 способа как написать запросы:
 
-
-1. **[YOUTUBE - Query by Example Executor](https://youtu.be/Alh03DoBo3M?t=2087).** This is interface that allow query execution by Example. You can use method of MongoRepository - `findAll(Example<S> example)`.
+## ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png) 1. <a href="https://youtu.be/Alh03DoBo3M?t=2087">Query by Example Executor</a>
+This is interface that allow query execution by Example. You can use method of MongoRepository - `findAll(Example<S> example)`.
 
 > **ВАЖНО! Модель НЕ должна содержать примитивы!**
 > 
@@ -105,11 +111,11 @@ public List<Employee> getAllByExample(Employee emp) {
     return employeeRepository.findAll(e);
 }
 ```
-
-2. **[YOUTUBE - Query by Method Names](https://youtu.be/Alh03DoBo3M?t=2500).** This approach use three things: 
-    * 1) Prefix (findBy, readBt, getBy...); 
-    * 2) Property expression; 
-    * 3) Keywords (AND, OR, LESSTHAN, StartingWith...).
+## ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png) 2. <a href="https://youtu.be/Alh03DoBo3M?t=2500">Query by Method Names</a>
+This approach use three things:
+   * 1) Prefix (findBy, readBt, getBy...); 
+   * 2) Property expression; 
+   * 3) Keywords (AND, OR, LESSTHAN, StartingWith...).
 > По сути принцип работы как у волшебных методов Spring Data JPA. Этим способом можно создать базовые запросы, но не очень сложные!
 > 
 > Query by method name [Supported keywords for query methods](https://docs.spring.io/spring-data/mongodb/docs/1.2.0.RELEASE/reference/html/mongo.repositories.html)
@@ -159,8 +165,8 @@ public interface EmployeeRepository extends MongoRepository<Employee, String> {
 }
 ```
 
-
-3. **[YOUTUBE - Query by Based on JSON](https://youtu.be/Alh03DoBo3M?t=2954).** Here we need to use `@Query` annotation. Inside of the `value` field you need to write JSON-query.
+## ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png) 3. <a href="https://youtu.be/Alh03DoBo3M?t=2954">Query by Based on JSON</a>
+Here we need to use `@Query` annotation. Inside of the `value` field you need to write JSON-query.
 
 Пример запроса в котором ищется `salary` больше чем:
 ```java
