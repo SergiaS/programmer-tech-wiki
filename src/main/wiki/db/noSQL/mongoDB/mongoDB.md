@@ -52,6 +52,33 @@
 
 </details>
 
+Для использования необходимо подключить зависимость:
+```xml
+<dependency>
+    <groupId>org.mongodb</groupId>
+    <artifactId>mongo-java-driver</artifactId>
+    <version>3.12.7</version>
+</dependency>
+```
+
+Дополнительно могут понадобиться зависимости:
+> С версией `3.0.0` могут быть конфликты!
+```xml
+<dependency>
+    <groupId>de.flapdoodle.embed</groupId>
+    <artifactId>de.flapdoodle.embed.mongo</artifactId>
+    <version>2.2.0</version>
+</dependency>
+```
+или с функционалом побольше
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-mongodb</artifactId>
+</dependency>
+```
+
+
 # Источник: Гоша Дударь
 Любой объект, который будет записан  в коллекцию - это будет JavaScript объект.
 
