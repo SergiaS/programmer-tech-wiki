@@ -5,26 +5,25 @@
 <summary>Open Menu</summary>
 
 - [Facts](#facts)
-- [MongoTemplate with Aggregation, Projection and Dynamic APIs]()
-  - [Paging and Sorting, Projection with MongoTemplate]()
-  - [Adding Aggregation]()
-  - [Comparing MongoTemplate with MongoClient]()
-  - [GitHub Examples]()
+- [MongoTemplate with Aggregation, Projection and Dynamic APIs](#-1-mongotemplate-with-aggregation-projection-and-dynamic-apis)
+  - [Paging and Sorting, Projection with MongoTemplate](#paging-and-sorting-projection-with-mongotemplate)
+  - [Adding Aggregation](#adding-aggregation)
+  - [Comparing MongoTemplate with MongoClient](#comparing-mongotemplate-with-mongoclient)
+  - [GitHub Examples](#github-examples)
   
 </details>
 
-
 ## Facts
-> **MongoTemplate is from Spring Data Mongo not from Driver.** You need use dependency `spring-data-mongodb`.
+> 1. **MongoTemplate is from Spring Data Mongo not from Driver.** You need use dependency `spring-data-mongodb`.
 
-> MongoTemplate doesn't support Pagging and Sorting by default, but there is a trick. [Example]()
+> 2. MongoTemplate doesn't support Paging and Sorting by default, but there is a trick. [Example](#paging-and-sorting-projection-with-mongotemplate)
 
-> Once configured, MongoTemplate is thread-safe and can be reused across multiple instances.
-> #### [SOURCE - docs.spring.io](https://docs.spring.io/spring-data/mongodb/docs/current/reference/html/#mongo-template)
+> 3. Once configured, MongoTemplate is thread-safe and can be reused across multiple instances.
+> __[SOURCE - docs.spring.io](https://docs.spring.io/spring-data/mongodb/docs/current/reference/html/#mongo-template)__
 
 
 ## ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png) 1. <a href="https://youtu.be/Nfb67sEYDek?t=139">MongoTemplate with Aggregation, Projection and Dynamic APIs</a>
-All courses by JR ACADEMY see here. [YOUTUBE](https://www.youtube.com/channel/UC2J07tM000x5WKburzZIPGw).
+All courses by JR ACADEMY you can see at [YOUTUBE](https://www.youtube.com/channel/UC2J07tM000x5WKburzZIPGw).
 
 ### Paging and Sorting, Projection with MongoTemplate
 This video shows how to create Dynamic API including projection, paging and sorting.
