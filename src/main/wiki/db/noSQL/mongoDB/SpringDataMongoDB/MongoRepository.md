@@ -7,6 +7,7 @@
 
 - [Paging and Sorting](#paging-and-sorting)
   * [Example](#-1-example)
+  * [Example](#-2-example)
 - [How to create methods that can fire out custom queries?](#how-to-create-methods-that-can-fire-out-custom-queries)
   * [Query by Example Executor](#-1-query-by-example-executor)
   * [Query by Method Names](#-2-query-by-method-names)
