@@ -6,6 +6,17 @@ You can look all code at **[GitHub](https://github.com/SergiaS/testMongo/tree/Mo
 ## DOC. [MongoOperators](https://docs.mongodb.com/manual/reference/operator/)
 Examples: `$set`, `$lt`...
 
+<details>
+<summary><b>Show all subjects</b></summary>
+
+- [How to manage MongoClient](#how-to-manage-mongoclient)
+- [Paging and Sorting, Projection with MongoClient](#paging-and-sorting-projection-with-mongoclient)
+    - [Paging and Sorting example + VIDEO](#--paging-and-sorting-example)
+- [MongoClient with Aggregation](#mongoclient-with-aggregation)
+    - [Пример полной реализации аггрегации](#пример-полной-реализации-аггрегации)
+- [Filtering inside another object. Projection](#пример-полной-реализации-аггрегации)
+
+</details>
 
 ## How to manage MongoClient:
 1. Get MongoClient object (connection).
