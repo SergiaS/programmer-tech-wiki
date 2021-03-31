@@ -9,14 +9,19 @@ Examples: `$set`, `$lt`...
 <details>
 <summary><b>Show all subjects</b></summary>
 
-- [How to manage MongoClient](#how-to-manage-mongoclient)
-- [Paging and Sorting, Projection with MongoClient](#paging-and-sorting-projection-with-mongoclient)
-    - [Paging and Sorting example + VIDEO](#--paging-and-sorting-example)
-- [MongoClient with Aggregation](#mongoclient-with-aggregation)
-    - [Пример полной реализации аггрегации](#пример-полной-реализации-аггрегации)
-- [Filtering inside another object. Projection](#пример-полной-реализации-аггрегации)
+- [JR ACADEMY - MongoClient with Aggregation, Projection and Dynamic APIs]()
+  - [How to manage MongoClient](#how-to-manage-mongoclient)
+  - [Paging and Sorting, Projection with MongoClient](#paging-and-sorting-projection-with-mongoclient)
+      - [Paging and Sorting example + VIDEO](#--paging-and-sorting-example)
+  - [MongoClient with Aggregation](#mongoclient-with-aggregation)
+      - [Пример полной реализации аггрегации](#пример-полной-реализации-аггрегации)
+  - [Filtering inside another object. Projection](#пример-полной-реализации-аггрегации)
 
 </details>
+
+
+# MongoClient with Aggregation, Projection and Dynamic APIs
+Course by JR ACADEMY. [YOUTUBE](https://www.youtube.com/channel/UC2J07tM000x5WKburzZIPGw).
 
 ## How to manage MongoClient:
 1. Get MongoClient object (connection).
@@ -236,7 +241,7 @@ public long countOfElements() {
     }
 }
 ```
-Аналог JSON-запроса на Java:
+Аналог JSON-запроса на Java с использованием MongoClient:
 ```java
 BasicDBObject sum = new BasicDBObject("$sum", "$pageCount");
 BasicDBObject grp = new BasicDBObject();
