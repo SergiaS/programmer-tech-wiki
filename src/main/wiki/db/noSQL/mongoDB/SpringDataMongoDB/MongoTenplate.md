@@ -8,7 +8,6 @@
 - [MongoTemplate with Aggregation, Projection and Dynamic APIs](#-1-mongotemplate-with-aggregation-projection-and-dynamic-apis)
   - [Paging and Sorting, Projection with MongoTemplate](#paging-and-sorting-projection-with-mongotemplate)
   - [Adding Aggregation](#adding-aggregation)
-  - [Comparing MongoTemplate with MongoClient](#comparing-mongotemplate-with-mongoclient)
   - [GitHub Examples](#github-examples)
   
 </details>
@@ -176,10 +175,6 @@ public Map<String, Object> countPage() {
     return mongoTemplate.aggregate(aggregation, "books", Document.class).getRawResults();
 }
 ```
-
-### Comparing MongoTemplate with MongoClient
-If you want pagination, MongoTemplate is not a good idea, but if you want to do aggregation template - MongoTemplate is a good idea.
-Also, with MongoTemplate you will write more less code, than with MongoClient.
 
 ### GitHub Examples
 All code from course you can look at [GitHub](https://github.com/SergiaS/testMongo/tree/MongoTemplate_with_Aggregation%2C_Projection_and_Dynamic_APIs/src/main/java/com/mongo/testmongo).

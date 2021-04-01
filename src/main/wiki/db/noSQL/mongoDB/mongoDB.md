@@ -1,8 +1,10 @@
-## MongoDB
+# MongoDB
 
 <details>
 <summary>"Click to expand"</summary>
 
+- [Comparing Mongo technologies](#comparing-mongo-technologies)
+- [Dependency](#dependency)
 - [Источник: Гоша Дударь](#источник-гоша-дударь)
   * [Вступление](#вступление)
     * [Сначала выбираем конкретную таблицу](#сначала-выбираем-конкретную-таблицу)
@@ -52,6 +54,20 @@
 
 </details>
 
+## Comparing Mongo technologies
+Comparing MongoClient vs MongoTemplate vs MongoRepository technologies.
+
+|               | MongoClient                                  | MongoTemplate                                                   | MongoRepository                                   |
+| ------------- |:--------------------------------------------:| :--------------------------------------------------------------:|:-------------------------------------------------:|
+| From          | Java MongoDriver                             | Spring Data Mongo                                               | Spring Data Mongo                                 |
+| How to use it | Create MongoClient object                    | Create bean of MongoTemplate<br>Java Config, Auto Configuration | Interface repository and extends MongoRepository  |
+| Result Object | Database Object<br>(BasicDBObject, Document) | Entity class and domain objects both                            | Класс сущности обязателен<br>Ex. Book.class       |
+| Mapping       | Need Mapping Explicitly with Entity class    | No need of mapping with Entity class<br>With domain objects need| No need of Mapping, Repository does that automatic|
+| Projection    | Possible through proper query                | Through Built in Method chain                                   | Possible with JSON Query                          |
+| Aggregation   | Possible through proper query                | Through Built in Method chain                                   | Not possible                                      |
+| Кол-во кода   | Много кода                                   | Сравнительно меньше кода                                        | Минимум кода                                      |
+
+## Dependency
 Для использования необходимо подключить зависимость:
 ```xml
 <dependency>
