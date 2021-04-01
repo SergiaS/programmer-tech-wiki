@@ -6,15 +6,15 @@
 <summary><b>Open Menu</b></summary>
 
 - [Different from MongoTemplate](#difference-from-mongotemplate)
-- [Difference between a `save()` and `insert()` methods]()
+- [Difference between a `save()` and `insert()` methods](#difference-between-a-save-and-insert-methods)
 - [Paging and Sorting](#paging-and-sorting)
   * [Example](#-1-example)
   * [Example](#-2-example)
 - [How to create methods that can fire out custom queries?](#how-to-create-methods-that-can-fire-out-custom-queries)
-  * [Query by Example Executor](#-1-query-by-example-executor)
-  * [Query by Method Names](#-2-query-by-method-names)
-  * [Query by Based on JSON](#-3-query-by-based-on-json)
-- [MongoRepository with Aggregation, Projection and Dynamic APIs]()
+  * [Query by Example Executor](#-21-query-by-example-executor)
+  * [Query by Method Names](#-22-query-by-method-names)
+  * [Query by Based on JSON](#-23-query-by-based-on-json)
+- [MongoRepository with Aggregation, Projection and Dynamic APIs](#-31-mongorepository-with-aggregation-projection-and-dynamic-apis)
   * [GitHub Examples](#github-examples)
 </details>
 
