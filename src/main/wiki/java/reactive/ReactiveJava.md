@@ -3,24 +3,24 @@
 <details>
 <summary>SHOW MENU</summary>
 
-- [Handling Concurrent Requests]()
-- [API Design]()
-- [What is Reactive Programming?]()
-- [What is a Reactive Streams Specification have?]()
-  - [1. Publisher interface]()
-  - [2. Subscriber interface]()
-  - [3. Subscription interface]()
-  - [4. Processor interface]()
-- [What is a Reactive Library?]()
-  - [Reactive Libraries]()
-- [Reactor]()
-  - [Flux]()
-  - [Mono]()
-  - [Функциональный стиль с использованием Handler, получаем строку]()
-  - [Функциональный стиль с использованием Handler, получаем JSON]()
-  - [Декларативный стиль с использованием Controller]()
+- [Handling Concurrent Requests](#handling-concurrent-requests)
+- [API Design](#api-design)
+- [What is Reactive Programming?](#what-is-reactive-programming)
+- [What is a Reactive Streams Specification have?](#what-is-a-reactive-streams-specification-have)
+  - [1. Publisher interface](#1-publisher-interface)
+  - [2. Subscriber interface](#2-subscriber-interface)
+  - [3. Subscription interface](#3-subscription-interface)
+  - [4. Processor interface](#4-processor-interface)
+- [What is a Reactive Library?](#what-is-a-reactive-library)
+  - [Reactive Libraries](#reactive-libraries)
+- [Reactor](#reactor)
+  - [Flux](#flux)
+  - [Mono](#mono)
+  - [Функциональный стиль с использованием Handler, получаем строку](#функциональный-стиль-с-использованием-handler-получаем-строку)
+  - [Функциональный стиль с использованием Handler, получаем JSON](#функциональный-стиль-с-использованием-handler-получаем-json)
+  - [Декларативный стиль с использованием Controller](#декларативный-стиль-с-использованием-controller)
   
-- [Another information]()
+- [Another information](#another-information)
 
 </details>
 

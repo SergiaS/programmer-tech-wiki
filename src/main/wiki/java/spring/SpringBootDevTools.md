@@ -4,8 +4,8 @@
 <details>
 <summary>SHOW MENU</summary>
 
-- [What is Spring Boot DevTools?]()
-- [How to enable automatic restart in IntelliJ IDEA]()
+- [What is Spring Boot DevTools?](#what-is-spring-boot-devtools)
+- [How to enable automatic restart in IntelliJ IDEA](#spring-boot-developer-tools-how-to-enable-automatic-restart-in-intellij-idea)
 
 </details>
 

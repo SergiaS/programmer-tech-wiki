@@ -1,5 +1,24 @@
 # Docker
 
+<details>
+<summary>SHOW MENU</summary>
+
+- [Dockerfile](#dockerfile)
+   - [Java example](#java-example)
+      * [Вариант 1 - простой]()
+      * [Вариант 2 - с использованием Maven]()
+      * [Вариант 3 - Multi-stage]()
+   - [Usage](#usage)
+      * [FROM](#from)
+      * [`Dockerfile` example](#from)
+- [Docker commands](#docker-commands)
+   - [Options](#options)
+   - [Detached vs foreground](#detached-vs-foreground)
+- [Articles](#articles)   
+
+</details>
+
+
 ## Dockerfile
 > [Best practices for writing Dockerfiles](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
 
@@ -189,10 +208,10 @@ The docker run command must specify an IMAGE to derive the container from. An im
 ### Detached vs foreground
 When starting a Docker container, you must first decide if you want to run the container in the background in a “detached” mode or in the default foreground mode.
 
-#### Detached (`-d`)
+__Detached (`-d`)__
 To start a container in detached mode, you use `-d=true` or just `-d` option.
 
-#### Foreground
+__Foreground__
 In foreground mode (the default when `-d` is not specified), `docker run` can start the process in the container and attach the console to the process’s standard input, output, and standard error.
 
 ```dockerfile
