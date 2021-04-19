@@ -21,9 +21,9 @@ Last update at 4/19/2021, 11:05AM
   - [Функциональный стиль с использованием Handler, получаем JSON](#функциональный-стиль-с-использованием-handler-получаем-json)
   - [Декларативный стиль с использованием Controller](#декларативный-стиль-с-использованием-controller)
 - [How to test?](#testing)
-- [Build the simple Non Blocking API](#build-the-simple-non-blocking-api)
-- [JUNIT : Test Reactive API using WebTestClient](#junit-test-reactive-api-using-webtestclient)
-- [Junit : Test for infinite Non Blocking Sequence API using WebTestClient](#junit-test-for-infinite-non-blocking-sequence-api-using-webtestclient)
+- [Build the simple Non Blocking API](#-build-the-simple-non-blocking-api)
+- [JUnit : Test Reactive API using WebTestClient](#-junit--test-reactive-api-using-webtestclient)
+- [JUnit : Test for infinite Non Blocking Sequence API using WebTestClient](#-junit--test-for-infinite-non-blocking-sequence-api-using-webtestclient)
 - [Пример популяции БД при старте приложения](#пример-популяции-бд-при-старте-приложения)
 - [Spring WebClient](#spring-webclient)
   - Spring 5 WebClient and WebTestClient Tutorial with Examples
@@ -357,7 +357,7 @@ public class FluxAndMonoController {
 * По ендпоиту `/flux` браузер будет ждать 4 секунды пока не получит весь ответ.
 * По ендпоиту `/fluxstream` браузер будет отображать каждую секунду на один элемент больше.
 
-## ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png) [JUNIT : Test Reactive API using WebTestClient](https://youtu.be/ao21gIB4qKw)
+## ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png) [JUnit : Test Reactive API using WebTestClient](https://youtu.be/ao21gIB4qKw)
 Full code look at [GitHub](https://github.com/SergiaS/learnReactiveSpring/commit/70da4c7580c58a2a94c277b4dd4272f343bbf935).
 
 Annotation `@WebFluxTest` will create the instance of `WebTestClient`.<br>
@@ -428,7 +428,7 @@ class FluxAndMonoControllerTest {
 }
 ```
 
-## ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png) [Junit : Test for infinite Non Blocking Sequence API using WebTestClient](https://youtu.be/nO8F4IO0BVo)
+## ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png) [JUnit : Test for infinite Non Blocking Sequence API using WebTestClient](https://youtu.be/nO8F4IO0BVo)
 Full code look at [GitHub](https://github.com/SergiaS/learnReactiveSpring/commit/7e57e3c8725fddefeacac67551ca97d95faa5d1c).
 
 Example for APPLICATION_STREAM endpoint.
