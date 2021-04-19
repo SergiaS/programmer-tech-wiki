@@ -1,5 +1,24 @@
 # Input Output Java Streams / Потоки ввода вывода
 
+<details>
+<summary>SHOW MENU</summary>
+
+- [Для работы с файлами](#для-работы-с-файлами)
+    - [Закрытие файлов](#закрытие-файлов)
+    - [Адрес файла](#адрес-файла)
+- [FileWriter и FileReader](#filewriter-и-filereader)
+    - [FileWriter](#filewriter)
+        - [Добавление к данным в файле - Append](#добавление-к-данным-в-файле---append)
+    - [FileReader](#filereader)
+- [BufferedReader и BufferedWriter](#bufferedreader-и-bufferedwriter)
+    - [Пример чтения и записи 1 - посимвольно](#пример-чтения-и-записи-1---посимвольно) 
+    - [Пример чтения и записи 2 - построчно](#пример-чтения-и-записи-2---построчно) 
+- [FileInputStream и FileOutputStream](#fileinputstream-и-fileoutputstream)
+    - [Пример копирования картинки](#пример-копирования-картинки)
+
+
+</details>
+
 
 ## Для работы с файлами
 Лучше это знать, облегчит жизнь.
@@ -19,13 +38,13 @@
 
 
 ### Адрес файла
-> Внимание на слеш! `/` или `\\`.
+> Внимание на слеш! `/` или `\\` - два слеша!.
 
 В конструкторе `FileReader` и `FileWriter` указывается относительный адрес файла - относительно папки проекта, X:<br>
 `src/main/java/`
 
 Также можно указать абсолютный адрес файла, т.е. начиная с имени диска:<br>
-`C:\java\projects\`
+`C:\\java\\projects\\`
 
 
 
@@ -123,7 +142,7 @@ public class FileReaderEx {
 ```
 
 
-## BufferedReader & BufferedWriter
+## BufferedReader и BufferedWriter
 Использование буферизации в стримах позволяет достичь большей эффективности при чтении файла или записи в него.
 
 #### Пример чтения и записи 1 - посимвольно
