@@ -100,10 +100,10 @@ Pattern pattern = Pattern.compile("java", Pattern.CASE_INSENSITIVE);
 | `[a-d]?`  |	Символы a-d встречаются 0..1 раз	|a, b, c, d
 | `[b-d,z]+`|	Символы b,c,d,z встречаются 1.. ∞ раз	|b, bcdcdbdbdbdbzzzzbbzbzb, zbz
 | `[1,7-9]*`|	Символы 1,7,8,9 встречаются 0.. ∞ раз	|1, 7, 9, 9777, 111199
-| `1{5}` |	Символ 1 встречается 5 раз	|11111
+| `1{5}`    |	Символ 1 встречается 5 раз	|11111
 | `[1,2,a,b]{2}` |	Символы 1,2,a,b встречаются 2 раза	|11, 12, 1a, ab, 2b, bb, 22
 | `[a,0]{2,3}` |	Символы a,0 встречаются 2..3 раз	|aa, a0,00,0a, aaa,000, a00,0a0, a0a
-|`a{3}`|	| **aaa** a **aaa** a **aaa**
-|`a{3}$`|	| aaa a aaa a **aaa**
-|`^a{3}`|	| **aaa** a aaa a aaa
+|`a{3}`|	| <ins>**aaa**</ins> a <ins>**aaa**</ins> a <ins>**aaa**</ins>
+|`a{3}$`|	| aaa a aaa a <ins>**aaa**</ins>
+|`^a{3}`|	| <ins>**aaa**</ins> a aaa a aaa
 |`^a{3}$`|	| aaa a aaa a aaa
