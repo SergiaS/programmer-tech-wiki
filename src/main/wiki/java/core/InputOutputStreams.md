@@ -15,7 +15,7 @@
     - [Пример чтения и записи 2 - построчно](#пример-чтения-и-записи-2---построчно) 
 - [FileInputStream и FileOutputStream](#fileinputstream-и-fileoutputstream)
     - [Пример копирования картинки](#пример-копирования-картинки)
-
+- [OutputStreamWriter](#outputstreamwriter)
 
 </details>
 
@@ -38,7 +38,8 @@
 
 
 ### Адрес файла
-> Внимание на слеш! `/` или `\\` - два слеша!.
+> Внимание на слеш! `/` или `\\` - два слеша!
+> В java, в файлах с кодом, внутри строк символ `\` тоже нужно экранировать, т.к. он является управляющим как в регулярных выражениях.
 
 В конструкторе `FileReader` и `FileWriter` указывается относительный адрес файла - относительно папки проекта, X:<br>
 `src/main/java/`
@@ -213,3 +214,36 @@ public class CopyPicture {
     }
 }
 ```
+
+## OutputStreamWriter
+Класс `Java.io.OutputStreamWriter` является мостом между символьными потоками и байтовыми потоками. 
+Записанные в него символы кодируются в байты с использованием указанной кодировки.
+```java
+// Пример из файла с кодировкой windows-1251 в файл с кодировкой UTF-8
+import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+
+public class ConvertFromWindows1251ToUTF8 {
+    public static void main(String[] args) throws IOException {
+        String fromFileName = "src/main/java/task/JavaRush/task22/task2211/windows-1251.txt";
+        String toFileName = "src/main/java/task/JavaRush/task22/task2211/utf-8.txt";
+
+        try (
+                BufferedReader reader = 
+                        new BufferedReader(
+                                new FileReader(fromFileName, Charset.forName("Windows-1251")));
+                OutputStreamWriter outputStreamWriter = 
+                        new OutputStreamWriter(
+                                new FileOutputStream(toFileName), StandardCharsets.UTF_8);
+        ) {
+            int character;
+            while ((character = reader.read()) != -1) {
+                outputStreamWriter.write(character);
+            }
+        }
+    }
+}
+```
+
+
