@@ -11,7 +11,8 @@ Pattern pattern = Pattern.compile("java", Pattern.CASE_INSENSITIVE);
 
 
 ## Ресурсы
-[JavaRush - Регулярные выражения в Java](https://javarush.ru/groups/posts/regulyarnye-vyrazheniya-v-java)
+* [JavaRush - Регулярные выражения в Java - 5 частей](https://javarush.ru/groups/posts/136-reguljarnihe-vihrazhenija-v-java-chastjh-1)
+* [JavaRush - Регулярные выражения в Java - статья](https://javarush.ru/groups/posts/regulyarnye-vyrazheniya-v-java)
 
 
 ### Обозначения
@@ -122,6 +123,10 @@ Pattern pattern = Pattern.compile("java", Pattern.CASE_INSENSITIVE);
 ```regexp
 "(\\+[0-9]{2})?\\(?[0-9]{3}\\)?[0-9]{3}-?[0-9]{2}-?[0-9]{2}"
 ```
+* `(\\+[0-9]{2})?` - ищет плюс `\\+` или любую цифру два раза подряд `[0-9]{2}`, и всё это условие МОЖЕТ БЫТЬ 0 или 1 раз `?`.
+* `\\(?[0-9]{3}\\)?` - далее МОЖЕТ БЫТЬ открывающаяся скобка `\\(` 0 или 1 раз, далее ДОЛЖНА БЫТЬ любая цифра 3 раза `[0-9]{3}`, далее ДОЛЖНА БЫТЬ закрывающаяся скобка `\\)` и всё это условие может быть 0 или 1 раз `?`. 
+* `[0-9]{3}-?` - далее ДОЖНО БЫТЬ 3 любые цифры и 1 дефис и всё это 0 или 1 раз `[0-9]{3}-?`, и так пару раз. 
+
 ```java
 // result
 +380501234567 - true
