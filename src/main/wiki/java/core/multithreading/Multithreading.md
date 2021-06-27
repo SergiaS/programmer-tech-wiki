@@ -277,3 +277,27 @@ ArrayBlockingQueue<Integer> queue = new ArrayBlockingQueue<>(4);
 
 - `add` - Если очередь полная выбросит ошибку.
 - `offer` - Если очередь полная НЕ выбросит ошибку, и в очередь ничего не добавит.
+
+
+##[Running Delayed or Periodic Tasks](https://www.baeldung.com/java-start-thread)
+Java has few tools that can help us to run delayed or recurring operations:
+- `java.util.Timer`
+- `java.util.concurrent.ScheduledThreadPoolExecutor`
+
+
+### Which Tool Is Better?
+**Timer:**
+
+* does not offer real-time guarantees: it schedules tasks using the Object.wait(long) method
+* there's a single background thread, so tasks run sequentially and a long-running task can delay others
+* runtime exceptions thrown in a TimerTask would kill the only thread available, thus killing Timer
+
+**ScheduledThreadPoolExecutor:**
+* can be configured with any number of threads
+* can take advantage of all available CPU cores
+* catches runtime exceptions and lets us handle them if we want to (by overriding afterExecute method from ThreadPoolExecutor)
+* cancels the task that threw the exception, while letting others continue to run
+* relies on the OS scheduling system to keep track of time zones, delays, solar time, etc.
+* provides collaborative API if we need coordination between multiple tasks, like waiting for the completion of all tasks submitted
+* provides better API for management of the thread life cycle
+

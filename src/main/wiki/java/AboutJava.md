@@ -1,5 +1,8 @@
 # Interesting about Java
 
+## [Security Tools and Commands](https://docs.oracle.com/en/java/javase/11/tools/keytool.html)
+X.509, ssl, keytool...
+
 
 > Строки в Java имеют формат Unicode.
 
@@ -7,6 +10,7 @@
 > Для этого есть специальные методы у класса String(!). 
 > Также в Java есть специальный класс Charset, который описывает конкретную кодировку.
 
+> Все анонимные классы на самом деле превращаются компилятором в обычные внутренние классы.
 
 ### [Character, кодировки](https://javarush.ru/quests/lectures/questmultithreading.level02.lecture10?post=full)
 1) Как получить список всех кодировок, с которыми Java может работать?

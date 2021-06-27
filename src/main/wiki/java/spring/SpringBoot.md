@@ -17,3 +17,20 @@ public CommandLineRunner initConfig(ReactiveCrudRepository<NodeRoot, String> rep
     };
 }
 ```
+
+## MessageSource
+Работа и локалями и интернализацией, обращается к папке `resources` и решает какую локаль брать.
+Пример одной из общих реализаций:
+```java
+@Bean
+public MessageSource messageSource() {
+    ReloadableResourceBundleMessageSource messageSource
+      = new ReloadableResourceBundleMessageSource();
+    
+    messageSource.setBasename("classpath:messages");
+    messageSource.setDefaultEncoding("UTF-8");
+    return messageSource;
+}
+```
+
+##[Spring Boot SSL [https] Example](https://howtodoinjava.com/spring-boot/spring-boot-ssl-https-example/)

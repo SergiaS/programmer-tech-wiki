@@ -384,3 +384,24 @@ public interface BooksRepository extends MongoRepository<Book, String> {
 ```
 ### GitHub Examples
 All code from course you can look at [GitHub](https://github.com/SergiaS/testMongo/tree/MongoRepository_with_Aggregation%2C_Projection_and_Dynamic_APIs/src/main/java/com/mongo/testmongo).
+
+## Tips
+### Annotation `@PersistenceConstructor`
+Если модель содержит более одного конструктора (без дефолтного), то необходимо указать конструктор который будет использоваться по умолчанию:
+```java
+@PersistenceConstructor
+public ItemOptions(String group, BigDecimal price, String status) {
+    this.group = group;
+    this.price = price;
+    this.status = status;
+}
+
+public ItemOptions(String color, String size, BigDecimal price, String status) {
+    this.color = color;
+    this.size = size;
+    this.price = price;
+    this.status = status;
+}
+```
+
+

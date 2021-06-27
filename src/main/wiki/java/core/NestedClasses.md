@@ -38,6 +38,8 @@ new Solution("The Darkside Hacker") {
 ## [Анонимные классы - JavaRush](https://javarush.ru/groups/posts/2193-anonimnihe-klassih)
 > **Анонимный класс не может содержать статические переменные и методы.**
 
+> **У анонимных внутренних классов не может быть конструктора.**
+
 Анонимный класс — это полноценный внутренний класс. Поэтому у него есть доступ к переменным внешнего класса, в том числе к статическим и приватным.
 
 
@@ -111,7 +113,7 @@ public class Solution {
 ```
 
 <details>
-<summary>SHOW SOLUTION = |</summary>
+<summary>SHOW SOLUTION (task2406) = |</summary>
 
 ```java
 import java.math.BigDecimal;
@@ -152,3 +154,29 @@ public class Solution {
 ```
 
 </details>
+
+
+## Локальные классы
+Локальные классы — классы внутри методов.
+Они работают как обычные внутренние классы, но их можно использовать в пределах того метода, где их объявили.<br>
+
+Класс, объявленный внутри метода, может использовать локальные переменные этого метода. 
+Но есть одно ограничение – переменные можно только «читать», изменять их нельзя.<br>
+Поэтому классы, объявленные внутри метода, могут иметь доступ только к тем переменным метода, которые помечены ключевым словом final.
+
+Пример, использования добавления к объекту `Car` локальной переменной метода `policeNumber`.
+```java
+class Car {
+   public ArrayList<Car> createPoliceCars(int count) {
+      ArrayList<Car> result = new ArrayList<Car>();
+      for (int i = 0; i < count; i++) {
+|        final int number = i;
+|        result.add(new Car() {
+|           int policeNumber = number;
+|        });
+      }
+      return result;
+   }
+}
+```
+
