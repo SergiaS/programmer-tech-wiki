@@ -38,4 +38,13 @@
 ***
 ```
 
+# Table
+|Column 1 | Column 2 |
+|:------- |:-------- |
+|Text 1   | Text 2   |
 
+```text
+|Column 1 | Column 2 |
+|:------- |:-------- |
+|Text 1   | Text 2   |
+```

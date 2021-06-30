@@ -1,5 +1,13 @@
 # Строки и всё что касается их
 
+## Format
+|Format-Specifier      | Datatype related | Format printing | Formatting a string |
+|:---------------------|:-----------------|:----------------|:--------------------|
+| %d | int, short, byte, long | System.out.printf("Display a Integer %d",15000); | String.format("Display a Integer %d",15000); |
+| %c | char | System.out.printf("Display a Character %c",'c'); | String.format("Display a Character %c",'c'); |
+| %f | double, float | System.out.printf("Display a Floating-point Number %f",123.45); | String.format("Display a Floating-point Number %f",123.45); |
+| %s | String | System.out.printf("Display a String %s","String"); | String.format("Display a String %s","String"); |
+
 
 ## Split by StringTokenizer
 Один из способ разбиения строки на части – с помощью класса `StringTokenizer`.
