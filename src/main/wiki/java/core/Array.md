@@ -37,8 +37,7 @@ All values of primitive types are stored in stack memory, but variables of refer
 
 Source: [stackoverflow](https://stackoverflow.com/questions/1073919/how-to-convert-int-into-listinteger-in-java)
 
-
-
+***
 
 
 
@@ -50,7 +49,7 @@ Source: [stackoverflow](https://stackoverflow.com/questions/1073919/how-to-conve
 - Отображение содержимого
   - ОДНОМЕРНОГО массива в строку без перебора: `Arrays.toString(arr);` 
   - Для МНОГОМЕРНЫХ - `Arrays.deepToString(array);`
-- Преобразование массива в лист: `Arrays.asList();`
+- Преобразование массива в лист: `Arrays.asList();` - фиксированный размер листа, `new ArrayList<Integer>(Arrays.asList(sourceArray));` - расширяемый.
 - Сравнение массивов делаем так: `Arrays.compare(arr1, arr2);` Если первый массив меньше второго (идёт раньше в словаре) возвращает значение меньше 0; если равны - 0; если первый больше второго - больше 0.
 - Сравнить 
   - ОДНОМЕРНЫЕ массивы по их содержанию: `Arrays.equals(arr1, arr2);` 
@@ -83,3 +82,34 @@ Source: [stackoverflow](https://stackoverflow.com/questions/1073919/how-to-conve
 Integer[] leftSubArr = list.toArray(new Integer[0]);
 ```
 
+## Sort
+
+### Method `sort` with `Comparator`
+This example sort array values and return indices.
+```java
+Integer[] idx = { 0, 1, 2, 3 };
+float[] data = { 1.7f, -0.3f,  2.1f,  0.5f };
+
+Arrays.sort(idx, new Comparator<Integer>() {
+    @Override public int compare(final Integer o1, final Integer o2) {
+        return Float.compare(data[o1], data[o2]);
+    }
+});
+
+// [1, 3, 0, 2]
+```
+
+### Inner sort by `Comparator`
+Пример двух-уровневой сортировки с `Comparator`, сначало по элементам с первым индексом, потом с нулевым:
+```java
+Queue<int[]> values = new PriorityQueue<>(new Comparator<int[]>() {
+    @Override
+    public int compare(int[] o1, int[] o2) {
+        int firstCompare = Integer.compare(o1[1], o2[1]);
+        if (firstCompare == 0) {
+            return Integer.compare(o1[0], o2[0]);
+        }
+        return firstCompare;
+    }
+});
+```

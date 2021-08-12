@@ -44,3 +44,8 @@ However, since Java 11 was released, for most JVM implementations JRE is no long
   Указывает чтобы компилятор не показывал предупреждения.
   
 
+***
+
+## Other helpful Java info 
+### Как узнать тип возвращаемого объекта
+Нужно на объекте вызвать метод `getClass()`.

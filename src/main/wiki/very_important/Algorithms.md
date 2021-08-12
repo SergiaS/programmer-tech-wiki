@@ -234,6 +234,46 @@ public static void quickSort(int[] arr, int leftBorder, int rightBorder) {
 }
 ```
 
+### Two-pointers
+Данный способ позволяет значительно увеличить эффективность алгоритма (занимает меньше времени на работу и памяти - time and space complexity) путём манипулирования двумя индексами массива или листа за один цикл.
+Нужно использовать при отсортированном массиве.
+
+```java
+// The time complexity of this solution is O(n) and space complexity is O(1)
+public class TwoPointer {
+
+    public static void main(String[] args) {
+        System.out.println(twoSums(new int[]{1, 1, 2, 3, 4, 6, 8, 9}, 11));
+    }
+
+    public static boolean twoSums(int[] array, int target) {
+        int pointerOne = 0;
+        int pointerTwo = array.length-1;
+
+        while (pointerOne <  pointerTwo) {
+            int sum = array[pointerOne] + array[pointerTwo];
+
+            if (sum == target) {
+                return true;
+            } else if (sum < target) {
+                pointerOne++;
+            } else {
+                pointerTwo--;
+            }
+        }
+        return false;
+    }
+}
+```
+
+# Dynamic programming
+Своего рода оптимизация рекурсии. Эффективное манипулирование состоянием объекта.
+Тема очень сложная, часто манипулируют индексами двухмерного массива. Из плюсов - `time complexity` лучше.
+
+Есть несколько подходов выполнения данного алгоритма:
+* Recursion
+* Store - memoize (not memorize!)
+* Bottom-up
 
 
 
@@ -247,6 +287,38 @@ public static void quickSort(int[] arr, int leftBorder, int rightBorder) {
 > 105 : 3 | сумма цифер делится на 3 без остатка?<br>
 > 100 : 4 | число делится на 4 когда две последние цифры 00; и последние две цифры дают двухзначное число, которое делится на 4.<br>
 > 100 : 8 | число делится на 8 когда три последние цифры 00; и последние три цифры дают трехзначное число, которое делится на 4.
+
+
+# BFS (Breath-First-Search / Поиск в ширину)
+
+Пример подсчета суммы на самом ПОСЛЕДНЕМ уровне:
+```java
+public int deepestLeavesSum(TreeNode root) {
+    if (root == null) return 0;
+
+    Queue<TreeNode> queue = new LinkedList<>();
+    queue.add(root);
+
+    int sum = 0;
+    while (queue.isEmpty()) {
+        int count = queue.size();
+        sum = 0;
+        for (int i = 0; i < count; i++) {
+            TreeNode tmp = queue.poll();
+            sum += tmp.val;
+            if (tmp.left != null) {
+                queue.add(tmp.left);
+            }
+            if (tmp.right != null) {
+                queue.add(tmp.right);
+            }
+        }
+    }
+    return sum;
+}
+```
+
+
 
 # Time and Space Complexity (сложность по времени и памяти)
 Эффективность алгоритмов определяют по количеству затраченных операций (Time Complexity - Big-O) и кол-ву затраченной памяти (Space Complexity).
