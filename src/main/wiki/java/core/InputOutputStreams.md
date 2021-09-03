@@ -1,4 +1,13 @@
 # Input Output Java Streams / Потоки ввода вывода
+Посути, потоки оборачиваются в друг друга - передаются в коструктор другого. 
+
+__Basic setup of decorators__:
+```java
+InputStream fileStream = new FileInputStream(filename);
+InputStream gzipStream = new GZIPInputStream(fileStream);
+Reader decoder = new InputStreamReader(gzipStream, encoding);
+BufferedReader buffered = new BufferedReader(decoder);
+```
 
 <details>
 <summary>SHOW MENU</summary>
@@ -16,6 +25,8 @@
 - [FileInputStream и FileOutputStream](#fileinputstream-и-fileoutputstream)
     - [Пример копирования картинки](#пример-копирования-картинки)
 - [OutputStreamWriter](#outputstreamwriter)
+- [Перемотка стримов (I/O поток)]()
+
 
 </details>
 
@@ -23,16 +34,28 @@
 ## Для работы с файлами
 Лучше это знать, облегчит жизнь.
 
+> Очень часто во время написания проверочного кода, данные могут не записываться в файл. 
+> Для записи - всегда закрывай поток/-и, даже если это просто кусок проверочного кода, ибо это может влиять на рузельтат!
+
+> [InputStream](https://betacode.net/13527/java-inputstream) - класс в package java.io, который является базовым классом, представляющим поток bytes (stream of bytes), полученный при чтении определенного источника данных, например файла.
+
 > Нельзя использовать стримы предназначеные для текстовых файлов при работе с бинарными файлами.
 
 > `FileWriter` и `FileReader` используются для работы с текстовыми файлами.
 
-> `FileInputStream` и `FileOutputStream` используются для работы с бинарными файлами. 
+> `FileInputStream` и `FileOutputStream` используются для работы с бинарными файлами - получаем поток bytes (stream of bytes).
+
+> Convert InputStream to Reader:
+> ```java
+> InputStream inputStream = new FileInputStream("c:\\data\\input.txt");
+> Reader inputStreamReader = new InputStreamReader(inputStream);
+> ```
 
 ### Закрытие файлов
 > Никогда не забывай закрывать стримы ввода/вывода после использования!
 
-Чтобы не забывать это делать, лучше использовать конструкцию `try-with-resources` - в скобках `try` указываются ТОЛЬКО объекты имплементирующие интерфейс `AutoCloseable` - ресурсы используемые в скобках `try` будут автоматически закрыты. В `try-with-resources` может быть один блок `try` без `catch` если нужно. 
+Чтобы не забывать это делать, лучше использовать конструкцию `try-with-resources` - в скобках `try` указываются ТОЛЬКО объекты имплементирующие интерфейс `AutoCloseable` - ресурсы используемые в скобках `try` будут автоматически закрыты. 
+В `try-with-resources` может быть один блок `try` без `catch` если нужно. 
 
 Другой вариант - использования блока `finally`.
 
@@ -246,4 +269,53 @@ public class ConvertFromWindows1251ToUTF8 {
 }
 ```
 
+## Перемотка стримов (I/O поток)
+> __Не все потоки поддерживают перемотку стримов.__
 
+Используется, например, при определении чтения архива несколькими разными алгоритмами, чтобы узнать каким алгоритмом нужно расшифровать данный архив.
+
+Принцип работы - сначало идёт чтение файла и курсор перемещается побайтово, в случае появления ошибки (не тот формат), `catch` должен обработь данную ошибку - отматать стрим (переставить курсор в начало потока).
+
+
+### Как перематать стрим?
+У абстрактного класса `InputStream` есть методы для перемотки стримов.
+Для перемотки используется связка методов `mark()` и `reset()`,
+где метод `mark()` запоминает место на которое необходимо переместить курсор,
+а `reset()` - откатывает курсор до этого места когда нужно.
+```java
+public static void rewindStream() {
+    // Create input stream 'test.txt' for reading containing text "abcdefg"
+    FileInputStream inputStream = new FileInputStream("test.txt");
+
+    // Convert inputStream to bufferedInputStream
+    BufferedInputStream buffInputStr = new BufferedInputStream(inputStream);
+
+    // Read and print characters one by one
+    System.out.println("Char : " + (char)buffInputStr.read());
+
+    // Mark is set on the input stream
+    System.out.println("mark() called");
+    buffInputStr.mark(0);
+
+    // Read and print characters
+    System.out.println("Char : " + (char)buffInputStr.read());
+    System.out.println("Char : " + (char)buffInputStr.read());
+    System.out.println("Char : " + (char)buffInputStr.read());
+
+    // Reset() is invoked
+    System.out.println("reset() called");
+    buffInputStr.reset();
+
+    // Read and print characters
+    System.out.println("Char : " + (char)buffInputStr.read());
+    System.out.println("Char : " + (char)buffInputStr.read());
+
+    // Reset() is invoked
+    System.out.println("reset() called");
+    buffInputStr.reset();
+
+    // Read and print characters
+    System.out.println("Char : " + (char)buffInputStr.read());
+    System.out.println("Char : " + (char)buffInputStr.read());
+}
+```

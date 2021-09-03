@@ -3,6 +3,12 @@
 # Flutter Configuration
 В основном с Flutter работают на Android Studio, но его можно установить на Intellij IDEA (как плагин) - результат тот же.
 
+## Commands
+Для использования команд `Flutter` в консоли нужно добавить переменные среды:
+1. В System variables создаем переменную с именем `FLUTTER_HOME` и указываем путь к корню `JDK Flutter`.
+2. Далее нужно добавить в переменную `PATH` путь к папке `bin` в `JDK Flutter`.
+3. Перезагрузить IDE. Может потребоваться перезагрузка ПК.
+
 ## Settings
 Необходимо будет произвести ряд настроек - установить Android SDK (в настройках IDEA - SDK Platforms).
 В SDK Tools должны быть выбраны __NDK, HAXM, Android Emulator__.
@@ -321,3 +327,13 @@ ElevatedButton(
 )
 ```
 
+## DataBase
+Подключение к БД должно происходить в асинхронном режиме. 
+Чтобы выполнять код асинхронно - необходимо создать асинхронный метод. 
+```dart
+void initFirebase() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+}
+```
+ну и конечно вызвать его потом, например в методе `initState()`.
