@@ -1,30 +1,46 @@
-# Command lines
+# AWS
+AWS (Amazon Web Services).
 
-## Commands
-Клавиша `TAB` будет дописывать названия файлов, адреса...
+First, we need to declare [AWS SDK Maven-dependency](https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk) in your project:
+```xml
+<dependency>
+    <groupId>com.amazonaws</groupId>
+    <artifactId>aws-java-sdk</artifactId>
+    <version>1.12.62</version>
+</dependency>
+```
 
-* `ls` - краткая инфа по каталогам.
-* `ls -lah` - отображает скрытые файлы и папки с подробной инфой.
-* `pwd` - показывает адрес директории где ты сейчас находишся.
-* `cd /` - перемещаешся в корень.
-* `echo "hello world" > somefile.txt` - создаст текст указанный в кавычках и сохранит его в указанный файл somefile.txt.
-* `mv plank.jpg somefile.txt ./tr-files` - переносит указанные файлы в указанную папку.
+## AWSCLIV2
+AWSCLIV2 (Amazon Web Service Command Line Interface Version 2).
 
-
-* `ls -all` - отображает список доступных файлов в данном каталоге командной строки.
-* `cd src/main` - переходим во внутырь каталога main.
-
-## HotKeys
-* `Ctrl + D` - выход. Иногда может глючить - не реагирует. 
+* [Install or Update AWSCLIV2](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)
+* [Set environment variables](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html)
 
 
-## Примеры использования
+## EC2
+EC2 (Elastic Cloud Compute).
 
-### Работа с AWS EC2 SSH
-Если нужно зайти на инстанс AWS EC2:
-  ```shell
-  ssh -i "ec2KP.pem" ec2-user@ec2-3-120-152-58.eu-central-1.compute.amazonaws.com
-  ```
+### Security Group
+[Security groups control the network traffic to our EC2 instances.](https://www.baeldung.com/ec2-java#1-creating-a-security-group)
+
+Security groups don't allow any network traffic by default.
+You have to configure your security group to allow traffic.
+
+### Key pair
+When launching an EC2 instance, we need to specify a key pair.
+
+### How to delete instance
+All you need to do it's just select the instance that you want to delete and choose action __TERMINATE__.
+That's all. Instance will be removed in a couple of hours.
+
+### How to connect to your instance
+Во-первых, у тебя должен быть файл формата `.pem` - это ключи, без которых к инстансу не подключишся.
+
+Далее в терминале (cmd, Bash, Power Shell...) переходим в директорию в которой лежит `.pem` файл, и запускаем команду со своим Public DNS, например: 
+```shell
+ssh -i "ec2-key-pair3.pem" ec2-user@ec2-3-66-217-181.eu-central-1.compute.amazonaws.com
+```
+Всё, мы на сервере:)
 
 <hr>
 
@@ -57,3 +73,4 @@ scp -i ./ec2KP.pem ec2-user@3.120.152.58:/home/ec2-user/somefile.txt ~/Desktop/t
 ```shell
 scp -i ./ec2KP.pem -r ec2-user@3.120.152.58:/home/ec2-user/tr-files/* ~/Desktop/tr-files
 ```
+Если вместо `/*` будет `*`, тогда будут скачаны все файлы с папкой включая скрытые.

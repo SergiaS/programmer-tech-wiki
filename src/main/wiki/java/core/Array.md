@@ -9,6 +9,14 @@ All about arrays - `[]`.
 
 ***
 
+#### Как отсортировать двухмерный массив?
+Для этого нужно написать компаратор как второй параметр:
+```java
+Arrays.sort(intervals, Comparator.comparingInt(o -> o[0]));
+```
+
+***
+
 #### Как отсортировать массив в обратном порядке?
 С помощью метода `Arrays.sort(T[] a, Comparator<? super T> c)`, и на вход этому методу передать `Collections.reverseOrder()` как второй параметр.
 
