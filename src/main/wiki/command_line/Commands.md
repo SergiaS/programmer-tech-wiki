@@ -1,24 +1,48 @@
 # Command lines
 
+> В bash слешы указываются в другую сторону - /<br>
+> В cmd - \
+
+> [Сответствие консольных команд Windows и Linux](https://white55.ru/cmd-sh.html) 
+
 ## Commands
 Клавиша `TAB` будет дописывать названия файлов, адреса...
 
 * `ls` - краткая инфа по каталогам.
 * `ls -lah` - отображает скрытые файлы и папки с подробной инфой.
-* `pwd` - показывает адрес директории где ты сейчас находишся.
-* `cd /` - перемещаешся в корень.
-* `echo "hello world" > somefile.txt` - создаст текст указанный в кавычках и сохранит его в указанный файл somefile.txt.
-* `mv plank.jpg somefile.txt ./tr-files` - переносит указанные файлы в указанную папку.
-
-
 * `ls -all` - отображает список доступных файлов в данном каталоге командной строки.
 * `cd src/main` - переходим во внутырь каталога main.
+* `pwd` - показывает адрес директории где ты сейчас находишся.
+* `cd /` - перемещаешся в корень.
+* `cd ..` - перемещаешся в уровень назад.
+* `cd /d C:\dev` - переключиться на нужный адресс/папку.
+* `start .` - откроет текущюю папку с файлами.
+* `echo "hello world" > somefile.txt` - создаст текст указанный в кавычках и сохранит его в указанный файл somefile.txt.
+* `mv plank.jpg somefile.txt ./tr-files` - переносит указанные файлы в указанную папку.
+* `echo %TOPJAVA_ROOT%` - Выводит адрес системной переменной (можно посмотреть в "переменные среды" в MY PC).
+* `whoami` - name of your computer (username).
+* `dir` - return the list of non-hidden files and folders in your current directory. If you want to view hidden files use `dir /A`.
+* `C:\users\student> help cd` - command can take any command as a parameter and return all the available options.
+
 
 ## HotKeys
 * `Ctrl + D` - выход. Иногда может глючить - не реагирует. 
 
 
 ## Примеры использования
+
+### Освобождение занятого порта
+Сначало, смотрим кем занят порт командой:
+```shell
+netstat -a -n -o | find "8080"
+```
+Далее копируем с результата *Process Id* и добавляем в команду вместо `< Process Id >`:
+```shell
+taskkill  /F  /PID < Process Id >
+```
+Команда убьет процесс и освободит порт.
+
+
 
 ### Работа с AWS EC2 SSH
 Если нужно зайти на инстанс AWS EC2:

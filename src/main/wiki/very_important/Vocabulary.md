@@ -6,6 +6,7 @@
 * `Аггрегация` - объединение различных данных.
 * `Релевантность` - схожесть.
 * `varargs` - variable-length arguments.
+* `LUW (Logical Unit of Work)` - Логическая единица работы.
 
 ### Литература
 * «Java. Эффективное программирование», Джошуа Блох.
@@ -17,3 +18,11 @@
 
 
 # English
+
+### Чтение формул, математика:
+f(x) = O(g(x)), we say **f of x is big-O g of x**. 
+
+[Source - Baeldung: An Introduction to the Theory of Big-O Notation](https://www.baeldung.com/cs/big-o-notation)
+
+### Литература
+[Учебник английского языка от программиста](https://urvanov.ru/2018/05/13/учебник-английского-языка/)
