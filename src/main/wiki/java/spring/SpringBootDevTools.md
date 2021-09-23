@@ -1,5 +1,8 @@
 # Spring Boot Developer Tools
+[Documentation - 1.5.16.RELEASE](https://docs.spring.io/spring-boot/docs/1.5.16.RELEASE/reference/html/using-boot-devtools.html#using-boot-devtools-livereload)
 **Рекомендуется для разработки!**
+
+> Время перезагрузки ~10 сек.
 
 <details>
 <summary>SHOW MENU</summary>
@@ -21,6 +24,7 @@ First you need to add a dependency to your Maven:
     <artifactId>spring-boot-devtools</artifactId>
     <scope>runtime</scope>
     <optional>true</optional>
+    <version>${springboot.version}</version>
 </dependency>
 ```
 * `scope` - says, that it will be work only in runtime.
@@ -35,3 +39,20 @@ First you need to add a dependency to your Maven:
 > After that when you change something in app and save new changes (Ctrl+s) the application has to make restart automatically.
 
 > Чтобы Spring DevTools подхватывал изменения нужно предварительно сохраняться `Ctrl+S`.
+
+> Также может понадобиться установить настройки конфигурации запуска файла в IntelliJ IDEA.
+> Для этого заходим в `Edit configuration` выбираем настройки для `On Update action > Update trigger file`, и для `On frame deactivation > Update classes and resources`. 
+
+## Problems
+Бывает так, что DevTools обновляется дважды. Этот сорс может помочь:
+[Application restarts twice on reload](https://github.com/spring-projects/spring-boot/issues/25269)
+```properties
+# application.properties
+spring.devtools.restart.poll-interval=2s
+spring.devtools.restart.quiet-period=1s
+```
+
+<hr>
+
+
+

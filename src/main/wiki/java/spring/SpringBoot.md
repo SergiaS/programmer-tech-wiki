@@ -1,4 +1,5 @@
 # Spring Boot
+Spring Boot включает в себя интерфейс командной строки.
 
 ## CommandLineRunner
 Один из способов популяции БД - создание бина:
@@ -34,3 +35,57 @@ public MessageSource messageSource() {
 ```
 
 ##[Spring Boot SSL [https] Example](https://howtodoinjava.com/spring-boot/spring-boot-ssl-https-example/)
+
+
+## Дефолтная предзагрузка данных
+Можно использовать для простых приложений.
+```java
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+class LoadDatabase {
+
+  private static final Logger log = LoggerFactory.getLogger(LoadDatabase.class);
+
+  @Bean
+  CommandLineRunner initDatabase(EmployeeRepository repository) {
+    return args -> {
+      log.info("Preloading " + repository.save(new Employee("Bilbo Baggins", "burglar")));
+      log.info("Preloading " + repository.save(new Employee("Frodo Baggins", "thief")));
+    };
+  }
+}
+```
+
+## Annotations
+
+### @SpringBootApplication
+Включает в себя сразу несколько аннотаций: `@Configuration`, `@EnableAutoConfiguration` и `@ComponentScan`.
+
+* `@SpringBootApplication` is a convenience annotation that adds all of the following:
+    * `@Configuration`: Tags the class as a source of bean definitions for the application context.
+    * `@EnableAutoConfiguration`: Tells Spring Boot to start adding beans based on classpath settings, other beans, and various property settings. For example, if spring-webmvc is on the classpath, this annotation flags the application as a web application and activates key behaviors, such as setting up a `DispatcherServlet`.
+    * `@ComponentScan`: Tells Spring to look for other components, configurations, and services in the `com/example` package, letting it find the controllers.
+    
+```java
+package com.example.servingwebcontent;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class ServingWebContentApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(ServingWebContentApplication.class, args);
+    }
+
+}
+```
+The `main()` method uses Spring Boot’s `SpringApplication.run()` method to launch an application. 
+Did you notice that there was not a single line of XML? **There is no `web.xml` file, either**. 
+This web application is 100% pure Java and you did not have to deal with configuring any plumbing or infrastructure.

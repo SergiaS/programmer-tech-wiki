@@ -1,9 +1,11 @@
-# Command lines
+# Command line
 
 > В bash слешы указываются в другую сторону - /<br>
 > В cmd - \
 
-> [Сответствие консольных команд Windows и Linux](https://white55.ru/cmd-sh.html) 
+> Для многострочного написания кода используй \  
+
+> [Соответствие консольных команд Windows и Linux](https://white55.ru/cmd-sh.html) 
 
 ## Commands
 Клавиша `TAB` будет дописывать названия файлов, адреса...
@@ -23,6 +25,7 @@
 * `whoami` - name of your computer (username).
 * `dir` - return the list of non-hidden files and folders in your current directory. If you want to view hidden files use `dir /A`.
 * `C:\users\student> help cd` - command can take any command as a parameter and return all the available options.
+* `mkdir -p src/main/java/hello` - создаст иерархию папок, очень полезно использовать в терминале IntelliJ IDEA.
 
 
 ## HotKeys
@@ -80,4 +83,78 @@ scp -i ./ec2KP.pem ec2-user@3.120.152.58:/home/ec2-user/somefile.txt ~/Desktop/t
 Если нужно скопировать все файлы (без самой папки) с инстанса на локальный ПК:
 ```shell
 scp -i ./ec2KP.pem -r ec2-user@3.120.152.58:/home/ec2-user/tr-files/* ~/Desktop/tr-files
+```
+
+
+### [Test a REST API with curl](https://www.baeldung.com/curl-rest?fbclid=IwAR0oPNaS1TxkFapkgbg7ByWaX47XwmdKqxiMveclZXX2vldmRDRR5STB70k)
+**curl** is a command-line tool for transferring data, and it supports about 22 protocols, including HTTP.
+
+**curl** supports over 200 command-line options.
+
+```shell
+curl -v http://www.example.com/
+```
+`-v` - Verbose - the commands provide helpful information such as the resolved IP address, the port we're trying to connect to, and the headers.
+
+<hr>
+
+#### Post (Project: t_spring)
+Многострочность не работает во многих терминалах.
+
+Отправка json-запроса в строке (2 варианта для Git-Bash):
+> Если отправлять данные на киррилице - будут ошибки.
+```shell
+curl -X POST http://localhost:8080/users -H 'Content-Type: application/json' -d '{"userName":"my_login","password":"my_password"}'
+
+curl -d '{"userName":"mendigo","password":"asdasdasd"}' -H 'Content-Type: application/json' http://localhost:8080/users
+```
+> **ВНИМАНИЕ!** Для Windows другой синтаксис - нужно использовать `"`, и экранировать каждую кавычку.
+Windows command prompt has no support for single quotes like the Unix-like shells.
+```shell
+curl -d "{\"userName\":\"mendigo\",\"password\":\"asdasdasd\"}" -H "Content-Type: application/json" http://localhost:8080/users
+```
+
+Отправка json-запроса в файле:
+```shell
+curl -d @request.json -H "Content-Type: application/json" http://localhost:8080/users
+```
+
+
+## Пример работы CURL
+
+### Отправка сообщения на почту GMail by curl
+> Обязательно нужно своя почта `gmail`.
+
+> Также нужно разрешить принимать аккаунтом не безопасные данные - [здесь](https://myaccount.google.com/u/2/lesssecureapps?pli=1)
+
+```shell
+curl --ssl-reqd \
+ --url 'smtps://smtp.gmail.com:465' \
+ --user 'YOUR_EMAIL@gmail.com:YOUR_ACCOUNT_PASSWORD' \
+ --mail-from 'YOUR_EMAIL@gmail.com' \
+ --mail-rcpt 'EMAIL_TO_SEND@gmail.com' \
+ --upload-file msg.txt
+```
+
+### Get request by curl
+В тестовом задании `tt_currency-converter` отправляю запрос на локалку и в ответе приходит json:
+```shell
+curl http://localhost:8080/nbu
+```
+
+С форматированием pretty json:
+```shell
+curl http://localhost:8080/nbu | json_pp
+
+```
+Для UTF-8 есть код с использованием конвертера `iconv`:
+```shell
+curl http://localhost:8080/nbu | iconv -t utf-8
+```
+
+<hr>
+
+Данная команда сохранит json в файл:
+```shell
+curl http://localhost:8080/nbu | iconv -t utf-8 > myJson.json
 ```

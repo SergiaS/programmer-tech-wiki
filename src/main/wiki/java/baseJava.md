@@ -49,3 +49,17 @@ However, since Java 11 was released, for most JVM implementations JRE is no long
 ## Other helpful Java info 
 ### Как узнать тип возвращаемого объекта
 Нужно на объекте вызвать метод `getClass()`.
+
+
+## Работа с `.properties` файлами
+* [Java Properties file exampless](https://mkyong.com/java/java-properties-file-examples/)
+```java
+private static final Properties properties = new Properties();
+static {
+    try(InputStream input = new FileInputStream("config.properties")) {
+        properties.load(input);
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+```
