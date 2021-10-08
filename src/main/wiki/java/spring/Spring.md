@@ -68,4 +68,9 @@ public class AnnotationDrivenEventListener {
 }
 ```
 
+## Profiles
+* [Baeldung - Spring Profiles](https://www.baeldung.com/spring-profiles)
+
+> Profile names can also be prefixed with a NOT operator, e.g., !dev, to exclude them from a profile.
+
 

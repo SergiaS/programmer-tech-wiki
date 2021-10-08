@@ -1,12 +1,20 @@
 # JavaScript
+Как программист Java учил JavaScript...
 
 * Всплытие / поднятие (Hoisting) переменных (var) относитя только к их объявлению (даже если она инициализирована).
 
 * С помощью `===` можно сравнить две строки или два булевых значения. 
   Если же сравнивать так значения разных типов, ответом всегда будет `false`.
-
-* Двойное равно, `==`, который означает «практически равно». 
+  ```js
+  console.log("0" === 0); // false
+  console.log(0 === false); // false
+  ```
+* Двойное равно, `==`, означает «практически равно». Не проверяет тип.
   Используйте его для проверки двух значений на соответствие друг другу, даже если одно из них строка, а другое — число.
+  ```js
+  console.log("0" == 0); // true
+  console.log(0 == false); // true
+  ```
 
 * JavaScript использует значение `undefined`, когда не может найти иного значения. 
   Например, если, создав новую переменную, вы не присвоите ей значение с помощью оператора `=`, ее значением будет `undefined`.
@@ -30,7 +38,82 @@
 
 * В JavaScript есть две чаще всего используемые структуры данных – это `Object` и `Array`.
 
+* Методы в JS называются функциями, - могут записываться по-разному:
+    ```js
+    // обычный вариант
+    function addNewElements() {
+        // some code
+    }
+  
+    function addNewElements2(arr) {
+        // some code
+    }
+    ```
+    ```js
+    // стрелочная функция
+    addNewElements = () => {
+        // some code
+    }
+    addNewElements2 = (arr) => {
+        // some code
+    }
+    ```
+* Regex в JS указывается без кавычек, например в методе `replace`. 
+  А `replaceAll` походу не работает - используй модификатор `g`.
+  Не забываем про экранирование, в отличии от Java в JS слеш ставится в другую сторону - `/`.
+  Паттерн указывается в квадратных скобках.
+  > [Модификаторы regex](https://www.w3schools.com/jsref/jsref_obj_regexp.asp). 
+  > The `g` character makes it a "global" match, meaning it repeats the search through the entire string.
+    ```js
+    // паттерн на поиск и замену всех точек
+    let email = "test.e.mail+bob.cathy@leetcode.com";
+    
+    console.log(email.substring(0, 21).replace(/[.]/g, ""));
+    // testemail+bobcathy
+    ```
+* In JavaScript, all functions return a value. 
+  Even if we don't use the `return` keyword, the function will return `undefined` implicitly. 
+  That's how the language has been designed. 
+  This rule also applies to callbacks - they are functions too.
 
+
+
+## Import and Export
+
+### Подключение scss:
+```js
+require('styles/main.scss');
+```
+
+### Подключение переменных/функций с другого файла
+```js
+import { log, logTitle } from 'logger';
+```
+при этом, данные в файле должны быть помечены словом `export`:
+```js
+import $ from 'jquery';
+export const log = content => $('#content').append("<i style = 'color: black' class = 'fa fa-terminal'> </i>  " + content + "<br>" );
+export const logTitle = title => $('#title').append(title);
+```
+Можно указать как мы будем обращаться к данным в другом файле, например `as someMath`.
+При импорте указывать `.js` не нужно.
+```js
+import * as someMath from './Math';
+
+console.log(someMath.add(2,2));
+console.log(someMath.substract(2,2));
+console.log(someMath.divide(2,2));
+console.log(someMath.multiply(2,2));
+console.log(someMath.PI);
+```
+Если нужно использовать только некоторые функции, а не все (`*`) - тогда не нужно использовать `as someName` и обращаемся на прямую:
+```js
+import {add, divide, PI} from './Math';
+
+console.log(add(2,2));
+console.log(divide(2,2));
+console.log(PI);
+```
 
 
 ## JS features:
@@ -79,10 +162,10 @@ let myFunc = () => {
 
 <hr>
 
-### Callback функции 
-Это функция передана в качестве параметра другой функции. Способ борьбы с асинхронностью.
+### Callback функции
+Это функция, которая выполняется в качестве параметра внутри другой функции. Способ борьбы с асинхронностью.
 
-Можно передавать не только функцию обертку, но и анонимную. 
+Можно передавать не только функцию обертку, но и анонимную.
 В примере в анонимной функции запускается функция `second(x,y)` с двумя аргументами.
 ```js
 function first(y){
@@ -96,6 +179,17 @@ function second(x,y){
 
 first(function () {
     second(5,7);
+});
+```
+
+Пример от amigoscode:
+```js
+function callbackExample(name, callback) {
+    console.log(callback(name));
+}
+
+callbackExample("Bob Singer", function (name) {
+    return "Hello " + name;
 });
 ```
 
@@ -116,7 +210,7 @@ one(5,78,3,2);
 <hr>
 
 ### Тернарный оператор
-Он не такой как в Java. По умолчанию сравнивает если значение переменной `0` или `1`:
+Имеет больше возможностей, чем в Java. По умолчанию сравнивает если значение переменной `0` или `1`:
 ```js
 num ? ++cur > max && (max = cur) : (cur = 0);
 ```
@@ -215,15 +309,287 @@ for (let i = 1; i <= 9; i++) {
 <hr>
 
 
-## Working with REST
+## Fetch API
 * [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch)
+* [Отличия fetch() от jQuery](https://developer.mozilla.org/ru/docs/Web/API/Fetch_API#отличия_от_jquery)
 
+После `fetch` получаем объект с ответом - [Response](https://developer.mozilla.org/ru/docs/Web/API/Response).
+
+После `join` получаем объект Promise.
+
+```js
+// Пример чтения json-данных (курсы валют) с сервера НБУ:
+fetch('https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json')
+    .then(response => response.json())
+    .then(data => {
+        for (let i = 0; i < data.length; i++) {
+            console.log(
+                "id: " + data[i]["r030"] +
+                "; currName: " + data[i]["txt"] +
+                "; rate: " + data[i]["rate"] +
+                "; cc: " + data[i]["cc"] +
+                "; exchangedate: " + data[i]["exchangedate"]
+            );
+        }
+    });
+```
+```js
+// Пример чтения json-данных randomuser.me с деструктаризацией
+// https://randomuser.me/documentation
+const getRandomUser = n => {
+    const fetchRandomUsers = fetch(`https://randomuser.me/api/?results=${n}`);
+    fetchRandomUsers.then(data => {
+        data.json().then(randomUsers => {
+            console.log(JSON.stringify(randomUsers.results.length));
+            randomUsers.results.forEach(u => {
+                const {gender, email} = u;
+                console.log(`${gender} - ${email}`);
+            })
+
+            // randomUsers.results
+            //     .filter(u => u.gender === "female")
+            //     .forEach(u => {
+            //         console.log("They are: " + u.name.first + ", age: " + u.dob.age)
+            //     });
+
+        });
+    });
+}
+
+getRandomUser(100);
+```
+
+### Пример итерации по мапе
+[Object.entries](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Object/entries) используется с деструктаризацией:
+```js
+for (const [key, value] of Object.entries(object1)) {
+    console.log(`${key}: ${value}`);
+}
+```
+Если у значения возвращается `Object object`, тогда можно получить значения через имя в квадратных скобках - `${value["id"]}`. Реальный пример:
+```js
+let jsonResponseMap;
+const jsonUrl = "http://localhost:8080/nbu";
+
+fetch(jsonUrl)
+    .then(response => response.json())
+    .then(data => {
+        jsonResponseMap = data;
+
+        addNewOptions();
+        showAllCurrenciesInfo();
+    })
+    .catch(error => {
+        console.log('Возникла проблема с вашим fetch запросом: ', error.message);
+    });
+
+function addNewOptions() {
+    let result = document.querySelector("#listOfCurrencies");
+    let select = document.getElementById("nbuList");
+    
+    for (const [key, value] of Object.entries(jsonResponseMap)) {
+        // console.log(`${key}: ${value["amount"]}`);
+
+        let newOption = document.createElement("option");
+        newOption.value = `${value["id"]}`;
+        newOption.text = `${value["currencyCode"]}`;
+        select.add(newOption);
+    }
+    
+    result.appendChild(select);
+    result.insertBefore(select, result.children[0]);
+}
+```
+
+
+## [Promise](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Promise) 
+Объект Promise (промис) используется для отложенных и асинхронных вычислений.
+
+[Amigoscode](https://youtu.be/dOnAC2Rr-6A?t=11386) > Промис - представляет значение, которое может быть доступно в данный момент, или в будущем, или никогда.
+
+Может имеет 3 состояния: до того как рез-т готовый, промис находится в состоянии ожидания - **Pending**. 
+Как только рез-т готовый - если успешно, то это **Fulfilled**, а если с ошибкой - **Rejected**.
+
+> Если есть несколько промисов - порядок выполнения не гарантируется!
+  Для фиксированного порядка используй `Promise.all([a,b])`.
+
+
+### Метод then
+В случае успешного вычисления промиса (promise выполнился), чтобы получить от него какой-то рез-т, нужно использовать спец-метод `.then`: 
+
+`somePromise.then()` - в нем (внутри then) указывается что будет, если Promise выполнился. В случае ошибки дело до этого метода не дойдёт.
+
+На промис можно добавить метод `then`. Возвращает промис - надо обработать чтобы использовать.
+Метод `then` у промиса называют **Fulfilled handler**.
+```js
+responsePromise.then(response => { 
+    console.log(response) 
+});
+```
+
+<hr>
+<hr>
+
+
+## [Generator](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Generator)
+Генераторы являются функциями с возможностью выхода и последующего входа. Их контекст исполнения (значения переменных) сохраняется при последующих входах.
+```js
+// Пример 1
+const getNumbers = function* () {
+    yield 1;
+    yield "hello";
+    yield true;
+    yield { name: "Bob"};
+    return "That's all folks";
+}
+
+const numbersGen = getNumbers();
+
+console.log(numbersGen.next().value); // 1
+console.log(numbersGen.next().value); // hello
+console.log(numbersGen.next().value); // true
+console.log(JSON.stringify(numbersGen.next().value)); // {"name":"Bob"}
+console.log(numbersGen.next().value); // That's all folks
+```
+```js
+// Пример 2
+const getNumbers = function* (numbers) {
+    for (let i = 0; i < numbers.length; i++) {
+        yield numbers[i];
+    }
+}
+
+const getNumbersGen = getNumbers([1,2,3,4,5]);
+
+const interval = setInterval(() => {
+    const next = getNumbersGen.next();
+    if (next.done) {
+        log("this generator is done");
+        clearInterval(interval);
+    } else {
+        const number = next.value;
+        log(number);
+    }
+}, 1000);
+```
+To use generators with promises, you have to install package called `bluebird` in the web or `co` in backend - node.
+
+### bluebird package
+Благодаря `bluebird` кода меньше, читаемость и поддержка лучше:
+```js
+// обычный пример на fetch:
+const getRandomUsers = n => {
+    const fetchRandomUsers = fetch(`https://randomuser.me/api/?results=${n}`)
+    fetchRandomUsers.then(data => {
+        data.json().then(randomUsers => {
+            console.log(JSON.stringify(randomUsers.results.length));
+            randomUsers.results.forEach(user => {
+                const {gender, email} = user;
+                console.log(`${gender} - ${email}`);
+            });
+        })
+    });
+}
+
+getRandomUsers(100);
+```
+```js
+// переписанный пример на bluebird:
+
+import { coroutine as co } from 'bluebird';
+
+const getRandomUsers = co(function* (n) {
+    const fetchRandomUsers = yield fetch(`https://randomuser.me/api/?results=${n}`)
+    const data = yield fetchRandomUsers.json();
+    return data;
+});
+
+getRandomUsers(10).then(randomUsers => {
+    randomUsers.results.forEach(user => {
+        const {gender, email} = user;
+        console.log(`${gender} - ${email}`);
+    });
+}).catch(err => console.log);
+```
+
+## [async await](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Statements/async_function) 
+> __The async is match cleaner than using corotines (co) with generators and promises.__
+```js
+// Пример хорошего использования - раньше так делали
+const getRandomUsers = async n => {
+    try {
+        const fetchRandomUsers = await fetch(`https://randomuser.me/api/?results=${n}`)
+        const data = await fetchRandomUsers.json();
+        data.results.forEach(user => {
+            const {gender, email} = user;
+            log(`${gender} - ${email}`);
+        });
+        return data;
+    } catch (err) {
+        log(err);
+    }
+};
+
+getRandomUsers(5);
+```
+После вызова функция `async` возвращает `Promise`.
+
+Функция `async` может содержать выражение `await`, которое приостанавливает выполнение функции async и ожидает ответа от переданного `Promise`, затем возобновляя выполнение функции `async` и возвращая полученное значение.
+
+Ключевое слово `await` допустимо только в асинхронных функциях. В другом контексте вы получите ошибку `SyntaxError`.
+
+> Цель функций `async`/`await` упростить использование promises синхронно и воспроизвести некоторое действие над группой `Promises`. 
+> Точно так же как `Promises` подобны структурированным колбэкам, `async`/`await` подобна комбинации генераторов и `promises`.
+
+```js
+// пример с промисами
+async function logName(name) {
+    console.log(name);
+    const transformName = new Promise((resolve, reject) => {
+        setTimeout(() => resolve(name.toUpperCase()), 3000);
+    });
+
+    let result = await transformName;
+
+    return result;
+}
+
+logName("antonio").then(res => {
+    console.log("result from async function = " + res);
+});
+```
+
+<hr>
+<hr>
 
 ## Methods
 
 <hr>
 
-### Массивы
+### [Массивы](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array)
+> Ни размер JavaScript-массива, ни типы его элементов не являются фиксированными. 
+
+Поскольку размер массива может увеличиваться и уменьшаться в любое время, то нет гарантии, что массив окажется плотным. 
+Т.е., при работе с массивом может возникнуть ситуация, что элемент массива, к которому вы обратитесь, будет пустым и вернёт `undefined`. 
+В целом, это удобная характеристика, но если эта особенность массива не желательна в вашем специфическом случае, вы можете рассмотреть возможность использования типизированных массивов.
+
+Array can store values of any type like this:
+```js
+// простые значения, объекты, функции
+let arr = [
+    "Orange", 
+    {
+        name: "Insha"
+    },
+    true,
+    function () {
+        console.log('hello');
+    }
+];
+```
+В примере выше можно обратиться к анонимной функции так: `arr[3]()`.
+
+<hr>
 
 #### `reduce`
 Применяет действие для каждого элемента в массиве - условие и дефолтное значение.
@@ -305,6 +671,16 @@ console.log(Array.from([1, 2, 3], x => x + x)); // Array [2, 4, 6]
 
 <hr>
 
+#### `map` 
+Mapping is an operation which applies a function to every element of a collection and __ALWAYS__ returns a new collection with elements changed by the mentioned function.
+```js
+const nums = [1, 2, 3, 4];
+const biggerNums = nums.map((n) => n * 2);
+// >> [2, 4, 6, 8];
+```
+
+<hr>
+
 #### Spread and Rest operators - `...` 
 [dev.to](https://dev.to/ibn_abubakre/spread-vs-rest-operator-199d)
 || [stackoverflow](https://stackoverflow.com/questions/33898512/spread-syntax-vs-rest-parameter-in-es2015-es6)
@@ -377,7 +753,36 @@ console.log(height); // 200
 <hr>
 
 
-### Объекты
+### [Объекты](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)
+Объект - это коллекция сгрупированных переменных. В объекте ими выступают свойство/ключ со значением.
+Объект использует фигурные скобки.
+
+Пример простого объекта:
+```js
+var obj = {};
+```
+Пример объекта со значениями:
+```js
+var person = {
+    name: "Bob Singer",
+    age: 21,
+    hasDriverLicence: true
+}
+```
+Если вывести объект на экран, получим `[object Object]`.
+
+Объект можно представить в виде JSON. Для этого есть метод `JSON.stringify()` - converts a JavaScript object or value to a JSON string.
+```js
+console.log(JSON.stringify(person));
+```
+получим:
+```json
+{
+  "name": "Bob Singer",
+  "age": 21,
+  "hasDriverLicence": true
+}
+```
 
 #### Создание объекта
 * В JS объекты создаются с помощью ключа и значения.
@@ -410,8 +815,9 @@ a.hi = "test";
 <hr>
 
 #### Чтение свойств объекта
-Попытка обратиться к свойству с пробелом через точку приведет к ошибке - обращаться нужно только через квадрартные скобки:
+Если свойство имеет односоставное имя без пробела, например "hi", к такому свойству можно обратиться как и в JAVA через точку.
 
+Если обратиться к свойству с пробелом через точку, например "how much" - это приведет к ошибке, т.к. обращаться нужно только через квадрартные скобки:
 ```js
 const test1 = {
     hi: "",
@@ -436,6 +842,41 @@ let b = "how match";
 console.log(hotel.b);  // undefined
 console.log(hotel[b]); // 500
 ```
+
+Получить коллекцию всех значений объекта можно с помощью команды `values` - аналогично в java получения значений мапы:
+```js
+Object.values(person); // Bob Singer,21,true
+```
+
+Внутри объекта могут быть другие объекты:
+```js
+var person = {
+    name: "Bob Singer",
+    age: 21,
+    hasDriverLicence: true,
+    dateOfBirth: "01/01/2000",
+    address: {
+        firstLine: "123",
+        postCode: "SE1",
+        country: "England"
+    }
+}
+```
+С помощью `JSON.stringify(person)`, получим json в json:
+```json
+{
+  "name": "Bob Singer",
+  "age": 21,
+  "hasDriverLicence": true,
+  "dateOfBirth": "01/01/2000",
+  "address": {
+    "firstLine": "123",
+    "postCode": "SE1",
+    "country": "England"
+  }
+}
+```
+
 
 <hr>
 
@@ -499,19 +940,117 @@ for (let key in a) {
 
 <hr>
 
-### Создание класса с конструктором
-Пример создания класса (с конструктором) и вызовом экземпляра.
+#### Деструктуризация объекта
+Во вложенности имя переменной задается с правой стороны - отличается по цвету в IDE.
+Имя задается после `:`.
 ```js
-class Test {
-    constructor(a) {
-        this.c = a;
+// имеется объект
+const getUser = () => {
+    return {
+        name: 'John',
+        surname: 'Doe',
+        gender: 'male',
+        address: {
+            country: 'United States',
+            city: 'California',
+            postCode: 'CA',
+            fullAddress: {
+                doorNumber: 22,
+                street: 'LA st'
+            }
+        },
+        age: 29
+    }
+};
+
+// сохраняем объект в переменную
+const user = getUser();
+
+// Деструктуризация объекта
+const {name, age, address: {country: theCountry}} = user;
+const {address: {fullAddress: {doorNumber: number}}} = user;
+
+log(name);
+log(age);
+log(theCountry);
+log(number);
+```
+```js
+// в первом случае, названия name и age должны совпадать с названиями в объекте:
+const {name, age, address: {country: theCountry}} = user;
+
+// во втором случае, мы задаем другие имена переменных - для name переменная n...:
+const {name : n, age : a, address: {country: theCountry}} = user;
+```
+
+<hr>
+
+### Мапа в JS - `new Map`
+Map не имеет метода сортировки. 
+Для сортировки необходимо мапу обернуть в массив, и на нём вызвать метод sort:
+```js
+let myJson = {
+    "12": {
+        "id": 12,
+        "currencyRate": 0.1942,
+        "currencyCode": "DZD",
+    },
+    "36": {
+        "id": 36,
+        "currencyRate": 19.2436,
+        "currencyCode": "ZAC",
+    },
+    "50": {
+        "id": 50,
+        "currencyRate": 0.31132,
+        "currencyCode": "BDT",
+    },
+    "51": {
+        "id": 51,
+        "currencyRate": 0.054972,
+        "currencyCode": "AMD",
+    }
+};
+
+let myMap = new Map([...Object.entries(myJson)].sort(([,a], [,b]) => {
+    if (a["currencyCode"] > b["currencyCode"]) return 1;
+    else if (a["currencyCode"] < b["currencyCode"]) return -1;
+    return 0;
+}));
+```
+
+<hr>
+
+### Создание класса с конструктором
+Пример создания класса с конструктором и вызовом экземпляра.
+Как и в Java срабатывает 1 раз при создании объекта.
+```js
+class Animal {
+    constructor(name, age) {
+        console.log(`${name} is an animal and was created`);
+        this.name = name;
+        this.age = age;
+    }
+
+    eat() {
+        console.log(`${this.name} is eating`);
+    }
+
+    sleep() {
+        console.log(`${this.name} is sleeping`);
     }
 }
 
-let myObj = new Test(5);
-myObj.d = 77;
-console.log(myObj); // Test { c: 5, d: 77 }
+const bobby = new Animal("bobby", 2);
+bobby.eat();
+bobby.sleep();
 ```
+
+### Наследование в JS
+Такое же как в Java. Используется ключевое слово `extend`. Обращение к родителю также через `super`.
+
+### Статические методы
+Такое же как в Java с ключевым словом `static`. Обращение - через имя класса `Animal.myStaticMethod()`.
 
 <hr>
 <hr>
@@ -624,7 +1163,7 @@ let lis = document.querySelectorAll("li");
    и следующие имя стиля писать вначале с пробелом:
     ```js
     heading.className = "changeBG";
-    heading.className+= " changeFT";
+    heading.className += " changeFT";
     // <h1 id="heading" class="changeBG changeFT">Hi there</h1>
     ```
 
@@ -861,8 +1400,226 @@ const findMaxConsecutiveOnes = (nums) => {
     func("#two");
     func("#four");
     ```
+* Пример сортировки JSON объекта => [Sort JSON Object Array Based On A Key Attribute](https://www.c-sharpcorner.com/UploadFile/fc34aa/sort-json-object-array-based-on-a-key-attribute-in-javascrip/)
+    ```js
+    fetch('https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json')
+        .then(response => response.json())
+        .then(data => {
+            ans.sort(sortByProperty("cc"));
+            addNewOptions();
+        });
+    
+    function sortByProperty(property) {
+        return (a, b) => {
+            if (a[property] > b[property]) return 1;
+            else if (a[property] < b[property]) return -1;
+            return 0;
+        }
+    }
+    
+    function addNewOptions() {
+        let result = document.querySelector("#listOfCurrencies");
+        let newSelect = document.createElement("select");
+        for (let i = 0; i < ans.length; i++) {
+            let newOption = document.createElement("option");
+            newOption.value = ans[i]["txt"];
+            newOption.text = ans[i]["cc"];
+            newSelect.add(newOption);
+        }
+        result.appendChild(newSelect);
+    }
+    ```
+* Добавление `event` к `select`:
+    ```js
+    let newSelect = document.createElement("select");
+    newSelect.setAttribute("onchange","getRate()");
+    ```
+* Проверка на `null || undefined || ''` и присваивание значения через `||` - выполняется коротко:
+    ```js
+    // длинный вариант 
+    if (variable1 !== null || variable1 !== undefined || variable1 !== '') {
+         let variable2 = variable1;
+    }
+    ```
+    ```js
+    // короткий вариант
+    let variable1 = undefined;
+    const variable2 = variable1  || 'new';
+    console.log(variable2); // new
+    ```
+* Пример итерации подобно лямбда в JAVA. 
+  В методе сохраняется значение `index`, но только на массиве - итеративна (передавая каждое значение через =>) не работает:
+    ```js
+    function logArrayElements(element, index, array) {
+      console.log("a[" + index + "] = " + element);
+    }
+    [2, 5, 9].forEach(logArrayElements);
+    // a[0] = 2
+    // a[1] = 5
+    // a[2] = 9
+    ```
+    ```js
+    // для тестов в LeetCode
+    function logArrayElements(element) {
+        return element;
+    }
+    [2, 5, 9].forEach(n => console.log(logArrayElements(n)));
+    ```
+
+* Пример записи значений объекта:
+    ```js
+    // длинный вариант
+    const x = 1920, y = 1080;
+    const obj = { x:x, y:y };
+    ```
+    ```js
+    // короткий вариант
+    const obj = { x, y };
+    ```
+* Примеры записи стрелочной функции:
+    ```js
+    // обычные методы
+    function sayHello(name) {
+        console.log('Hello', name);
+    }
+    
+    setTimeout(function() {
+        console.log('Loaded')
+    }, 2000);
+    
+    list.forEach(function(item) {
+        console.log(item);
+    });
+    ```
+    ```js
+    // аналог в стрелочных функциях
+    sayHello = name => console.log('Hello', name);
+    
+    setTimeout(() => console.log('Loaded'), 2000);
+    
+    list.forEach(item => console.log(item));
+    ```
+* Пример не явного возврата `return`:
+    ```js
+    // длинный вариант
+    function calcCircumference(diameter) {
+      return Math.PI * diameter
+    }
+    ```
+    ```js
+    // короткий вариант
+    calcCircumference = diameter => (
+        Math.PI * diameter
+    );
+    console.log(calcCircumference(3.14));
+    ```
+* Деструктурирующее присвоение:
+    ```js
+    // длинный вариант
+    const observable = require('mobx/observable');
+    const action = require('mobx/action');
+    const runInAction = require('mobx/runInAction');
+    
+    const store = this.props.store;
+    const form = this.props.form;
+    const loading = this.props.loading;
+    const errors = this.props.errors;
+    const entity = this.props.entity;
+    ```
+    ```js
+    // короткий вариант
+    import { observable, action, runInAction } from 'mobx';
+    
+    const { store, form, loading, errors, entity } = this.props;
+    ```
+* Многострочная запись с использованием backtick `` ` `` - без плюсов и переносов:
+    ```js
+    // длинный вариант
+    const lorem = 'Lorem ipsum dolor sit amet, consectetur\n\t'
+        + 'adipisicing elit, sed do eiusmod tempor incididunt\n\t'
+        + 'ut labore et dolore magna aliqua. Ut enim ad minim\n\t'
+    ```
+    ```js
+    // короткий вариант
+    const lorem = `Lorem ipsum dolor sit amet, consectetur
+        adipisicing elit, sed do eiusmod tempor incididunt
+        ut labore et dolore magna aliqua. Ut enim ad minim`
+    ```
+* Exponent Power:
+    ```js
+    Math.pow(2,3); // 8 = 2 * 2 * 2
+    Math.pow(2,2); // 4 = 2 * 2
+    Math.pow(4,3); // 64 = 4 * 4 * 4
+    ```
+    ```js
+    // сокращенный вариант
+    2**3 // 8
+    2**4 // 4
+    4**3 // 64
+    ```
+* Converting a String into a Number:
+    ```js
+    const num1 = parseInt("100");
+    const num2 = +"100";
+    ```
+* Назначение свойств объекта
+    ```js
+    let fname = { firstName : 'Black' };
+    let lname = { lastName : 'Panther'}
+    
+    let full_names = Object.assign(fname, lname);
+    ```
+* Побитовое `IndexOf`:
+    ```js
+    if(arr.indexOf(item) > -1) { // Confirm item IS found
+        // some code
+    }
+    
+    if(~arr.indexOf(item)) { // Confirm item IS found
+    // some code
+    }
+    ```
+* Опраделение позиции символа:
+    ```js
+    var myString = "Happy birthday";
+    
+    /* Shorthand */
+    console.log(myString[4]); // y
+    
+    /* Longhand */
+    console.log(myString.charAt(4)); // y
+    ```
+* Декларирование объекта:
+    ```js
+    /* Shorthand */
+    var myObj = { name: "Sean Connery", placeOfBirth: "Edinburgh",
+    age: 86, wasJamesBond: true };
+    
+    /* Longhand */
+    var myObj = new Object();
+    myObj.name = "Sean Connery";
+    myObj.placeOfBirth = "Edinburgh";
+    myObj.age = 86;
+    myObj.wasJamesBond = true;
+    ```
+* Преобразование `String` в `Array`:
+    ```js
+    const name = "Bob Singer";
+    const nameToArray = [...name];
+    for (const ch of nameToArray) {
+        console.log(ch);
+    }
+    ```
 
 
+<hr>
 
-## Литература, статьи
+## Литература, статьи, видео
+* [Примеры записи функций, свойст объекта](https://www.youtube.com/watch?v=dOnAC2Rr-6A)
+* [Деструктурирующее присваивание](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)
 * [20 Killer JavaScript One Liners](https://dev.to/saviomartin/20-killer-javascript-one-liners-94f?fbclid=IwAR01WZ6eZokN-vSF5CHQI5pk48N49ULjNWYcN25YHCy7Q6G65DPCKf8YCaE)
+* [Top 35 JavaScript Shorthands for Beginners](https://morioh.com/p/05414714e685?f=5c21fb01c16e2556b555ab32&fbclid=IwAR2mgqPBKtBzkyQ1CgwdwkddazUDcV3aFZ22RKOoOMi90_LcqqLMfddFbP8)
+* [Random User Generator API](https://randomuser.me/documentation)
+
+## Additional info
+* ESLint - следит за установленным стандартом, т.е. используются качывки одинарные или двойные, ставится точка с запятой в конце или нет... В IDEA есть плагин.

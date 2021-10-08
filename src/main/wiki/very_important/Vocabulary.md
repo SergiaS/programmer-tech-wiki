@@ -38,9 +38,18 @@
 # English
 
 ### Чтение формул, математика:
-f(x) = O(g(x)), we say **f of x is big-O g of x**. 
+* [Source - Baeldung: An Introduction to the Theory of Big-O Notation](https://www.baeldung.com/cs/big-o-notation)
+  
+  f(x) = O(g(x)), we say **f of x is big-O g of x**.
 
-[Source - Baeldung: An Introduction to the Theory of Big-O Notation](https://www.baeldung.com/cs/big-o-notation)
+* [Exponents](https://www.mathsisfun.com/exponent.html)
+  In 82 the "2" says to use 8 twice in a multiplication,
+  so 82 = 8 × 8 = 64
+  
+  In words: 82 could be called "8 to the power 2" or "8 to the second power", or simply "8 squared"
+  
+  Exponents are also called Powers or Indices.
+
 
 ### Литература
 [Учебник английского языка от программиста](https://urvanov.ru/2018/05/13/учебник-английского-языка/)

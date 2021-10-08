@@ -1,4 +1,4 @@
-# SpringWeb
+# Spring Web MVC
 Spring MVC – это фреймворк для создания web приложений на Java, в основе которого лежит шаблон проектирования MVC.
 
 * <b><u>Model</u></b> – контейнер для хранения данных.
@@ -9,16 +9,17 @@ Spring MVC – это фреймворк для создания web прило�
 
 <hr>
 
-## [How Spring MVC Framework works? How HTTP Request is processed?](https://javarevisited.blogspot.com/2017/06/how-spring-mvc-framework-works-web-flow.html)
-Here is the flow of an HTTP request in Java application created using the Spring MVC framework:
 
-1) The client sends an HTTP request to a specific URL
-2) DispatcherServlet of Spring MVC receives the request
-   It passes the request to a specific controller depending on the URL requested using @Controller and @RequestMapping annotations.
-3) Spring MVC Controller then returns a logical view name and model to DispatcherServlet.
-4) DispatcherServlet consults view resolvers until actual View is determined to render the output
-5) DispatcherServlet contacts the chosen view (like Thymeleaf, Freemarker, JSP) with model data and it renders the output depending on the model data
-6) The rendered output is returned to the client as a response
+## [How Spring MVC Framework works? How HTTP Request is processed?](https://javarevisited.blogspot.com/2017/06/how-spring-mvc-framework-works-web-flow.html)
+Here is the flow of an HTTP-request in Java application created using the Spring MVC framework:
+
+1) The client sends an HTTP-request to a specific URL.
+2) `DispatcherServlet` of Spring MVC receives the request.
+   It passes the request to a specific controller depending on the URL requested using `@Controller` and `@RequestMapping` annotations.
+3) Spring MVC Controller then returns a logical view name and model to `DispatcherServlet`.
+4) `DispatcherServlet` consults view resolvers until actual View is determined to render the output.
+5) `DispatcherServlet` contacts the chosen view (like `Thymeleaf`, `Freemarker`, `JSP`) with model data and it renders the output depending on the model data.
+6) The rendered output is returned to the client as a response.
 
 ```xml
 <web-app>
@@ -46,6 +47,13 @@ for handling all application requests -->
 ### Difference between Controller and RESTController
 The flow of the RESTful Web Service request is also not very different from this. 
 It follows the same path but in the case of REST, the Controller methods are annotated with `@ResponseBody` which means it doesn't return a logical view name to `DispatcherServlet`, instead it write the output directly to the HTTP response body.
+
+
+## More about `DispatcherServlet`
+* [How does Spring MVC Process HTTP Request [Flow]? DispatcherServlet Example Tutorial](https://www.java67.com/2019/08/how-dispatcherservlet-process-request-in-spring-mvc-application.html?fbclid=IwAR3dJogejj__xC0tbZEkeSw1o6o983fO5YFMQRv-ab-ZHgqgHG-B21lkmbk)
+
+`DispatcherServlet` plays a significant role in Spring MVC. 
+It acts as a front controller, and all incoming request passes through it, of course, you can configure this in URL pattern of `DispatcherServlet` declaration in `web.xml`, but this is the case for many Spring based web application.
 
 
 ## CORS
