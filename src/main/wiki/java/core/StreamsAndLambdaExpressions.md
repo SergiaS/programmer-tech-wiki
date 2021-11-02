@@ -25,7 +25,7 @@
 - Стрим из массива: `Arrays.stream(array)`
 - Стрим из указанных элементов: `Stream.of("1", "2", "3")`
 
-## Примеры сьримов
+## Примеры стримов
 
 ### Example 1:
 Сначало нужно превратить набор элементов/данных (что принимаем - лист, массив...) в другую сущность - в поток (вызвав метод `.stream`).
@@ -88,6 +88,7 @@ int sum1 = Arrays.stream(arr3).reduce((acc, b) -> acc + b).getAsInt();
 // Stream для листа
 list3.stream().reduce((acc, b) -> acc + b);
 ```
+<hr>
 
 ### Example 3:
 Пример стрима с лямбдами из проекта Topjava (HW0):
@@ -105,8 +106,22 @@ Map<LocalDate, Integer> caloriesSumByDate = meals.stream()
                 .map(meal -> createWithExcess(meal, caloriesSumByDate.get(meal.getDate()) > caloriesPerDay))
                 .collect(Collectors.toList());
 ```
+<hr>
 
-
+### [LeetCode - 451. Sort Characters By Frequency](https://leetcode.com/problems/sort-characters-by-frequency/discuss/646152/Slow-and-funny-Steam-only-Java-solution):
+Не продуктивный, но очень наглядный метод работы стримов!
+```java
+public String frequencySort(String s) {
+    return s.chars()
+        .mapToObj(c -> (char)c)                                                     // map IntStream into Stream<Character>
+        .collect(Collectors.groupingBy(Function.identity(), Collectors.counting())) // collect into frequency map: Map<Character, Long> 
+        .entrySet().stream()                                                        // establish a new stream: Stream<Map.Entry<Character, Long>>
+        .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))             // sort by frequency
+        .flatMap(e -> Stream.generate(e::getKey).limit(e.getValue()))               // generate repeating sequence: e.g. ('a',3) -> ['a','a','a']
+        .map(String::valueOf)                                                       // map Stream<Character> into Stream<String>
+        .collect(Collectors.joining());                                             // perform final joining
+}
+```
 <hr>
 
 

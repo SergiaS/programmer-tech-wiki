@@ -1,4 +1,6 @@
 # Input Output Java Streams / Потоки ввода вывода
+Входящие и выходящие потоки делятся на байтовые и символьные.
+
 Посути, потоки оборачиваются в друг друга - передаются в коструктор другого. 
 
 __Basic setup of decorators__:
@@ -9,24 +11,26 @@ Reader decoder = new InputStreamReader(gzipStream, encoding);
 BufferedReader buffered = new BufferedReader(decoder);
 ```
 
+
 <details>
 <summary>SHOW MENU</summary>
 
 - [Для работы с файлами](#для-работы-с-файлами)
-    - [Закрытие файлов](#закрытие-файлов)
-    - [Адрес файла](#адрес-файла)
+  - [Закрытие файлов](#закрытие-файлов)
+  - [Адрес файла](#адрес-файла)
 - [FileWriter и FileReader](#filewriter-и-filereader)
-    - [FileWriter](#filewriter)
-        - [Добавление к данным в файле - Append](#добавление-к-данным-в-файле---append)
-    - [FileReader](#filereader)
+  - [FileWriter](#filewriter)
+    - [Добавление к данным в файле - Append](#добавление-к-данным-в-файле---append)
+  - [FileReader](#filereader)
 - [BufferedReader и BufferedWriter](#bufferedreader-и-bufferedwriter)
-    - [Пример чтения и записи 1 - посимвольно](#пример-чтения-и-записи-1---посимвольно) 
-    - [Пример чтения и записи 2 - построчно](#пример-чтения-и-записи-2---построчно) 
+  - [Пример чтения и записи 1 - посимвольно](#пример-чтения-и-записи-1---посимвольно) 
+  - [Пример чтения и записи 2 - построчно](#пример-чтения-и-записи-2---построчно) 
 - [FileInputStream и FileOutputStream](#fileinputstream-и-fileoutputstream)
-    - [Пример копирования картинки](#пример-копирования-картинки)
+  - [Пример копирования картинки](#пример-копирования-картинки)
 - [OutputStreamWriter](#outputstreamwriter)
-- [Перемотка стримов (I/O поток)]()
-
+- [InputStreamReader](#inputstreamreader)
+- [Перемотка стримов (I/O поток)](#перемотка-стримов-io-поток)
+  - [Пример копирования картинки](#как-перематать-стрим)
 
 </details>
 
@@ -268,6 +272,10 @@ public class ConvertFromWindows1251ToUTF8 {
     }
 }
 ```
+
+## InputStreamReader
+Класс преобразует байтовые потоки в символьные. Он позаботится о переводе с копьютерного языка на человеческий.
+
 
 ## Перемотка стримов (I/O поток)
 > __Не все потоки поддерживают перемотку стримов.__

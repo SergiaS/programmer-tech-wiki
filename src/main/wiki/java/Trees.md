@@ -90,3 +90,44 @@ public TreeNode mergeTrees(TreeNode root1, TreeNode root2) {
 }
 ```
 
+***
+
+[LeetCode - 226. Invert Binary Tree](https://leetcode.com/problems/invert-binary-tree/discuss/1540810/Easy-Java-Solution-or-0-ms-or-Beats-100)
+When dealing with trees (and most importantly recursion), the first thin you need to do is to apply one of the most important algorithmic principles: **divide and conquer**.
+Usually what you want to do is to divide the problem in actions that you need to apply to current nodes, supposing that you did the same to children nodes.
+
+In our example if we want to invert the tree:
+* We first want to invert right and left node for our current root node;
+* Then we need to do the same for left and right nodes of our root left and right nodes (and repeat the same until we reach a `null` node).
+
+So if we simplify the code snippet below, it becomes
+
+```java
+// We do a standard java permutation, to invert nodes at current level (if current node is not null).
+TreeNode left = root.left;
+root.left = root.right;
+root.right = left;
+
+// Then we invert children nodes for each of inverted nodes.
+// So here we simply call our same method for recursion, since it soul purpose is to 
+// invert left and right children for a specefic node then recurse to lower levels.
+root.left = invertTree(root.left); // here we can simply call the method without affecting it to root.left, but I've put it for clarity
+root.right = invertTree(root.right); // same as for root.left
+```
+
+Which translates to the following instructions:
+* If current node is not null - invert its left and right nodes;
+* Do the same for its left node and its right node.
+
+```java
+// full example
+public TreeNode invertTree(TreeNode root) {
+    if(root == null) return null;
+    
+    TreeNode left = root.left;
+    root.left = invertTree(root.right);
+    root.right = invertTree(left);
+    
+    return root;
+}
+```

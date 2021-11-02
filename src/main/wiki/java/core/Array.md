@@ -122,3 +122,22 @@ Queue<int[]> values = new PriorityQueue<>(new Comparator<int[]>() {
     }
 });
 ```
+
+### Пример переворачивания элементов стримом
+На вход приходит `String[]`, нужно отсеить пустые элементы, перевернуть и соединить все элементы через пробел.
+
+> Внимание на ПЕРЕВЕРНУТЬ массив, а не отсортировать в обратном порядке - методы `Comparator` не подходят, т.к. сначала будет проведена сама сортировка по алфавиту, а потом произведен обратный порядок.
+> Нужно только зеркальное отражение элементов.
+
+Для отзеркаливания элементов у класса `Arrays` нет метода, часто используют метод `Collections.reverse()`, но на вход нужен `List`!
+Поэтому сначало конвертируем поток в `List`, применяем метод `Collections.reverse()`, и дальше можно конвертировать во что нужно.
+
+```java
+return Stream.of(s.split(" ")) // Make a stream of words
+          .filter(s1 -> !s1.isEmpty()) // filter empty strings
+          .collect(Collectors.collectingAndThen(Collectors.toList(), list -> {
+              Collections.reverse(list);
+              return list.stream();
+          })) // reverse the words
+          .collect(Collectors.joining(" ")); // join all the words into a string
+```

@@ -1,6 +1,6 @@
 # Java Virtual Machine (JVM)
 
-## [>_ How Java Virtual Machine(JVM) works](https://medium.com/@harindu973/how-java-virtual-machine-jvm-works-2403fdba4fca)
+## [How Java Virtual Machine(JVM) works](https://medium.com/@harindu973/how-java-virtual-machine-jvm-works-2403fdba4fca)
 Languages such as `C` and `C++` is compiled into machine code unique to the operating system. 
 As a result, these programming languages are referred to as __compiled languages__.
 
@@ -87,7 +87,7 @@ In the JVM architecture there are 3 main components named as:
 <hr>
 
 
-## [>_ JIT Java | Just In Time compiler](https://medium.com/nerd-for-tech/jit-java-just-in-time-jit-compiler-af1cc86fe53b)
+## [JIT Java | Just In Time compiler](https://medium.com/nerd-for-tech/jit-java-just-in-time-jit-compiler-af1cc86fe53b)
 
 It’s vital to understand how a program runs on our computer.
 There are two types which we can classify how a program runs on our computer:
@@ -165,3 +165,34 @@ JVM will be destroyed under 2 circumstances such as...
 * If the Java app kills itself (by calling System.exit() method).
 
 ...and obviously, JVM will be destroyed if it crashes.
+
+
+<hr>
+
+
+## [Java Memory Management](https://medium.com/geekculture/java-memory-management-8ff9bc202a58)
+
+Java objects are created at their instantiation and destroyed after they are dereferenced. static attributes and methods are created when their class is loaded by the classLoader, 
+and are only destroyed when the classLoader is itself picked up by the GC, for these reasons you need to use static fields/methods only when it’s convenient.
+
+
+<hr>
+
+
+## Java Heap Memory
+![img](https://miro.medium.com/max/1400/1*iQmXAWwi1ddSa8mZhruRGA.png)
+This picture illustrates how JVM internal memory looks like. 
+Any newly created object first get into **Young Gen** and slowly moved to **Old Gen**. 
+We can customize the size dynamically using-XX command as mentioned in the image.
+
+
+<hr>
+
+
+## [Garbage Collector — An Introduction](https://medium.com/javarevisited/garbage-collection-an-introduction-169922e90c61)
+![img](https://miro.medium.com/max/770/1*JJClvb9nwTiIvDy7bmsqOg.png)
+
+
+## Articles
+* [Java Memory Leaks | How to Avoid? | Prevention Techniques](https://seagence.com/blog/java-memory-leaks-how-to-avoid-prevention-techniques/)
+

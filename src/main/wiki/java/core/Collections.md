@@ -3,9 +3,11 @@
 И если у одинаковых объектов будут разные `hashCode`, то объекты будут считаться разными — до сравнения с помощью `equals` просто не дойдет.
 
 
-<hr>
+***
 
 ## List
+
+### Инициализация
 ```java
 List<String> list = new ArrayList<>(List.of("Ted","Bob","Lex","Liza","Tasha"));
 ```
@@ -31,6 +33,16 @@ private static void calc(List<String> list) {
 }
 ```
 
+### Принцип работы ArrayList
+`ArrayList` - это динамически расширяемый массив. Он упорядочен.
+
+При создании пустого `ArrayList` в памяти выделяется место под массив на 10 элементов.
+
+
+
+### Принцип работы LinkedList
+При удалении элемента с `LinkedList` метод `remove` обновляет ссылку.
+
 ## Map interface
 ```java
 Map<String, PersonEmpl> map = new HashMap<>() {{
@@ -42,7 +54,20 @@ Map<String, PersonEmpl> map = new HashMap<>() {{
 
 
 ### Принцип работы HashMap
-[How HashMap works in Java](https://javarevisited.blogspot.com/2011/02/how-hashmap-works-in-java.html?utm_source=dlvr.it&utm_medium=facebook&m=1)
+* [Using a Custom Class as a Key in a Java HashMap](https://www.baeldung.com/java-custom-class-map-key?fbclid=IwAR11QS0x_2Y57f1FsI6fruEedzKgmocB1Xw1LmIts6L67NF0hOtNYHuv8Vg)
+
+Пример работы алгоритма вставки пары ключ-значение:
+
+1. У объекта вызывается метод `158-865-A.hashCode()` для получения хешкода.
+2. Проверяется, есть ли существующий ключ с таким хешкодом.
+3. Далее производится сравнение всех ключей в списке с методом equals - `158-865-A.equals(key)`.
+   1. Первое сходство идентифицируется как уже существующий ключ, и его значение будет заменено на новое.
+   2. Если сравнения не выявлено, вставляется новая пара ключ-значение.
+
+
+<hr>
+
+* [How HashMap works in Java](https://javarevisited.blogspot.com/2011/02/how-hashmap-works-in-java.html?utm_source=dlvr.it&utm_medium=facebook&m=1)
 
 HashMap состоит из «корзин» (bucket`ов). «корзины» — это элементы массива, которые хранят ссылки на списки элементов.
 
@@ -114,6 +139,27 @@ map.entrySet().stream()
         .forEach(System.out::println);
 ```
 
+### [How to sort HashMap by values in Java 8 - using Lambdas and Stream](https://www.java67.com/2017/07/how-to-sort-map-by-values-in-java-8.html)
+Интересный момент - для сборки мапы и сохранения порядка (после сортировки) нужно использовать `LinkedHashMap`, - в противном случае порядок не сохранится!
+```java
+// wrong way
+// now, let's collect the sorted entries in Map
+Map<String, Integer> sortedByPrice = ItemToPrice.entrySet().stream()
+        .sorted(Map.Entry.<String, Integer>comparingByValue())
+        .collect(Collectors.toMap(e->e.getKey(),e->e.getValue()));
+```
+> The `Map` returned by the previous statement was not sorted because the order was lost while collecting results in Map you need to use the `LinkedHashMap` to preserve the order
+```java
+// right way
+Map<String, Integer> sortedByValue=ItemToPrice.entrySet().stream()
+        .sorted(Map.Entry.<String, Integer>comparingByValue())
+        .collect(toMap(Map.Entry::getKey,
+                       Map.Entry::getValue,(e1,e2)->e1,LinkedHashMap::new));
+```
+This is the right way to sort a `Map` by values in Java 8 because now the ordering will not be lost as `Collector` is using `LinkedHashMap` to store entries.
+
+
+
 ### Interview questions
 <hr>
 
@@ -167,6 +213,30 @@ Q: __Какое начальное количество корзин в HashMap?
 A: По умолчанию 16. Используя конструкторы с параметрами можно задавать свое начальное количество корзин.
 
 
+## Set
+Коллекция уникальных элементов, дубли будут отсеяны.
+
+### TreeSet
+По умолчанию сортирует коллекцию в возврастающем порядке, можно передать в конструктор свой компаратор.
+
+У класса `TreeSet` присутствуют свои уникальные методы, такие как `ceiling` (возврат равного или следующего большого ключа) и `floor` (возврат равного или следующего меньшего ключа):
+```java
+TreeSet<Integer> set = new TreeSet<>();
+set.add(2);
+set.add(8);
+set.add(3);
+set.add(9);
+set.add(4);
+
+System.out.println(set);            // [2, 3, 4, 8, 9]
+System.out.println(set.ceiling(7)); // 8
+System.out.println(set.ceiling(8)); // 8
+System.out.println(set.floor(8));   // 8
+System.out.println(set.floor(7));   // 4
+```
+
+Подобным образом работает и TreeMap, только возвращен будет ключ со значением. 
+
 
 ## Queue
 Отличительная особенность данной коллекции - Очереди обычно, но не обязательно, упорядочивают элементы в `FIFO` (First-In-First-Out). 
@@ -180,6 +250,30 @@ A: По умолчанию 16. Используя конструкторы с п
 - Не является потобезопасной! Для этих целей в Java реализован класс `PriorityBlockingQueue`.
 - Добавление/удаление элементов происходит за время `O(log(n))`.
 - `PriorityQueue.toString` использует `iterator()`, который не гарантирует прохождение элементов приоритетной очереди в каком-либо определенном порядке.
+
+[451. Sort Characters By Frequency](https://leetcode.com/problems/sort-characters-by-frequency/discuss/1534282/Simple-Solution-using-Heap):
+```java
+class Solution {
+    public String frequencySort(String s) {
+        int[] f = new int[128];
+        for(char c : s.toCharArray())
+            f[c]++;
+        
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> b[1] - a[1]);
+        for(int i = 0; i < f.length; i++)
+            pq.offer(new int[] {i, f[i]});
+        
+        StringBuilder sb = new StringBuilder();
+        while(pq.peek()[1] != 0) {
+            int[] pair = pq.poll();
+            int count = pair[1];
+            while(count-- > 0)
+                sb.append((char) pair[0]);
+        }
+        return sb.toString();
+    }
+}
+```
 
 ### ArrayDeque
 Представляет собой реализацию с использованием массивов, подобно `ArrayList`, но не позволяет обращаться к элементам по индексу и хранение `null`.

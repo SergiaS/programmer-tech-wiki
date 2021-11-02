@@ -1,4 +1,8 @@
 # Spring Boot
+* [Developing with Spring Boot](https://docs.spring.io/spring-boot/docs/current/reference/html/using.html)
+* [How to avoid SSL validation in Spring Boot RestTemplate?](https://medium.com/@reachansari/how-to-avoid-ssl-validation-in-spring-boot-resttemplate-3876a7fc2c4a)
+
+
 Spring Boot включает в себя интерфейс командной строки.
 
 ## CommandLineRunner

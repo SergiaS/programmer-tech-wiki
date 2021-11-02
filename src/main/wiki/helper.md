@@ -53,7 +53,7 @@ Use next code:
 # Line
 ***
 ```text
-***
+*** or <hr>
 ```
 
 # Table
