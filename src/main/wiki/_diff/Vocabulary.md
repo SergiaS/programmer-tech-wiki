@@ -59,3 +59,9 @@
   
   Exponents are also called Powers or Indices.
 
+***
+
+* `2 * 3 = 6` читается как **two times three is six**;
+* `O(n2)` - **big O n square**;
+* `120` - **one twenty**;
+* 

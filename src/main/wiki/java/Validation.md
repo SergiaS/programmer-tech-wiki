@@ -1,5 +1,11 @@
 # Validation
-First, add dependence *[org.hibernate.validator](https://mvnrepository.com/artifact/org.hibernate.validator/hibernate-validator)* to your `pom.xml`:
+
+> evict или инвалидация - это сброс, например сброс кеша.
+ 
+***
+
+First, add dependence *[org.hibernate.validator](https://mvnrepository.com/artifact/org.hibernate.validator/hibernate-validator)* 
+to your `pom.xml`:
 ```xml
 <dependency>
     <groupId>org.hibernate.validator</groupId>
@@ -8,8 +14,8 @@ First, add dependence *[org.hibernate.validator](https://mvnrepository.com/artif
 </dependency>
 ```
 
-> Необходимо использовать аннотации с пакета __javax.validation.constraints__, а не от hibernate.
-> Это сделано с целью устранения жестного связывания, например, в случае перехода на другой фреймворк.
+> Необходимо использовать аннотации с пакета `javax.validation.constraints`, а не от **Hibernate**.
+> Это сделано с целью устранения жесткого связывания, например, в случае перехода на другой фреймворк.
 
 Далее в модели указываем валидацию с аннотаций:
 ```java

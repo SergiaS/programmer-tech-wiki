@@ -440,6 +440,23 @@ console.log(width);  // 100
 console.log(height); // 200
 ```
 
+***
+
+Пример тестов для метода, например LeetCode:
+```js
+let searchInsert = function(nums, target) {
+    // some code
+};
+
+const tests = [
+    [[1,3,5,6], 5],
+    [[1,3,5,6], 2],
+    [[1,3,5,6], 7],
+    [[1,3,5,6], 0],
+    [[1], 0],
+];
+tests.forEach((params) => console.log(searchInsert(...params)));
+```
 
 
 ## [Объекты](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)

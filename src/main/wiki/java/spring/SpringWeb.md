@@ -1,5 +1,46 @@
 # Spring Web MVC
-Spring MVC – это фреймворк для создания web приложений на Java, в основе которого лежит шаблон проектирования MVC.
+* [Spring MVC hello world example](https://mkyong.com/spring-mvc/spring-mvc-hello-world-example/)
+* [habr - Spring Web MVC](https://habr.com/ru/post/490586/#:~:text=свойства%20не%20существует.-,Spring%20Web%20MVC,-Spring%20Web%20MVC)
+* [habr - Как генерировать JSON/XML (представления) с помощью Spring Web MVC](https://habr.com/ru/post/490586/#:~:text=Как%20генерировать%20JSON%20/%20XML%20(представления)%20с%20помощью%20Spring%20Web%20MVC)
+* [Spring MVC: создание веб-сайтов и RESTful сервисов](https://habr.com/ru/post/500572/)
+* [Quick Guide to Spring Controllers](https://www.baeldung.com/spring-controllers)
+
+> Если вы хотите обслуживать представления/view (HTML-страницы, которые отображаются на стороне сервера), вы должны использовать `@Controller`, а ваши методы контроллера должны возвращать имя вашего шаблона/страницы представления. 
+> Если вы планируете создать приложение RESTful, используйте `@RestController` или комбинацию `@Controller` и `@ResponseBody` вместе.
+
+> `@Controller` должен возвращать представление **view** - имя страницы для отрисовки.
+> 
+> [Как генерировать HTML представление (view) с помощью Spring Web MVC](https://habr.com/ru/post/490586/#:~:text=Как%20генерировать%20HTML%20представление%20(view)%20с%20помощью%20Spring%20Web%20MVC)
+
+> You can use one of `WebInitializer` in place of `web.xml`:
+> ```java
+> public class WebInitializer
+>     extends AbstractAnnotationConfigDispatcherServletInitializer {
+>   
+>     @Override
+>     protected Class<?>[] getRootConfigClasses()
+>     {
+>         // TODO Auto-generated method stub
+>         return null;
+>     }
+>   
+>     @Override
+>     protected Class<?>[] getServletConfigClasses()
+>     {
+>         // TODO Auto-generated method stub
+>         return new Class[] { MVCconfig.class };
+>     }
+>   
+>     @Override
+>     protected String[] getServletMappings()
+>     {
+>         // TODO Auto-generated method stub
+>         return new String[] { "/" };
+>     }
+> }
+```
+
+**Spring MVC** – это фреймворк для создания web приложений на Java, в основе которого лежит шаблон проектирования MVC.
 
 * <b><u>Model</u></b> – контейнер для хранения данных.
 * <b><u>View</u></b> – web страница, которую можно создать с помощью `html`, `jsp`, `Thymeleaf` и т.д.
@@ -7,7 +48,114 @@ Spring MVC – это фреймворк для создания web прило�
 * <b><u>Front Controller</u></b> также известен под именем `DispatcherServlet`. Он является частью __Spring__. 
   Остальные компоненты - _Model_ и _View_ - нужно создать самому.
 
-<hr>
+
+
+## Конфигурирование на примере TopJava
+Работа Spring MVC основана на паттерне Front Controller (Единая точка входа). 
+Все запросы поступают в единый собственный сервлет Spring, в котором происходит его перенаправление на нужный сервлет приложения.
+
+Для работы со Spring MVC нужно заменить зависимость `spring-web` на `spring-webmvc`:
+```xml
+ <dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-webmvc</artifactId>
+</dependency>
+```
+
+После этого в `web.xml` необходимо сконфигурировать единую точку входа - Spring `DispatcherServlet`, в который будут поступать все запросы к приложению:
+```xml
+<servlet>
+    <servlet-name>mvc-dispatcher</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+        <!--Spring MVC имеет собственный контекст, контексты объединяются в цепочке. 
+        В итоге у нас будет два контекста - первый - контекст web-приложения, в котором находятся контроллеры
+        и который обрабатывает запросы к приложению, второй - основной контекст приложения, в котором происходит 
+        бизнес-логика. Ниже мы указываем путь к конфигурации web-контекста приложения-->
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:spring/spring-mvc.xml</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+</servlet>
+
+<!--Все запросы к приложения будут поступать в "/", этот сервлет-->
+<servlet-mapping>
+    <servlet-name>mvc-dispatcher</servlet-name>
+    <url-pattern>/</url-pattern>
+</servlet-mapping>
+```
+> Различные контексты не имеют доступа к бинам друг друга (исключение - дочерние контексты могут получать доступ к бинам родителя, но не наоборот), 
+> каждый контекст поднимает для себя свои собственные экземпляры, поэтому нужно следить за конфигурацией бинов и поднимать их в соответствующем контексте.
+
+Конфигурацию **webmvc** контекста и диспетчер-сервлета определим в файле `spring-mvc.xml`.
+
+**Сценарий обработки запроса**
+
+* Запрос поступает в `dispatcher-servlet`, в нем определен набор Handler Mappings - классы, которые обрабатывают запросы в зависимости от их типа.
+* Соответствующий запросу Handler делегирует обработку запроса нужному контроллеру.
+* Контроллер необходимым образом обрабатывает запрос и возвращает View.
+* View отображает результат выполнения запроса.
+
+В нашем приложении будет два вида контроллеров: одни — работают с User Interface и отображают результат работы приложения в браузере, 
+другие — работают по REST-интерфейсу. Контроллеры помечаются аннотацией `@Controller`.
+
+Паттерн и тип HTTP метода, по которым мы можем получить доступ к методу контроллера конфигурируются с помощью аннотации 
+`@RequestMapping(value = "/users", method = RequestMethod.GET)`.
+В последних версиях **Spring** можно сделать проще: `@GetMapping("/users")`
+
+При этом **Spring** внедрит в метод объект **Model**, в который мы можем добавлять атрибуты и передавать их из слоя контроллера в слой представления.
+
+Чтобы **Spring MVC** контекст мог осуществлять роутинг запросов по этим аннотациям, в конфигурации `spring-mvc.xml` нужно вручную включить поддержку аннотаций:
+```xml
+<mvc:annotation-driven/>
+```
+
+Методы контроллера, помеченные аннотацией `@RequestMapping` (а также `@GetMapping`, `@PostMapping`, `@PutMapping`, ..) 
+после обработки запроса должны возвращать имя представления, в которое будет передана **Model**.
+Эта **View** отобразится как результат выполнения запроса. 
+Чтобы в этих методах возвращать только название нужной **View**, в конфигурации нужно определить `ViewResolver`, 
+который автоматически к этому названию добавит путь к **view** в приложении и суффикс — формат **view**:
+```xml
+<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+          p:prefix="/WEB-INF/jsp/"
+          p:suffix=".jsp"/>
+```
+
+Для того чтобы приложение имело доступ к статическим ресурсам (например, стили) - нужно добавить дополнительную конфигурацию в `spring-mvc.xml`:
+```xml
+<mvc:resources mapping="/resources/**" location="/resources/"/>
+```
+
+> **Spring MVC** имеет конфигурацию по умолчанию. Если в `spring-mvc.xml` мы не укажем никаких **Handlers**, то их стандартный 
+> набор будет создан автоматически и приложение будет работать. 
+> Как только мы добавляем собственные **Handlers** в конфигурацию — настройки по умолчанию переопределяются и будут созданы 
+> только те бины, которые мы определили, стандартные **Handlers** созданы не будут.
+
+
+## Чтение web.xml
+```xml
+<!-- Spring MVC -->
+<listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+</listener>
+<servlet>
+    <servlet-name>mvc-dispatcher</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:spring/spring-mvc.xml</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+</servlet>
+<servlet-mapping>
+    <servlet-name>mvc-dispatcher</servlet-name>
+    <url-pattern>/</url-pattern>
+</servlet-mapping>
+```
+* Здесь инициализируем `DispatcherServlet` для того, чтобы читать наши запросы.
+* В качестве параметра `DispatcherServlet` парсит файл `spring-mvc.xml` в котором указаны бины (это и будет его context).
+* Все запросы будут читаться по `/`.
+
 
 
 ## [How Spring MVC Framework works? How HTTP Request is processed?](https://javarevisited.blogspot.com/2017/06/how-spring-mvc-framework-works-web-flow.html)
@@ -46,21 +194,23 @@ for handling all application requests -->
 
 ### Difference between Controller and RESTController
 The flow of the RESTful Web Service request is also not very different from this. 
-It follows the same path but in the case of REST, the Controller methods are annotated with `@ResponseBody` which means it doesn't return a logical view name to `DispatcherServlet`, instead it write the output directly to the HTTP response body.
+It follows the same path but in the case of REST, the Controller methods are annotated with `@ResponseBody` which means 
+it doesn't return a logical view name to `DispatcherServlet`, instead it write the output directly to the HTTP response body.
 
 
 ## More about `DispatcherServlet`
 * [How does Spring MVC Process HTTP Request [Flow]? DispatcherServlet Example Tutorial](https://www.java67.com/2019/08/how-dispatcherservlet-process-request-in-spring-mvc-application.html?fbclid=IwAR3dJogejj__xC0tbZEkeSw1o6o983fO5YFMQRv-ab-ZHgqgHG-B21lkmbk)
 
 `DispatcherServlet` plays a significant role in Spring MVC. 
-It acts as a front controller, and all incoming request passes through it, of course, you can configure this in URL pattern of `DispatcherServlet` declaration in `web.xml`, but this is the case for many Spring based web application.
+It acts as a front controller, and all incoming request passes through it, of course, you can configure this in URL pattern of `DispatcherServlet` 
+declaration in `web.xml`, but this is the case for many Spring based web application.
 
 
 ## CORS
 <u>Один из вариантов</u> - это [добавление аннотации](https://www.baeldung.com/spring-cors) `@CrossOrigin` над метод-ом/ами или над классом.
 По умолчанию All origins are allowed.
 
-<hr>
+***
 
 <u>Второй вариант</u> - написание своего фильтра.
 
@@ -92,19 +242,6 @@ public class BrowserCORSFilter implements Filter {
 > Access to fetch at 'http://localhost:8080/' from origin 'null' has been blocked by CORS policy: 
 > No 'Access-Control-Allow-Origin' header is present on the requested resource. 
 > If an opaque response serves your needs, set the request's mode to 'no-cors' to fetch the resource with CORS disabled.
-
-
-## Questions
-### Как мы будем работать с нашими view?
-Нужно создать бин по обработке _view_ в `applicationContext.xml`.
-```xml
-<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-    <property name="prefix" value="/WEB-INF/view/" />
-    <property name="suffix" value=".jsp" />
-</bean>
-```
-Чтобы обращаться к своим _view_ по имени, необходимо прописать преффикс и суффикс. 
-Конфигурация в примере выше, автоматически будет искать в установленном месте и с указанным расширением.
 
 
 
@@ -148,7 +285,16 @@ public String showEmpDetails(HttpServletRequest request, Model model){
 }
 ```
 
+
 ## Annotations
+
+### @Controller
+This annotation is used to make a class as a web controller, which can handle client requests and send a response back to the client. This is a class-level annotation, which is put on top of your controller class. 
+Similar to `@Service` and `@Repository` it is also a stereotype annotation.
+
+`@Controller` должен возвращать представление **view** - имя страницы для отрисовки.
+
+***
 
 ### @RestController
 
@@ -156,7 +302,8 @@ public String showEmpDetails(HttpServletRequest request, Model model){
 
 > `@RestController` simply returns the object and object data is directly written into HTTP response as JSON or XML.
 
-This can also be done with traditional `@Controller` and use `@ResponseBody` annotation but since this is the default behavior of RESTful Web services, Spring introduced `@RestController` which combined the behavior of `@Controller` and `@ResponseBody` together.
+This can also be done with traditional `@Controller` and use `@ResponseBody` annotation but since this is the default behavior of 
+RESTful Web services, Spring introduced `@RestController` which combined the behavior of `@Controller` and `@ResponseBody` together.
 
 In short, the following two code snippet are equal in Spring MVC:
 
@@ -173,8 +320,7 @@ public class RestFulController {
 }
 ```
 
-<hr>
-
+***
 
 ### @ModelAttribute()
 В зависимости от места использования (над методом или перед аргументом метода) данная аннотация выполняет разные функции:
@@ -228,8 +374,7 @@ public String create(@ModelAttribute("person") Person person) {
 ```
 
 Еще пример. Посколько в `model` не ложим никакого дополнительного аттрибута, тогда здесь можно использовать `@ModelAttribute` у аргумента. 
-Равнозначные методы: 
-
+Равнозначные методы:
 ```java
 @GetMapping("/new")
 public String newPerson(Model model) {
@@ -282,6 +427,29 @@ public User get(@PathVariable int id) {
 ```
 
 
+### @ResponseBody
+> Ответ от нашего приложения будет приходить в теле запроса.
+
+> `@ResponseBody` The function of annotation is to convert the return value of the controller method to the specified format 
+> through the appropriate converter, Write to Response Object's body District, Usually used to return **JSON** Data or **XML** data .
+> 
+> Be careful: View processor will not walk after using this annotation, Instead, the data is written directly into the input stream,
+> His effect is equivalent to passing Response Object to output data in the specified format.
+
+Сообщает Spring, что вы хотите записать свой Java-объект HealthStatus непосредственно в HttpResponse (например, в виде XML или JSON).
+```java
+@Controller
+public class HealthController {
+
+    @GetMapping("/health")
+    @ResponseBody //
+    public HealthStatus health() {
+        return new HealthStatus(); // возвращаете простой Java-объект
+    }
+}
+```
+
+
 ### @ExceptionHandler
 Аннотацией `@ExceptionHandler` отмечается метод, ответственный за обработку исключений.
 ```java
@@ -311,8 +479,9 @@ __DOCUMENTATION:__ _By default, the methods in an @ControllerAdvice apply global
 Аннотация `@RequestBody` связывает тело HTTP-метода с параметром метода _Controller_-а.
 Означает, что ответ от нашего приложения будет приходить в теле запроса.
 
-Чтобы использовать информацию посылаемую в методе POST (тело метода POST) - используй аннотацию `@RequestBody`.
+Технически `@RestController` - это просто комбинация `@Controller` и `@ResponseBody`.
 
+Чтобы использовать информацию посылаемую в методе POST (тело метода POST) - используй аннотацию `@RequestBody`.
 ```java
 @PostMapping("/employees")
 public Employee addNewEmployee(@RequestBody Employee employee) {
@@ -343,14 +512,11 @@ public String deleteEmployee(@PathVariable int id) {
 }
 ```
 
-
 ### @PatchMapping
 Используется, когда модифицируется не всё entity, а его часть.
 
-
 ### @ResponseStatus(HttpStatus.NO_CONTENT)
 Рекомендуется ставить над void методами.
-
 
 ### @Valid
 Нужно указывать в контроллере - `@Valid` говорит, что аттрибут будет подтвергаться валидации.
@@ -370,21 +536,17 @@ public String showEmpDetails(@Valid @ModelAttribute("employee") Employee emp, Bi
 }
 ```
 
-
 ### @NotNull
 В `@NotNull` идёт пустое преобразование из `null` значения в пустую строку - `""` длиной в `0`. 
 Чтобы `@NotNull` работал как надо, нужно дописать код, который будет конвертировать пустой `String` в `null`, и лишь потом пропускать это свойство через валидацию. 
 Возможно лучше использовать аннотацию `@NotEmpty`.
 
-
 ### @NotEmpty
 Требует, чтобы поле было и _не null_ и _не пустым_ полем.
-
 
 ### @NotBlank
 Поле не должно быть пустыми не должно быть заполнено только пробелами. 
 Делает всё тоже самое что и аннотация `@NotEmpty` + проверяет чтобы поле не было из пробелов.
-
 
 ### @Min и @Max
 Используются для валидации числовых значений. Значения включительны.
@@ -394,14 +556,28 @@ public String showEmpDetails(@Valid @ModelAttribute("employee") Employee emp, Bi
 private int salary;
 ```
 
-
 ### @Pattern
 `@Pattern` – значение поля должно соответствовать определённому _Регулярному Выражению_.
-
 
 ### @RestController 
 `@RestController` – это _Controller_, который управляет REST-запросами и -ответами.
 
+
+## [Принципы REST, REST-контроллеры](https://github.com/JavaWebinar/topjava/blob/doc/doc/lesson07.md#-5-принципы-rest-rest-контроллеры)
+REST - архитектурный стиль проектирования распределенных систем (типа клиент-сервер).
+
+Чаще всего в REST сервер и клиент общаются посредством обмена JSON-объектами через HTTP-методы GET/POST/PUT/DELETE/PATCH.
+Особенностью REST является отсутствие состояния (контекста) взаимодействий клиента и сервера.
+
+> В `@RestController` к аннотации `@Controller` добавлена `@ResponseBody`.
+> Т.е. ответ от нашего приложения будет не имя **View**, а данные в теле ответа.
+
+В @RequestMapping, кроме пути для методов контроллера (value) добавляем параметр produces = MediaType.APPLICATION_JSON_VALUE. 
+Это означает, что в заголовки ответа будет добавлен тип ContentType="application/json" - в ответе от контроллера будет приходить JSON-объект.
+
+```java
+
+```
 
 
 ## Формы Spring MVC
@@ -412,11 +588,11 @@ private int salary;
 
 * `form:form` – основная форма, содержащая в себе другие формы. Другими словами, форма-контейнер.
 
-<hr>
+***
 
 * `form:input` – форма, предназначенная для текста. Используется всего лишь одна строка.
 
-<hr>
+***
 
 * `form:select` – форма, предназначенная для реализации выпадающего списка.
 * `form:option` – оборачивают опции.
@@ -439,7 +615,7 @@ Hardcoded вариант, с указанными значениями:
 ```
 При выпадающем списке будет видно значение мапы, а отображаться будет ключ.
 
-<hr>
+***
 
 * `form:radiobutton` – форма, предназначенная для реализации `radio button` (переключатель). 
 
@@ -461,7 +637,7 @@ private Map<String, String> carBrands;
 <form:radiobuttons path="carBrand" items="${employee.carBrands}"/>
 ```
 
-<hr>
+***
 
 * `form:checkbox` – форма, предназначенная дляреализации `check box` (флажок).
 
@@ -479,7 +655,7 @@ To iterate each element you need to use `jstl-tag`:
 ```html
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:forEach var="lang" items="${employee.languages}">
-<li>${lang}</li>
+    <li>${lang}</li>
 </c:forEach>
 ```
 
@@ -496,11 +672,11 @@ To iterate each element you need to use `jstl-tag`:
 ```html
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:forEach var="lang" items="${employee.languages}">
-<li>${lang}</li>
+    <li>${lang}</li>
 </c:forEach>
 ```
 
-<hr>
+***
 
 * `form:errors` - Используется для отображения указаного сообщения об ошибке валидации.
 
@@ -518,7 +694,8 @@ private String name;
 HTML понимает только два типа запрос - `GET` и `POST`. С помощью __Spring__ можно обойти эти ограничения и использовать другие типы запросов.
 
 `PATCH`, `DELETE`, `PUT` запросы передаются с помощью `POST` запроса, но в скрытом поле `_method` указывается желаемый HTTP метод.
-__Spring__ прочитает значение скрытого поля _method, увидит у него значение, например, `PATCH`, и не смотря на то, что форма посылается с помощью `POST` запроса, __Spring__ будет считать, что форма посылается с помощью `PATCH` запроса.
+__Spring__ прочитает значение скрытого поля _method, увидит у него значение, например, `PATCH`, и не смотря на то, что форма посылается 
+с помощью `POST` запроса, __Spring__ будет считать, что форма посылается с помощью `PATCH` запроса.
 ```html
 <form th:method="post" action="/person/1">
   <input type="hidden" name="_method" value="patch"/>
@@ -535,7 +712,8 @@ __Spring__ прочитает значение скрытого поля _method
 
 ## Ошибки
 ### Request method 'POST' not supported
-При использовании типов запросов, которые не поддерживает html5, например `PATCH` (код выше), ошибка появляется, т.к. нет метода в контроллере по этому адресу с POST-запросом.
+При использовании типов запросов, которые не поддерживает **HTML5**, например `PATCH` (код выше), ошибка появляется, 
+т.к. нет метода в контроллере по этому адресу с POST-запросом.
 
 ```java
 @PatchMapping("/{id}")
@@ -545,9 +723,10 @@ public String update(@ModelAttribute("person") Person person, @PathVariable("id"
 }
 ```
 
-Чтобы ошибка ушла, нужно на стороне __Spring__ читать значение поля `_method` и направлять запрос на нужный метод контроллера, т.е. POST запрос нужно направить на PATCH метод выше - для этого нужно создать фильтр.
+Чтобы ошибка ушла, нужно на стороне __Spring__ читать значение поля `_method` и направлять запрос на нужный метод контроллера, 
+т.е. `POST` запрос нужно направить на `PATCH` метод выше - для этого нужно создать фильтр.
 
-У Spring уже есть фильтр, который читает значения с поля `_method` - `HiddenHttpMethodFilter`.
+У **Spring** уже есть фильтр, который читает значения с поля `_method` - `HiddenHttpMethodFilter`.
 Реализация в `MySpringMvcDispatcherSerlvetIntitializer` будет такой:
 
 ```java
@@ -562,4 +741,96 @@ private void registerHiddenFieldFilter(ServletContext aContext) {
             new HiddenHttpMethodFilter()).addMappingForUrlPatterns(null ,true, "/*");
 }
 ```
+
+
+## Тестирование
+
+`@WebAppConfiguration` - требуется для указания, что конфигурация будет использоваться для тестов.
+
+
+
+### Тестирование веб на примере TopJava
+Для тестирования web создадим вспомогательный класс `AbstractControllerTest`, от которого будут наследоваться все тесты контроллеров. 
+Его особенностью будет наличие `MockMvc` - эмуляции Spring MVC для тестирования web-компонентов. 
+Инициализируем ее в методе, отмеченном `@PostConstruct`:
+
+```java
+@ContextConfiguration({
+        "classpath:spring/spring-app.xml",
+        "classpath:spring/spring-mvc.xml",
+        "classpath:spring/spring-db.xml"
+})
+@WebAppConfiguration
+@RunWith(SpringJUnit4ClassRunner.class)
+@Transactional
+@ActiveProfiles(resolver = ActiveDbProfileResolver.class, profiles = Profiles.REPOSITORY_IMPLEMENTATION)
+public abstract class AbstractControllerTest {
+
+   private static final CharacterEncodingFilter CHARACTER_ENCODING_FILTER = new CharacterEncodingFilter();
+
+   static {
+      CHARACTER_ENCODING_FILTER.setEncoding("UTF-8");
+      CHARACTER_ENCODING_FILTER.setForceEncoding(true);
+   }
+
+   private MockMvc mockMvc;
+
+   @Autowired
+   private WebApplicationContext webApplicationContext;
+
+   @PostConstruct
+   private void postConstruct() {
+      mockMvc = MockMvcBuilders
+              .webAppContextSetup(webApplicationContext)
+              .addFilter(CHARACTER_ENCODING_FILTER)
+              .build();
+   }
+
+   protected ResultActions perform(MockHttpServletRequestBuilder builder) throws Exception {
+      return mockMvc.perform(builder);
+   }
+}
+```
+Для того, чтобы в тестах контроллеров не популировать базу перед каждым тестом, пометим этот базовый тестовый класс аннотацией `@Transactional`. 
+Теперь каждый тестовый метод будет выполняться в транзакции, которая будет откатываться после окончания метода и возвращать базу данных в исходное состояние. 
+Однако теперь в работе тестов могут возникнуть нюансы, связанные с пропагацией транзакций: все транзакции репозиториев станут вложенными во внешнюю транзакцию теста.
+
+Создадим тестовый класс для контроллера юзеров, он должен наследоваться от `AbstractControllerTest`. 
+В `MockMvc` используется паттерн проектирования **Builder**.
+
+```java
+public class RootControllerTest extends AbstractControllerTest {
+
+   @Test
+   public void getUsers() throws Exception {
+      perform(get("/users"))
+              .andDo(print())
+              .andExpect(status().isOk())
+              .andExpect(view().name("users"))
+              .andExpect(forwardedUrl("/WEB-INF/jsp/users.jsp"))
+              .andExpect(model().attribute("users", hasSize(2)))
+              .andExpect(model().attribute("users", hasItem(
+                      allOf(
+                              hasProperty("id", is(START_SEQ)),
+                              hasProperty("name", is(UserTestData.user.getName()))
+                      )
+              )));
+   }
+}
+```
+В параметры метода `andExpect()` передается реализация `ResultMatcher`, в которой мы определяем как должен быть обработан ответ контроллера.
+
+
+## Questions
+### Как мы будем работать с нашими view?
+Нужно создать бин по обработке _view_ в `applicationContext.xml`.
+```xml
+<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <property name="prefix" value="/WEB-INF/view/" />
+    <property name="suffix" value=".jsp" />
+</bean>
+```
+Чтобы обращаться к своим _view_ по имени, необходимо прописать преффикс и суффикс.
+Конфигурация в примере выше, автоматически будет искать в установленном месте и с указанным расширением.
+
 

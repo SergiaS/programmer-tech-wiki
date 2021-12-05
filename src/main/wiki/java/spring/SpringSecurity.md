@@ -3,13 +3,15 @@
 * `{noop}` - means _[NoOpPasswordEncoder](https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/crypto/password/NoOpPasswordEncoder.html)_.
 
 
+
+
 ## Authentication
 
 __Roles__
 
 The roles while creating users have no significance while performing authentication, it will be used for authorization.
 
-
+***
 
 
 ## Examples
@@ -39,12 +41,13 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
 > In Spring Security 5 we can’t store plain text passwords directly we need to tell spring which encoder we are using to encode the password in {xxxx}.
 
+***
 
 __Authorization__
 
 For Authorization, we need to get hold of `HttpSecurity`.
 
-As we have already extended the class `WebSecurityConfigurerAdapter`, we need to override the `configure` method which takes HttpSecurity as a parameter.
+As we have already extended the class `WebSecurityConfigurerAdapter`, we need to override the `configure` method which takes `HttpSecurity` as a parameter.
 
 ```java
 @Override
@@ -57,6 +60,6 @@ protected void configure(HttpSecurity http) throws Exception {
 }
 ```
 
-
-
 <hr>
+
+

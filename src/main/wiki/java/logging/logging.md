@@ -25,6 +25,10 @@
 > </dependency>
 > ```
 
+## Settings
+> Для JPA, чтобы посмотреть информацию о транзакциях (открытие/закрытие и пр.), можно выставить в конфигурации logback `<logger name="org.springframework.orm.jpa.JpaTransactionManager" level="debug"/>`
+
+
 
 
 ## SLF4J 
@@ -46,4 +50,24 @@
 
 ## Logback
 * [Logback Project](http://logback.qos.ch/)
+
+### Подключение цветов и аппендера
+```xml
+<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+	<encoder>
+		<charset>UTF-8</charset>
+		<pattern>%d{HH:mm:ss.SSS} %highlight(%-5level) %cyan(%class{50}.%M:%L) - %msg%n</pattern>
+	</encoder>
+</appender>
+
+<appender name="result" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+        <charset>UTF-8</charset>
+        <pattern>%magenta(%msg%n)</pattern>
+    </encoder>
+</appender>
+<logger name="result" level="INFO" additivity="false">
+    <appender-ref ref="result"/>
+</logger>
+```
 

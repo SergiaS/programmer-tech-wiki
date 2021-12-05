@@ -1,4 +1,6 @@
 # Command line
+* [Написание HTTP-запросов с помощью Curl](http://rus-linux.net/lib.php?name=/MyLDP/internet/curlrus.html)
+* 
 
 > В bash слешы указываются в другую сторону - /<br>
 > В cmd - \
@@ -27,6 +29,9 @@
 * `C:\users\student> help cd` - command can take any command as a parameter and return all the available options.
 * `mkdir -p src/main/java/hello` - создаст иерархию папок, очень полезно использовать в терминале IntelliJ IDEA.
 
+### Сокращения
+* `-d` for `--data`.
+* `-H` for `--header`.
 
 ## HotKeys
 * `Ctrl + D` - выход. Иногда может глючить - не реагирует. 
@@ -53,7 +58,7 @@ taskkill  /F  /PID < Process Id >
   ssh -i "ec2KP.pem" ec2-user@ec2-3-120-152-58.eu-central-1.compute.amazonaws.com
   ```
 
-<hr>
+***
 
 Если нужно скопировать файлы с локального ПК на инстанс амазона. Будут залиты все файлы найденные в папке без самой папки:
   ```shell
@@ -71,14 +76,14 @@ taskkill  /F  /PID < Process Id >
 Сначало используй команду `cd /` для перехода в корень, потом `ls` - будет отображен список файлов и папок, где имена юзеров это доступы к папкам на чтение и запись.
 Далее сверь команду - под каким юзером ты это делаешь, и есть ли разрешение у данного юзера.
 
-<hr>
+***
 
 Если нужно скорировать файл с инстанса на локальный ПК:
 ```shell
 scp -i ./ec2KP.pem ec2-user@3.120.152.58:/home/ec2-user/somefile.txt ~/Desktop/tr-files/somefile.txt
 ```
 
-<hr>
+***
 
 Если нужно скопировать все файлы (без самой папки) с инстанса на локальный ПК:
 ```shell
@@ -96,7 +101,7 @@ curl -v http://www.example.com/
 ```
 `-v` - Verbose - the commands provide helpful information such as the resolved IP address, the port we're trying to connect to, and the headers.
 
-<hr>
+***
 
 #### Post (Project: t_spring)
 Многострочность не работает во многих терминалах.
@@ -108,7 +113,7 @@ curl -X POST http://localhost:8080/users -H 'Content-Type: application/json' -d 
 
 curl -d '{"userName":"mendigo","password":"asdasdasd"}' -H 'Content-Type: application/json' http://localhost:8080/users
 ```
-> **ВНИМАНИЕ!** Для Windows другой синтаксис - нужно использовать `"`, и экранировать каждую кавычку.
+> **ВНИМАНИЕ!** Для Windows другой синтаксис - нужно использовать `"`, и экранировать каждую кавычку в запросе.
 Windows command prompt has no support for single quotes like the Unix-like shells.
 ```shell
 curl -d "{\"userName\":\"mendigo\",\"password\":\"asdasdasd\"}" -H "Content-Type: application/json" http://localhost:8080/users
@@ -145,16 +150,29 @@ curl http://localhost:8080/nbu
 С форматированием pretty json:
 ```shell
 curl http://localhost:8080/nbu | json_pp
-
 ```
 Для UTF-8 есть код с использованием конвертера `iconv`:
 ```shell
 curl http://localhost:8080/nbu | iconv -t utf-8
 ```
 
-<hr>
+***
 
 Данная команда сохранит json в файл:
 ```shell
 curl http://localhost:8080/nbu | iconv -t utf-8 > myJson.json
 ```
+
+***
+
+### Запросы cURL для Windows (cmd)
+Мои команды из ДЗ по TopJava (vol.24)
+
+|Controller method  | REST address       | cURL command |
+|:-------           |:--------           |:-------- |
+|getAll             | /rest/meals        | `curl -v http://localhost:8080/topjava/rest/meals` |
+|get                | /rest/meals/100002 | `curl -v http://localhost:8080/topjava/rest/meals/100002` |
+|delete             | /rest/meals/100002 | `curl -X DELETE http://localhost:8080/topjava/rest/meals/100002` |
+|createWithLocation | /rest/meals        | `curl -X POST http://localhost:8080/topjava/rest/meals -H "content-type:application/json" -d "{ \"dateTime\":\"2021-12-01T11:30:00\",\"description\":\"BLA\",\"calories\":\"555\"}"` |
+|update             | /rest/meals/100011 | `curl -X PUT http://localhost:8080/topjava/rest/meals/100011 -H "content-type:application/json" -d "{ \"id\":\"100011\",\"dateTime\":\"2021-12-01T11:30:00\",\"description\":\"BLA\",\"calories\":\"666\"}"` |
+|getBetween         | /rest/meals/filter | `curl -v http://localhost:8080/topjava/rest/meals/filter?start=2020-01-30T00:15:30&end=2020-01-30T23:15:30` |

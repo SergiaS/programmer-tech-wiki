@@ -6,7 +6,7 @@
 ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png)
 ```
 
-<hr>
+***
 
 ## Вставка картинки:
 ![img](https://miro.medium.com/max/2640/1*jr9u4kZidlDWg4Q0FrILrw.jpeg)
@@ -14,7 +14,7 @@
 ![img](https://miro.medium.com/max/2640/1*jr9u4kZidlDWg4Q0FrILrw.jpeg)
 ```
 
-<hr>
+***
 
 ## Backtick - `` ` ``
 For this:
@@ -50,7 +50,7 @@ Use next code:
 ```
 
 
-# Line
+# Horizontal line
 ***
 ```text
 *** or <hr>

@@ -1,5 +1,11 @@
 # JAVA
-Interesting info about Java.
+* [Список полезных ссылок для Java программиста](https://github.com/Vedenin/useful-java-links/tree/master/link-rus)
+* [Лучшие плагины IntelliJ IDEA](https://habr.com/ru/post/486578/)
+
+> Оператор `==` сравнивает ссылаются ли две ссылки на один и тот же объект, 
+> в то время как `equals()` сравнивает содержат ли два объекта одни и те же данные.
+> 
+> Другими словами: `==` внешнее сравнение, а `equals()` - внутренее.
 
 ***
 
@@ -10,9 +16,15 @@ JRE includes JVM and standard libraries: it is needed to run compiled programs;
 JDK includes JRE and development tools: it is needed to develop programs. As a developer, you need to install JDK.
 
 Before Java 11, if you wanted only to run a Java program, JRE was enough for you.
-However, since Java 11 was released, for most JVM implementations JRE is no longer downloadable as a separate component. If you want to run programs in JVM 11 or newer, you have to install JDK.
+However, since Java 11 was released, for most JVM implementations JRE is no longer downloadable as a separate component. 
+If you want to run programs in JVM 11 or newer, you have to install JDK.
 
 *** 
+
+
+## Features
+* [Java Records (JEP 359)](https://habr.com/ru/post/487308/)
+
 
 ## NOTES
 * Никогда не сравнивай числа с плавующей точкой через `==`.
@@ -20,6 +32,9 @@ However, since Java 11 was released, for most JVM implementations JRE is no long
 
 * `@SuppressWarnings("rawtypes")` - Аннотация пакета `package java.lang`, работает в режиме компиляции.
   Указывает чтобы компилятор не показывал предупреждения.
+
+* **Как узнать тип возвращаемого объекта?**
+Нужно на объекте вызвать метод `getClass()`.
 
 
 ## Системы счисления
@@ -56,6 +71,7 @@ X.509, ssl, keytool...
 
 > Все анонимные классы на самом деле превращаются компилятором в обычные внутренние классы.
 
+
 ## [Character, кодировки](https://javarush.ru/quests/lectures/questmultithreading.level02.lecture10?post=full)
 1) Как получить список всех кодировок, с которыми Java может работать?
 2) Как получить текущую активную кодировку (Unicode)?
@@ -73,23 +89,19 @@ X.509, ssl, keytool...
 3. Далее в данном каталоге появится файл `Note5.class` который можно открыть в IDEA.
 
 
-## Other helpful Java info
-### Как узнать тип возвращаемого объекта
-Нужно на объекте вызвать метод `getClass()`.
-
-
 ## Работа с `.properties` файлами
 * [Java Properties file exampless](https://mkyong.com/java/java-properties-file-examples/)
-    ```java
-    private static final Properties properties = new Properties();
-    static {
-        try(InputStream input = new FileInputStream("config.properties")) {
-            properties.load(input);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+```java
+private static final Properties properties = new Properties();
+static {
+    try(InputStream input = new FileInputStream("config.properties")) {
+        properties.load(input);
+    } catch (IOException e) {
+        e.printStackTrace();
     }
-    ```
+}
+```
+
 
 ## Методы улучшения качества кода
 * [Topjava](https://github.com/JavaWebinar/topjava/blob/doc/doc/lesson04.md#-3-методы-улучшения-качества-кода)
@@ -99,3 +111,11 @@ X.509, ssl, keytool...
 * Plugins
   * IDEA Settings -> Plugins -> Browse repositories... Add [QAPlug: PMD/FindBugs/Checkstyle/Hammurapi](https://qaplug.com/about/)
     (Tools -> QAPlug -> Analyze Code...) 
+
+
+## As In JAVA
+Аналогичные методы в других языках:
+
+| JAVA           | JS                              |
+|:--------       |:-------                         |
+| `s.charAt(n)`  | `charAt(n)`,<br>`myString[n]`   |

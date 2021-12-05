@@ -1,8 +1,8 @@
-# Gson
+## Gson
 Google library for working with Json.<br>
 [GitHub Documentation](https://github.com/google/gson/blob/master/UserGuide.md)
 
-## [Parsing JSON from URL](https://stackoverflow.com/a/7467629)
+### [Parsing JSON from URL](https://stackoverflow.com/a/7467629)
 1. First you need to download the URL (as text):
 ```java
 private static String readUrl(String urlString) throws Exception {
@@ -55,7 +55,7 @@ public static void main(String[] args) throws Exception {
 ```
 
 
-## Object to json
+### Object to json
 To generate from object:
 ```java
 // some model
@@ -71,7 +71,7 @@ String message = gson.toJson(jsonStrReq);
 clientEndpoint.sendMessage(message);
 ```
 
-## Exclude field from model for json
+### Exclude field from model for json
 Here you need add `transient` word for your field.
 
 ```java
@@ -86,7 +86,7 @@ public class JsonStreamRequest {
 }
 ```
 
-## Setup property's names
+### Setup property's names
 ```java
 @SerializedName("r030")
 private final int id;
@@ -100,9 +100,10 @@ private final String currencyCode;
 private final String exchangeDate;
 ```
 
-## Errors
+### Errors
 
 > No serializer found for class `YourClass.class` and no properties discovered to create BeanSerializer...
 
 Добавление геттеров может решить данную проблему.
+
 

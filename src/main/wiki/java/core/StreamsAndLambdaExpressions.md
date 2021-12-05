@@ -1,5 +1,5 @@
 # Streams and Lambda expressions
-Главное о стримах и лямбда выражениях.
+* [Sort using Lambda expressions](https://medium.com/@aishwarya.chamanoor/sort-using-lambda-expressions-java-19d0433abcb7)
 
 
 

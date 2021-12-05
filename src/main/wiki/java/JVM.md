@@ -1,5 +1,52 @@
 # Java Virtual Machine (JVM)
 
+* [Java Memory Leaks | How to Avoid? | Prevention Techniques](https://seagence.com/blog/java-memory-leaks-how-to-avoid-prevention-techniques/)
+
+
+
+## [Управление памятью Java](https://habr.com/ru/post/549176/)
+Максимальные размеры стека и кучи не определены заранее - это зависит от работающей JVM машины.
+
+### Стек (Stack)
+Стековая память отвечает за хранение ссылок на объекты кучи и за хранение типов значений (также известных в Java как примитивные типы),
+которые содержат само значение, а не ссылку на объект из кучи.
+
+Кроме того, переменные в стеке имеют определенную видимость, также называемую областью видимости.
+Используются только объекты из активной области. Например, предполагая, что у нас нет никаких глобальных переменных (полей) области видимости,
+а только локальные переменные, если компилятор выполняет тело метода, он может получить доступ только к объектам из стека, которые находятся внутри тела метода.
+Он не может получить доступ к другим локальным переменным, так как они не выходят в область видимости.
+Когда метод завершается и возвращается, верхняя часть стека выталкивается, и активная область видимости изменяется.
+
+### Куча (Heap)
+Эта часть памяти хранит в памяти фактические объекты, на которые ссылаются переменные из стека.
+
+Сама куча разделена на несколько частей, что облегчает процесс сборки мусора.
+
+### Советы и приемы
+* Чтобы минимизировать объем памяти, максимально ограничьте область видимости переменных. 
+Помните, что каждый раз, когда выскакивает верхняя область видимости из стека, ссылки из этой области теряются, 
+и это может сделать объекты пригодными для сбора мусора.
+* Явно устанавливайте в `null` устаревшие ссылки. Это сделает объекты, на которые ссылаются, подходящими для сбора мусора.
+* Избегайте финализаторов (`finalizer`). Они замедляют процесс и ничего не гарантируют. 
+Фантомные ссылки предпочтительны для работы по очистке памяти.
+* Не используйте сильные ссылки там, где можно применить слабые или мягкие ссылки. 
+Наиболее распространенные ошибки памяти - это сценарии кэширования, когда данные хранятся в памяти, даже если они могут не понадобиться.
+* **JVisualVM** также имеет функцию создания дампа кучи в определенный момент, чтобы вы могли анализировать для каждого класса, сколько памяти он занимает.
+* Настройте JVM в соответствии с требованиями вашего приложения. Явно укажите размер кучи для JVM при запуске приложения. 
+Процесс выделения памяти также является дорогостоящим, поэтому выделите разумный начальный и максимальный объем памяти для кучи. 
+Если вы знаете его, то не имеет смысла начинать с небольшого начального размера кучи с самого начала, JVM расширит это пространство памяти.
+Указание параметров памяти выполняется с помощью следующих параметров:
+  * Начальный размер кучи `-Xms512m-` установите начальный размер кучи на 512 мегабайт.
+  * Максимальный размер кучи `-Xmx1024m-` установите максимальный размер кучи 1024 мегабайта.
+  * Размер стека потоков `-Xss1m-` установите размер стека потоков равным 1 мегабайту.
+  * Размер поколения `-Xmn256m-` установите размер поколения 256 мегабайт.
+* Если приложение Java выдает ошибку `OutOfMemoryError` и вам нужна дополнительная информация для обнаружения утечки, 
+запустите процесс с `–XX:HeapDumpOnOutOfMemory` параметром, который создаст файл дампа кучи, когда эта ошибка произойдет в следующий раз.
+* Используйте опцию `-verbose:gc`, чтобы получить вывод процесса сборки мусора. 
+Каждый раз, когда происходит сборка мусора, будет генерироваться вывод.
+
+
+
 ## [How Java Virtual Machine(JVM) works](https://medium.com/@harindu973/how-java-virtual-machine-jvm-works-2403fdba4fca)
 Languages such as `C` and `C++` is compiled into machine code unique to the operating system. 
 As a result, these programming languages are referred to as __compiled languages__.
@@ -27,6 +74,7 @@ _In Java architecture, there are three key components:_
   Anyone can use that specification to create their own JVM.
 
 ![img](https://miro.medium.com/max/2640/1*LuKOZMDCX8e1zDyGyMUu_w.png)
+
 
 ### Inside of the JVM Architecture
 In the JVM architecture there are 3 main components named as:
@@ -84,7 +132,6 @@ In the JVM architecture there are 3 main components named as:
 ![img](https://www.freecodecamp.org/news/content/images/2021/01/image-39.png)
 
 
-<hr>
 
 
 ## [JIT Java | Just In Time compiler](https://medium.com/nerd-for-tech/jit-java-just-in-time-jit-compiler-af1cc86fe53b)
@@ -97,6 +144,7 @@ There are two types which we can classify how a program runs on our computer:
 
 A compiler is a software program that translates computer code written in one programming language into another language.
 A compiler is used for programs that translate source code from a high-level programming language to a lower-level language.
+
 
 ### How does a program run on a Virtual Machine?
 There are 3 steps in compilation time.
@@ -130,6 +178,7 @@ So we can say that the Java program is slower than other languages like C becaus
 
 After the interpreter interprets the code then it transfers to the OS and is executed.
 
+
 ### The Just in Time
 The JIT compiler converts recurring bytecode code blocks into machine code, which the interpreter can use immediately.
 У Java JIT є невід'ємним компонентом JVM. Це покращує продуктивність виконання в десять разів порівняно з попереднім рівнем.
@@ -143,7 +192,6 @@ The JIT compiler is located inside the JVM, which consist of 3 components:
 ![img](https://miro.medium.com/max/2640/1*jr9u4kZidlDWg4Q0FrILrw.jpeg)
 
 
-<hr>
 
 
 ## [Java Virtual Machine(JVM) Architecture](https://fasrinaleem.medium.com/java-virtual-machine-jvm-architecture-87b5bdd47403)
@@ -151,6 +199,7 @@ The JIT compiler is located inside the JVM, which consist of 3 components:
 > A Java Virtual Machine (JVM) instance will be built for each program.
 > As a result, after the program is finished, the JVM instance is destroyed. 
 > JVM will also create a non-daemon (user threads) thread to execute the Java program.
+
 
 ### Lifetime of a Java Virtual Machine
 * When a java application starts, a runtime instance of JVM is created. 
@@ -167,7 +216,6 @@ JVM will be destroyed under 2 circumstances such as...
 ...and obviously, JVM will be destroyed if it crashes.
 
 
-<hr>
 
 
 ## [Java Memory Management](https://medium.com/geekculture/java-memory-management-8ff9bc202a58)
@@ -176,7 +224,6 @@ Java objects are created at their instantiation and destroyed after they are der
 and are only destroyed when the classLoader is itself picked up by the GC, for these reasons you need to use static fields/methods only when it’s convenient.
 
 
-<hr>
 
 
 ## Java Heap Memory
@@ -186,13 +233,10 @@ Any newly created object first get into **Young Gen** and slowly moved to **Old 
 We can customize the size dynamically using-XX command as mentioned in the image.
 
 
-<hr>
 
 
 ## [Garbage Collector — An Introduction](https://medium.com/javarevisited/garbage-collection-an-introduction-169922e90c61)
 ![img](https://miro.medium.com/max/770/1*JJClvb9nwTiIvDy7bmsqOg.png)
 
 
-## Articles
-* [Java Memory Leaks | How to Avoid? | Prevention Techniques](https://seagence.com/blog/java-memory-leaks-how-to-avoid-prevention-techniques/)
 

@@ -9,3 +9,10 @@
 > Индексы ускоряют операции чтения, но замедляют вставку и удаление.
 
 
+## JOIN
+Пример добавления столбца с ролями (`user_roles`) после данных с таблицы `users`, без объединения (`GROUP BY`):
+```postgresql
+SELECT *
+FROM users u
+RIGHT JOIN user_roles ur ON u.id = ur.user_id
+```

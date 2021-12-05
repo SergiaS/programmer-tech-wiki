@@ -1,8 +1,12 @@
-# Spring Data JDBC
+# [Spring Data JDBC](https://spring.io/projects/spring-data-jdbc)
+
 
 ## JdbcTemplate
+* [Java Concepts: JdbcTemplate Querying Spring](https://medium.com/beingcoders/java-concepts-jdbctemplate-querying-spring-3192bed61f44)
+
 `JdbcTemplate` работает через сеттеры. 
 Вместе с конструктором по умолчанию их нужно добавить в свою модель.
+
 
 ## RowMapper
 `RowMapper<T>` отображает/переводит строки из таблицы в сущности (модели). Используется при выборке с БД методом `jdbcTemplate.query()`.
@@ -33,7 +37,8 @@ public List<MP3> getMP3ListByAuthor(String author) {
 }
 ```
 
-Либо можно использовать одну из дефолтных реализаций, которая сама просеттит все поля в сущности, например `BeanPropertyRowMapper` - он используется для простого использования.
+Либо можно использовать одну из дефолтных реализаций, которая сама просеттит все поля в сущности, 
+например `BeanPropertyRowMapper` - он используется для простого использования.
 ```java
 BeanPropertyRowMapper<User> ROW_MAPPER = BeanPropertyRowMapper.newInstance(User.class);
 
@@ -81,8 +86,8 @@ if (payout.isNew()) {
 } else {
     if (namedParameterJdbcTemplate.update(
             "UPDATE payouts " +
-                   "SET date_time=:date_time, amount=:amount, notes=:notes " +
-                 "WHERE id=:id AND user_id=:user_id", map) == 0)
+               "SET date_time=:date_time, amount=:amount, notes=:notes " +
+             "WHERE id=:id AND user_id=:user_id", map) == 0)
     return null;
 }
 ```
@@ -95,12 +100,15 @@ if (user.isNew()) {
     int newId = insertUser.executeAndReturnKey(parameterSource).intValue();
     user.setId(newId);
 } else if (namedParameterJdbcTemplate.update(
-        "UPDATE users SET name=:name, email=:email, password=:password," +
-                "registered=:registered, enabled=:enabled, profit_per_day=:profitedPerDay WHERE id=:id", parameterSource) == 0) {
+        "UPDATE users " +
+        "SET name=:name, email=:email, password=:password, registered=:registered," +
+            "enabled=:enabled, profit_per_day=:profitedPerDay " +
+        "WHERE id=:id", parameterSource) == 0) {
     return null;
 }
 return user;
 ```
+
 
 ## Инициализация и популирование DB
 * [Initializing a Database by Using Spring XML](https://docs.spring.io/spring-framework/docs/current/reference/html/data-access.html#jdbc-initializing-datasource-xml)
@@ -128,3 +136,7 @@ xsi:schemaLocation=http://www.springframework.org/schema/jdbc
     <property name="password" value="${database.password}"/>
 </bean>
 ```
+
+
+## Batch
+Это групповая операция, которая накапливает в себе SQL, а потом выполняет их за один запрос.

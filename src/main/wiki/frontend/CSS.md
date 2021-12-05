@@ -1,4 +1,6 @@
 # CSS
+* [Responsive web design in 37 minutes + layout. You don’t need Bootstrap!](https://www.youtube.com/watch?v=XbnAKjjlgc4)
+
 
 ## data-атрибуты
 [Использование data-* атрибутов](https://developer.mozilla.org/ru/docs/Learn/HTML/Howto/Use_data_attributes)

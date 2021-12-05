@@ -1,8 +1,9 @@
 # Servlets
-
 * [Как работает сервлет](https://metanit.com/java/javaee/4.8.php)
 
 > Все методы в качестве параметра принимают два объекта: `HttpServletRequest` - хранит информацию о запросе и `HttpServletResponse` - управляет ответом на запрос.
+
+
 
 ## javax.servlet-api
 Для работы с сервлетами нужна зависимость `javax.servlet-api` ([актуальная версия на репозитории Maven](https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api)):
@@ -14,6 +15,8 @@
     <scope>provided</scope>
 </dependency>
 ```
+
+
 
 ## web.xml
 Файл `web.xml` хранит информацию о конфигурации приложения.
@@ -32,6 +35,7 @@
 </web-app>
 ```
 Для запуска приложения нужно создать Tomcat-конфигурацию (выбрать версию сервера, указать артефакт exploded...).
+
 
 
 ## JSP
@@ -60,8 +64,6 @@
 ```html
 ?action=filter
 ```
-
-***
 
 ### JSP bean
 > `jsp:useBean` нужен IDEA для автодополнений - она понимает тип переменной, которая уже доступна в JSP (например через `setAttribute`).
@@ -106,9 +108,6 @@ request.setAttribute("mealsTo",
 </c:forEach>
 ```
 
-***
-
-
 ### JSTL
 * [JSTL: Шаблоны для разработки веб-приложений в java](https://javatutor.net/articles/jstl-patterns-for-developing-web-application-1)
 * [Baeldung - A Guide to the JSTL Library](https://www.baeldung.com/jstl)
@@ -128,13 +127,13 @@ request.setAttribute("mealsTo",
 
 ***
 
-Начиная с `Servlet API 2.3` пул сервлетов не создается, [создается только один инстанс сервлетов](https://stackoverflow.com/questions/6298309/how-many-instances-of-servlet-are-created-by-container-after-loading-it-singlet).
+Начиная с `Servlet API 2.3` пул сервлетов не создается, 
+[создается только один инстанс сервлетов](https://stackoverflow.com/questions/6298309/how-many-instances-of-servlet-are-created-by-container-after-loading-it-singlet).
 
 ***
 
-[JSP позволяет использовать ряд объектов](https://stackoverflow.com/a/1890462). Например, параметр запроса `param.action`, который не кладется в атрибуты, т.е. достается значение ключа `action` указанное в строке запроса.
-
-***
+[JSP позволяет использовать ряд объектов](https://stackoverflow.com/a/1890462). 
+Например, параметр запроса `param.action`, который не кладется в атрибуты, т.е. достается значение ключа `action` указанное в строке запроса.
 
 #### Working with LocalDateTime
 Для работы с датой и временем нужно импортировать тег:
@@ -148,9 +147,6 @@ request.setAttribute("mealsTo",
    <fmt:formatDate value="${parsedDateTime}" pattern="dd.MM.yyyy HH:mm"/>
 </td>
 ```
-
-
-
 
 ***
 
@@ -167,3 +163,59 @@ request.setAttribute("mealsTo",
 * `initParam` - Конфигурационные параметры, указанные для вашей страницы, сервлета в файле `web.xml`.
 * `cookie` - Список переменных помещенных внутрь cookie.
 * `pageContext` - Ссылка на объект pageContext (см. описание служебных объектов автоматически создаваемых внутри jsp-страницы).
+
+
+
+## Работа со Spring на примере TopJava
+Для работы с web с помощью Spring подключим к проекту следующие зависимости:
+```xml
+<!--TomCat - web-контейнер. Позволяет работать с jsp, сервлетами -->
+<dependency>
+   <groupId>org.apache.tomcat</groupId>
+   <artifactId>tomcat-servlet-api</artifactId>
+   <version>${tomcat.version}</version>
+   <scope>provided</scope>
+</dependency>
+
+<!--java standart tag library - не предоставляется TomCat, нужно добавлять вручную -->
+<dependency>
+   <groupId>javax.servlet</groupId>
+   <artifactId>jstl</artifactId>
+   <version>1.2</version>
+</dependency>
+        
+<!--Spring библиотека для работы с web -->
+<dependency>
+   <groupId>org.springframework</groupId>
+   <artifactId>spring-web</artifactId>
+   <version>${spring.version}</version>
+</dependency>
+```
+При старте web-приложения в контейнере сервлетов требуется инициализировать контекст спринга.
+Запустить Spring можно с помощью `ContextLoaderListener`, который будет отслеживать работу веб-приложение и при инициализации сервлета 
+поднимать Spring context в методе `contextInitialized` и отключать контекст спринга при остановке приложения в методе `contextDestroyed`. 
+Для этого нужно определить этот `ContextListener` в `web.xml`:
+```xml
+<listener>
+  <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+</listener>
+```
+Чтобы **Listener** смог поднять контекст спринга — ему нужно указать в `web.xml` путь к конфигурационным файлам и задать необходимые профили:
+```xml
+<context-param>
+   <param-name>spring.profiles.default</param-name>
+   <param-value>postgres,datajpa</param-value>
+</context-param>
+
+<context-param>
+   <param-name>contextConfigLocation</param-name>
+   <param-value>
+      classpath:spring/spring-app.xml
+      classpath:spring/spring-db.xml
+   </param-value>
+</context-param>
+```
+Для каждого сервлета, при инициализации, после создания запускается метод `init(ServletConfig config)`, где мы можем получить текущий контекст Spring. 
+Для web приложений определяется свой собственный `WebApplicationContext`, который может работать с сервлетами. 
+В `UserServlet` мы можем получить контекст с помощью метода `getRequiredWebApplicationContext(getServletContext())` из `WebApplicationContextUtils`. 
+Из полученного контекста мы можем получать бины Spring, например, объект `UserService`, и работать через него с пользователями.

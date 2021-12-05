@@ -1,4 +1,9 @@
-# Строки и всё что касается их
+# String и всё что касается их
+* [Difference between @NotNull, @NotEmpty, and @NotBlank](https://stackoverflow.com/a/17137308)
+
+Самый используемый тип в Java.
+При каждом изменении будет возвращен новый объект.
+
 
 ## Format
 |Format-Specifier      | Datatype related | Format printing | Formatting a string |
@@ -9,7 +14,7 @@
 | %s | String | System.out.printf("Display a String %s","String"); | String.format("Display a String %s","String"); |
 
 
-## Split by StringTokenizer
+## StringTokenizer
 Один из способ разбиения строки на части – с помощью класса `StringTokenizer`.
 ```java
 String s = "Good news everyone!";
@@ -28,9 +33,27 @@ ryo
 !
 ```
 
+***
+
+Один из способ подсчета кол-ва вхождений:
+```java
+int stringTokenizer = new StringTokenizer(" " +testString + " ", ".").countTokens()-1;
+System.out.println("stringTokenizer = " + stringTokenizer);
+```
+
+
 ## [MessageFormat и ChoiceFormat by JavaRush](https://javarush.ru/groups/posts/590-klass-messageformat)
 > Класс Java `MessageFormat` принимает набор объектов, форматирует их, а затем вставляет форматированные строки в шаблон в соответствующих местах. 
 > Это своего рода альтернатива (или даже дополнение) к статическому методу `String.format`.
 
 С помощью класса `ChoiceFormat` возможно сделать так, что в зависимости от значения переменной будет выбираться необходимый текст. 
 Своего рода реализация оператора `if...else`.
+
+
+## intern()
+* [Все о String.intern()](https://habr.com/ru/post/79913/)
+
+> Нужно интернировать строки тогда, когда они не являются константами, и вы хотите иметь возможность быстро сравнить их с 
+> другими интернированными строками.
+
+

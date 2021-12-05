@@ -6,6 +6,14 @@
 > При удалении класса из исходников, его скомпилированная версия все еще будет находиться в `target` (и `classpath`). 
 > В этом случае (или в любом другом, когда проект начинает глючить) сделайте `mvn clean`. 
 
+> Если зависимость имеет `<scope>runtime</scope>`, то она не будет индексироваться IDEA.
+
+
+## Репозитории Мавена
+* [Maven Central Repository Search](https://search.maven.org/)
+  * `-Mx` означают предварительные milestone версии
+
+
 ## Добавления веб-модуля (`web.xml`) в проект (IntelliJ IDEA)
 Для добавления `web.xml` и его структуры нужно зайти в:<br>
 `Project Structure` > `Modules` > на проекте выбрать `+` > `Web` ...
@@ -85,6 +93,9 @@ C:\java\projects\tt_rss-reader\src\main\webapp
 ```
 **Почему-то, изменения подхватываются только при добавление/удалении любой зависимости, а не при изменении инфы в `pom.xml`.** 
 
+
+
+
 ## Plugins
 
 ### [Maven WAR Plugin](https://www.baeldung.com/maven-generate-war-file?fbclid=IwAR1py7FSLmUKST6qMN3lInaFacDjdFd2D2-jpz_IcL_YNMfF2T573r7OzD8#maven-war-plugin)
@@ -130,6 +141,22 @@ The Maven WAR plugin is responsible for collecting and compiling all the depende
 
 
 
+## Profiles
+Maven позволяет запускать проект с разными конфигурациями, и эти конфигурации задаются профилями.
+
+Профили в Intellij IDEA переключаются в боковой вкладке Maven - там появится вкладка Profiles.
+
+При смене профиля нужно обязательно делать **Reload All Maven Projects** чтобы проект переконфигурился с другими зависимостями.
+
+<u>Пример работы с Topjava:</u>
+> Для переключения на HSQLDB необходимо:
+> * поменять в окне Maven Projects профиль (Profiles) - выключить `postgres`, включить `hsqldb` - и сделать *Reimport All Maven Projects* (1-я кнопка);
+> * поменять `Profiles.ACTIVE_DB = HSQLDB`;
+> * почистить проект `mvn clean` (фаза clean не выполняется автоматически, чтобы каждый раз не перекомпилировать весь проект).
+> 
+> Для корректного отображения неактивного профиля в IDEA проверьте флаг Inactive profile highlighting и сделайте проекту clean
+
+
 ## [Область действия зависимости `scope`](http://java-online.ru/maven-dependency.xhtml#scope)
 Область действия зависимости scope определяет этап жизненного цикла проекта, в котором эта зависимость будет использоваться. Maven использует 6 областей :
 
@@ -142,3 +169,45 @@ The Maven WAR plugin is responsible for collecting and compiling all the depende
 * `system` - область похожа на provided за исключением того, что необходимо определить физическое расположение артефакта на диске. 
 Артефакт с этой областью видимости maven не ищет в репозитории;
 * `import` - эта область используется в зависимости секции `<dependencyManagement>` при сложных связях.
+
+
+## Теги
+
+### `<dependencyManagement>` 
+`dependencyManagement` - это зависимости, которые в .jar не включаются. 
+Здесь просто указывается, какой версии зависимости будем использовать. 
+Т.е. здесь будем использовать зависимости с такой-то версией, а в основном проекте можно версию не прописывать, и версия будет браться отсюда.
+
+Когда мы используем несколько дополнительных зависимостей например от JUnit, и эти зависимости имеют разную версию. 
+Таким образом, в сборку могут попасть несколько версий отдой зависимостей. А указав в dependencyManagement конкретную - попадёт одна.
+
+
+## Исключение пакета из зависимости
+Из TopJava:
+
+Для более удобного сравнения объектов в тестах мы будем использовать библиотеку **Harmcrest** с **Matcher'ами**, которая позволяет делать сложные проверки. 
+С **Junit** по умолчанию подтягивается **Harmcrest** core, но нам потребуется расширенная версия:
+в `pom.xml` из зависимости **Junit** исключим дочернюю `hamcrest-core` и добавим `hamcrest-all`.
+```xml
+<dependency>
+    <groupId>junit</groupId>
+    <artifactId>junit</artifactId>
+    <version>${junit.version}</version>
+    <scope>test</scope>
+    <exclusions>
+        <exclusion>
+            <artifactId>hamcrest-core</artifactId>
+            <groupId>org.hamcrest</groupId>
+        </exclusion>
+    </exclusions>
+</dependency>
+<dependency>
+    <groupId>org.hamcrest</groupId>
+    <artifactId>hamcrest-all</artifactId>
+    <version>${hamcrest.version}</version>
+    <scope>test</scope>
+</dependency>
+```
+
+
+

@@ -26,7 +26,10 @@
 > </bean>
 > ```
 
+> `spring-context-support` - поддерживает кеширование.
+> Подключается аннотацией `@Cacheble`.
 
+> После прочтения класса с аннотациями, в своем контексте **Spring** хранит не инстанс этого класса, а его прокси-обертку.
 
 
 ## IoC - Inversion of Control (инверсия управления)
@@ -102,6 +105,18 @@ Spring Container получает инструкции какие объекты
 | @EnableWebMvc                                     | `<mvc:annotation-driven/>`                                                |
 | @EnableTransactionManagement                      | `<tx:annotation-driven transaction-manager="transactionManager"/>`        |
 
+### Set up Environment and then load xml configuration
+Бывают случаи когда нужно настройть объект context (например, указать профили или определить драйвер БД (обычно при компиляции не работает - требует константу)), а потом загрузить ресурсы с `.xml`.
+Для XML нужно использовать объект `GenericXmlApplicationContext`:
+```java
+try (GenericXmlApplicationContext appCtx = new GenericXmlApplicationContext()) {
+    ConfigurableEnvironment environment = appCtx.getEnvironment();
+    environment.setActiveProfiles("postgres", "datajpa");
+    appCtx.load("spring/spring-app.xml", "spring/spring-db.xml");
+    Arrays.stream(appCtx.getBeanDefinitionNames()).forEach(System.out::println);
+    appCtx.refresh();
+```
+Метод `refresh()` загружает или обновляет конфигурацию.
 
 
 
@@ -117,8 +132,15 @@ Spring Container получает инструкции какие объекты
 ***
 
 ### Notes
-> `@PostConstruct` и `@PreDestroy` - Для работы этих аннотаций, которые были deprecated в версии java 9, а в java 11 удалены - нужно подключить зависимость:
+`@PostConstruct` и `@PreDestroy` - Для работы этих аннотаций, которые были deprecated в версии java 9, а в java 11 удалены - нужно подключить зависимость:
+
 [Javax Annotation API](https://stackoverflow.com/questions/46502001/how-to-get-access-to-javax-annotation-resource-at-run-time-in-java-9/46502132#46502132), например версии 1.3.2.
+
+***
+
+Стереотипы — это аннотации, обозначающие специальную функциональность. Все стереотипы включают в себя аннотацию `@Component`.
+
+Аннотации-стереотипы (stereotypes): `@Component`, `@Controller`, `@RestController`, `@Service`, `@Repository` и `@Configuration`.
 
 ***
 
@@ -204,12 +226,18 @@ Spring создаст бин из класса над которым будет 
 ***
 
 ### @Controller
+`@Controller` сообщает Spring, что этот класс хочет реагировать на HTTP-запросы и ответы, чтобы 'DispatcherServlet' знал об этом.
+
+
 Это специализированный `@Component`.
 
 ***
 
 ### @Repository
+Указывает, что класс является репозиторием для работы с БД.
+
 Это специализированный `@Component`. Данная аннотация используется для **DAO**.
+
 При поиске компонентов, Spring также будет регистрировать все **DAO** с аннотацией `@Repository` в **Spring Container-е**.
 
 ***
@@ -228,7 +256,21 @@ Spring создаст бин из класса над которым будет 
 
 ***
 
-### @Autowired
+### @Autowired, @Lazy
+> Если нужно сделать загрузку контекста с необязательным бином (например профиля), тогда нужно использовать аттрибут `required` у аннотации `@Autowired` или сразу использовать
+> аннотацию `@Lazy`, которая инициализирует бин только после первого обращения к нему:
+> ```java
+> @Autowired(required = false)
+> protected JpaUtil jpaUtil;
+> ```
+> ```java
+> @Autowired
+> @Lazy
+> protected JpaUtil jpaUtil;
+> ```
+
+`@Lazy` - ленивая инициализация бина.
+
 Обеспечивает контроль над тем, где и как автосвязывание должны быть осуществлено.
 Можно применять `@Autowired` к сеттерам, обычным методам, конструкторам и свойствам.
 
@@ -260,6 +302,7 @@ Spring создаст бин из класса над которым будет 
 ***
 
 
+
 ## Event Processing
 There are four components involved in event processing:
 * __Source__ - to publish event in spring we must have `ApplicationEventPublisher` object.
@@ -277,7 +320,7 @@ There are four components involved in event processing:
 
 [Подробнее об некоторых Event'ах - proselyte](https://proselyte.net/tutorials/spring-tutorial-full-version/event-handling/)
 
-<hr>
+***
 
 #### How to consume the published events?
 Starting from version 4.2, Spring supports an annotation-driven event listener – `@EventListener`.
@@ -316,8 +359,159 @@ public class AnnotationDrivenEventListener {
 
 ## Profiles
 * [Baeldung - Spring Profiles](https://www.baeldung.com/spring-profiles)
+* [Spring Profiles Java and XML Configuration](https://memorynotfound.com/spring-profiles-java-xml-configuration/)
+
+> Общие для нескольких профилей свойства можно выносить в общий блок, перечислив в декларации профилей их наименования через запятую. 
+> Следует обратить особое внимание на то, что тег <beans> в котором объявляются профили и их конфигурация, может располагаться только в 
+> самом конце файла конфигурации после всех остальных настроек. 
+> Intellij Idea предоставляет интерфейс для переключения между профилями Spring, настроенными в конфигурации (такое переключение влияет 
+> только на отображение файла конфигурации, но не оказывает никакого влияния на запуск и работу приложения).
 
 > Profile names can also be prefixed with a NOT operator, e.g., !dev, to exclude them from a profile.
+
+> Профили в Spring добавляются после бинов - в конце можно использовать тег beans.
+
+### Автоматический выбор профиля базы: [ActiveProfilesResolver](https://stackoverflow.com/questions/23871255/spring-profiles-simple-example-of-activeprofilesresolver)
+
+> Автоматический выбор профиля базы при запуске приложения (тестов) в зависимости от присутствия драйвера базы в `classpath` (`ActiveDbProfileResolver`).
+
+Сначало создаем резолвер:
+```java
+import org.springframework.lang.NonNull;
+import org.springframework.test.context.ActiveProfilesResolver;
+
+public class ActiveDbProfileResolver implements ActiveProfilesResolver {
+    @Override
+    public @NonNull
+    String[] resolve(@NonNull Class<?> aClass) {
+        return new String[]{Profiles.getActiveDbProfile()};
+    }
+}
+```
+Далее класс с профилями:
+```java
+import org.springframework.util.ClassUtils;
+
+public class Profiles {
+    public static final String
+            JDBC = "jdbc",
+            JPA = "jpa";
+
+    public static final String REPOSITORY_IMPLEMENTATION = JPA;
+
+    public static final String
+            POSTGRES_DB = "postgres",
+            HSQL_DB = "hsqldb";
+
+    //  Get DB profile depending on DB driver in classpath
+    public static String getActiveDbProfile() {
+        if (ClassUtils.isPresent("org.postgresql.Driver", null)) {
+            return POSTGRES_DB;
+        } else if (ClassUtils.isPresent("org.hsqldb.jdbcDriver", null)) {
+            return HSQL_DB;
+        } else {
+            throw new IllegalStateException("Could not find DB driver");
+        }
+    }
+}
+```
+И над тестовым класслм указываем наш резолвер:
+```java
+@ActiveProfiles(resolver = ActiveDbProfileResolver.class)
+public class MealServiceTest {
+    // some code
+}
+```
+Сам профиль выбирается во вкладке Maven.
+
+> Атрибуты `resolver` и `profiles` в одном `@ActiveProfiles` вместе не работают (см. org.springframework.test.context.support.ActiveProfilesUtils#resolveActiveProfiles). 
+> `@ActiveProfiles` принимает в качестве параметра строку, либо массив строк. 
+> В тестах можно задавать несколько `@ActiveProfiles` в разных классах, они суммируются.
+
+
+
+## Transactions
+* [Spring Transaction Management](https://www.tutorialspoint.com/spring/spring_transaction_management.htm)
+* [Эффективное управление транзакциями в Spring](https://habr.com/ru/company/otus/blog/431508/)
+* [Spring @Transactional - isolation, propagation](https://stackoverflow.com/questions/8490852/spring-transactional-isolation-propagation)
+
+> Рекомендуется выполнять все операции (включая чтение) в транзакции.
+
+> Откуда `@Transactional` вытягивает класс для работы с транзакцией, в составе какого бина он идет?
+> 
+> Если в контексте **Spring** есть `<tx:annotation-driven/>`, то подключается `BeanPostProcessors`, который проксирует классы (и методы), помеченные `@Transactional`.
+> По умолчанию для `TransactionManager` используется бин с `id=transactionManager`.
+
+***
+
+**На каком слое открывать транзакцию...**
+Мы можем не открывать транзакцию на уровне сервиса, если у нас нет нескольких запросов к нескольким репозиториям. Т.е. если один репозиторий, тогда можно открывать их на уровне доступа к базе - репозиторий, если несколько - сервис.
+
+***
+
+Для подключения к Spring нужно добавить бин на основе JPA и указать в конфигурации спецальную строку:
+```xml
+<tx:annotation-driven/>
+		
+<!-- Transaction manager for a single JPA EntityManagerFactory (alternative to JTA) -->
+<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"
+      p:entityManagerFactory-ref="entityManagerFactory"/>
+```
+> Чтобы посмотреть информацию о транзакциях (открытие/закрытие и пр.), можно выставить в конфигурации logback `<logger name="org.springframework.orm.jpa.JpaTransactionManager" level="debug"/>`
+
+***
+
+
+### Propagation
+`PROPAGATION` определяет, как транзакции связаны друг с другом.
+
+Основное распостранение транзакций - `PROPAGATION`:
+* `REQUIRED` - используется по умолчанию. Использует текущюю транзакцию, если нет - будет создана новая.
+* `SUPPORT` - использовать текущюю транзакцию, если нет - новая НЕ создается, т.е. будет выполнен код без транзакции.
+* `MANDATORY` - ожидает в этом месте открытую транзакцию, иначе - exception.
+* `NOT_SUPPORTED` - перед выполнением блока кода существующая транзакция будет приостановлена.
+* `NEVER` - транзакции не должно быть, если существует - exception.
+* `NESTED` - вложенная - открывается новая транзакция внутри пришедшей.
+* `REQUIRES_NEW` - всегда открывается новая транзакция внутри пришедшей.
+  Приостанавливает текущую транзакцию, если таковая существует.
+
+### Isolation
+Определяет контракт данных между транзакциями.
+
+* `ISOLATION_READ_UNCOMMITTED` - разрешает грязное чтение.
+* `ISOLATION_READ_COMMITTED` - не разрешает грязное чтение.
+* `ISOLATION_REPEATABLE_READ` - если строка читается дважды в одной транзакции, результат всегда будет одинаковым.
+* `ISOLATION_SERIALIZABLE` - выполняет все транзакции последовательно.
+
+
+
+## Spring Internationalization
+
+### По примеру TopJava
+* [Learning the code way](http://learningviacode.blogspot.com/2012/07/reloadable-messagesources.html)
+Spring нормально работает с кириллицей. 
+Spring также автоматически может изменять локаль приложения, для этого в конфигурации `spring-mvc.xml` ему нужно определить 
+`ReloadableResourceBundleMessageSource`, который будет отвечать за локализацию и указать для него путь к **Bundles** с локализованными данными.
+
+В страницах **JSP** мы также должны указать, что теперь будем работать не через **JSTL**, а через **Spring локализацию**. 
+Для этого в страницах удаляем тег `fmt:setBundle`. Теперь **Spring** автоматически будет подставлять сообщения в зависимости от локали. 
+Но сейчас **Spring** работает на основании **JDK ResourceBundle** и он игнорирует свойство `p:cacheSeconds="5"`, так как ресурсы интернационализации будут кэшироваться Java. 
+Чтобы ресурсы не кэшировались, нужно использовать бин `ReloadableResourceBundleMessageSource` с путем к локализации, отличным от `classpath` приложения.
+
+```xml
+<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource"
+        p:cacheSeconds="5"
+        p:defaultEncoding="UTF-8">
+    <property name="basenames" value="file:///#{systemEnvironment[TOPJAVA_ROOT]}/config/messages/app"/>
+    <property name="fallbackToSystemLocale" value="false"/>
+</bean>
+```
+Теперь ресурсы интернационализации не будут кэшироваться и их можно будет менять во время работы приложения "на ходу" (runtime).
+
+> Выбор языка зависит от языка операционной системы и заголовка `Accept-Language`.
+
+> Для тестирования локали можно поменять `Accept-Language`. 
+> Для Хрома в `chrome://settings/languages` перетащить нужную локаль наверх или поставить плагин **Locale Switcher**.
 
 
 ## Questions
@@ -353,8 +547,8 @@ A: JMS, JPA.
 
 Q: **Какие зоны видимости (scope) у бина?**<br>
 A: 
-* `singleton` - Определяет один единственный бин для каждого контейнера Spring IoC (используется по умолчанию).
-* `prototype` - Позволяет иметь любое количество экземпляров бина.
+* `singleton` - Определяет один единственный бин для каждого контейнера Spring IoC (используется по умолчанию). Потокбезопасный.
+* `prototype` - Позволяет иметь любое количество экземпляров бина. Не потокбезопасный!
 * `request` - Создаётся один экземпляр бина на каждый HTTP-запрос. Касается исключительно `ApplicationContext`.
 * `session` - Создаётся один экземпляр бина на каждую HTTP-сессию. Касается исключительно `ApplicationContext`.
 * `application` - Создаётся один экземпляр бина на жизненный цикл `ServletContext`.
