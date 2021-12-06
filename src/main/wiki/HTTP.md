@@ -3,6 +3,7 @@
 ***
 
 * [Руководство по выбору между GET и POST](https://handynotes.ru/2009/08/get-versus-post.html)
+
 ![img](https://raw.githubusercontent.com/SergiaS/programmer-tech-wiki/master/src/main/resources/img/get-vs-post.png)
 
 ***
