@@ -4,7 +4,6 @@
 
 
 
-
 ## Authentication
 
 __Roles__
@@ -60,6 +59,8 @@ protected void configure(HttpSecurity http) throws Exception {
 }
 ```
 
-<hr>
+***
+
+* [From TopJava](https://github.com/JavaWebinar/topjava/blob/doc/doc/lesson08.md#-8-добавление-spring-security)
 
 
