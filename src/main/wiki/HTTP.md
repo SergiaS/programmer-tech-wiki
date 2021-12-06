@@ -1,8 +1,11 @@
 # HTTP
 
-* [Руководство по выбору между GET и POST](https://handynotes.ru/2009/08/get-versus-post.html)
+***
 
-![img]()
+* [Руководство по выбору между GET и POST](https://handynotes.ru/2009/08/get-versus-post.html)
+![img](https://raw.githubusercontent.com/SergiaS/programmer-tech-wiki/master/src/main/resources/img/get-vs-post.png)
+
+***
 
 ## REST
 * [10 Best Practices for Better RESTful API](https://medium.com/@mwaysolutions/10-best-practices-for-better-restful-api-cbe81b06f291)
