@@ -31,13 +31,14 @@ public static class ListNode {
 ListNode{2, -> ListNode{1, -> ListNode{4, -> ListNode{3, -> ListNode{5, -> null}}}}}
 ```
 
-<hr>
+***
 
 ## Examples
 
 ### [LeetCode - #25 Reverse Nodes in k-Group](https://leetcode.com/problems/reverse-nodes-in-k-group/)
 
 Перевернуть все ноды до _k_.
+
 ![img](https://assets.leetcode.com/uploads/2020/10/03/reverse_ex1.jpg)
 
 ```java
@@ -72,11 +73,12 @@ public ListNode reverseKGroup(ListNode head, int k) {
 }
 ```
 
-<hr>
+***
 
 ### [LeetCode - #86 Partition List](https://leetcode.com/problems/partition-list/)
 
 Пример с разделением нодов по условию нода (>= x || < x)
+
 ![img](https://assets.leetcode.com/uploads/2021/01/04/partition.jpg)
 
 ```java
@@ -102,11 +104,12 @@ public ListNode partition(ListNode head, int x) {
 При этом необходимо хранить ссылки на первые элементы (`root`). Нужно будет склеить два листа - последний элемент `ListNode l` будет ссылаться на next-элемент, который будет выступать первый элемент `ListNode r`.
 И в самом конце передаем следующий элемент от главного `ListNode l`.
 
-<hr>
+***
 
 ### [LeetCode - #206 Reverse Linked List](https://leetcode.com/problems/reverse-linked-list/)
 
 Пример с простым переворотом листа
+
 ![img](https://assets.leetcode.com/uploads/2021/02/19/rev1ex1.jpg)
 ```java
 public ListNode reverseList(ListNode head) {

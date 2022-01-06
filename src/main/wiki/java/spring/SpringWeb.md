@@ -4,6 +4,13 @@
 * [habr - Как генерировать JSON/XML (представления) с помощью Spring Web MVC](https://habr.com/ru/post/490586/#:~:text=Как%20генерировать%20JSON%20/%20XML%20(представления)%20с%20помощью%20Spring%20Web%20MVC)
 * [Spring MVC: создание веб-сайтов и RESTful сервисов](https://habr.com/ru/post/500572/)
 * [Quick Guide to Spring Controllers](https://www.baeldung.com/spring-controllers)
+* [Java Interview Series: Spring RESTful Web Services](https://medium.com/@.midi/interview-questions-on-spring-restful-web-services-86d0e5e28a14)
+* [Обработка исключений в контроллерах Spring](https://habr.com/ru/post/528116/)
+* [Spring и JDK 8: использование @Param и name/value в Spring MVC аннотациях не обязательно](https://habr.com/ru/post/440214/)
+  > Аннотации `@PathVariable` и `@RequestParam` все еще часто нужны, чтобы приложение работало корректно. 
+  > Но их атрибуты **value/name** уже не обязательны: соответствие ищется по именам переменных.
+
+***
 
 > Если вы хотите обслуживать представления/view (HTML-страницы, которые отображаются на стороне сервера), вы должны использовать `@Controller`, а ваши методы контроллера должны возвращать имя вашего шаблона/страницы представления. 
 > Если вы планируете создать приложение RESTful, используйте `@RestController` или комбинацию `@Controller` и `@ResponseBody` вместе.
@@ -11,6 +18,11 @@
 > `@Controller` должен возвращать представление **view** - имя страницы для отрисовки.
 > 
 > [Как генерировать HTML представление (view) с помощью Spring Web MVC](https://habr.com/ru/post/490586/#:~:text=Как%20генерировать%20HTML%20представление%20(view)%20с%20помощью%20Spring%20Web%20MVC)
+
+> `Spring Data Binding` - функциональность Spring преобразовывать данные в параметрах или теле запроса в экземпляры класса. 
+> Формат данных может быть как application/x-www-form-urlencoded (из html формы), так и JSON.
+> Spring автоматически извлечет из запроса нужные данные и, используя отражение, сделает из них объект. 
+> Для этого объект должен иметь конструктор без параметров и сеттеры.
 
 > You can use one of `WebInitializer` in place of `web.xml`:
 > ```java
@@ -38,14 +50,17 @@
 >         return new String[] { "/" };
 >     }
 > }
-```
+> ```
+
+> Существует несколько различных библиотек шаблонов, которые хорошо интегрируются с Spring MVC, из которых вы можете выбрать: Thymeleaf, Velocity, Freemarker, Mustache и даже JSP (хотя это не библиотека шаблонов).
+
 
 **Spring MVC** – это фреймворк для создания web приложений на Java, в основе которого лежит шаблон проектирования MVC.
 
-* <b><u>Model</u></b> – контейнер для хранения данных.
-* <b><u>View</u></b> – web страница, которую можно создать с помощью `html`, `jsp`, `Thymeleaf` и т.д.
+* **<u>Model</u>** – контейнер для хранения данных.
+* **<u>View</u>** – web страница, которую можно создать с помощью `html`, `jsp`, `Thymeleaf` и т.д.
   Часто при отображении _View_ использует данные из _Model_.
-* <b><u>Front Controller</u></b> также известен под именем `DispatcherServlet`. Он является частью __Spring__. 
+* **<u>Front Controller</u>** также известен под именем `DispatcherServlet`. Он является частью __Spring__. 
   Остальные компоненты - _Model_ и _View_ - нужно создать самому.
 
 
@@ -468,6 +483,8 @@ ResponseEntity - это обертка http-response.
 ### @ControllerAdvice
 Аннотацией `@ControllerAdvice` отмечается класс, предоставляющий функциональность _Global Exception Handler_-а.
 
+Любой класс с аннотацией `@ControllerAdvice` является глобальным обработчиком исключений, который очень гибко настраивается.
+
 __DOCUMENTATION:__ _By default, the methods in an @ControllerAdvice apply globally to all controllers._
 
 
@@ -743,6 +760,7 @@ private void registerHiddenFieldFilter(ServletContext aContext) {
 ```
 
 
+
 ## Тестирование
 
 `@WebAppConfiguration` - требуется для указания, что конфигурация будет использоваться для тестов.
@@ -821,6 +839,14 @@ public class RootControllerTest extends AbstractControllerTest {
 В параметры метода `andExpect()` передается реализация `ResultMatcher`, в которой мы определяем как должен быть обработан ответ контроллера.
 
 
+## Internationalization i18n, Localization
+* [TopJava - добавление смены локали](https://github.com/JavaWebinar/topjava/blob/doc/doc/lesson11.md#-2-hw10-optional-change-locale)
+* [Spring MVC internationalization example](https://mkyong.com/spring-mvc/spring-mvc-internationalization-example/)
+
+
+
+
+
 ## Questions
 ### Как мы будем работать с нашими view?
 Нужно создать бин по обработке _view_ в `applicationContext.xml`.
@@ -833,4 +859,13 @@ public class RootControllerTest extends AbstractControllerTest {
 Чтобы обращаться к своим _view_ по имени, необходимо прописать преффикс и суффикс.
 Конфигурация в примере выше, автоматически будет искать в установленном месте и с указанным расширением.
 
+***
 
+### Почему @RequestParam не работает в запросах PUT и DELETE?
+
+По спецификации Servlet API параметры в теле для методов PUT, DELETE, TRACE не обрабатываются (только в url). Можно:
+
+* использовать POST
+* передавать параметры в url
+* использовать HttpPutFormContentFilter фильтр
+* настроить Tomcat в обход спецификации. См. Handle request parameters for an HTTP PUT method

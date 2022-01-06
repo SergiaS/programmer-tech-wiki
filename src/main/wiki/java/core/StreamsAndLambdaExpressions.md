@@ -1,7 +1,16 @@
 # Streams and Lambda expressions
 * [Sort using Lambda expressions](https://medium.com/@aishwarya.chamanoor/sort-using-lambda-expressions-java-19d0433abcb7)
 
+***
+Преобразование значений в массив:
+```java
+String[] details = e.getBindingResult().getFieldErrors().stream()
+        .map(fe -> String.format("[%s] %s", fe.getField(), fe.getDefaultMessage()))
+        .toArray(value -> new String[value]);
+//        .toArray(String[]::new);
+```
 
+***
 
 # Stream
 
@@ -60,7 +69,7 @@ for (int i = 0; i < 10; i++) {
 }
 ```
 
-<hr>
+***
 
 ### Example 2:
 * `reduce()` (уменьшение) - метод берет набор данных и сжимает его в какой-то один элемент, например можно подсчитать сумму элементов, произведение... (арифметические операции).
@@ -88,7 +97,7 @@ int sum1 = Arrays.stream(arr3).reduce((acc, b) -> acc + b).getAsInt();
 // Stream для листа
 list3.stream().reduce((acc, b) -> acc + b);
 ```
-<hr>
+***
 
 ### Example 3:
 Пример стрима с лямбдами из проекта Topjava (HW0):
@@ -106,7 +115,7 @@ Map<LocalDate, Integer> caloriesSumByDate = meals.stream()
                 .map(meal -> createWithExcess(meal, caloriesSumByDate.get(meal.getDate()) > caloriesPerDay))
                 .collect(Collectors.toList());
 ```
-<hr>
+***
 
 ### [LeetCode - 451. Sort Characters By Frequency](https://leetcode.com/problems/sort-characters-by-frequency/discuss/646152/Slow-and-funny-Steam-only-Java-solution):
 Не продуктивный, но очень наглядный метод работы стримов!
@@ -122,7 +131,7 @@ public String frequencySort(String s) {
         .collect(Collectors.joining());                                             // perform final joining
 }
 ```
-<hr>
+***
 
 
 
@@ -157,7 +166,7 @@ runner.run(new Executable() {
         });
 ```
 
-<hr>
+***
 
 ### Example 2:
 `{}` - при описании нескольких действий/операций, нужно ставить точку с запятой `;`.
@@ -181,7 +190,7 @@ runner.run(new Executable() {
         });
 ```
 
-<hr>
+***
 
 ### Example 3:
 Нельзя переприсваивать локальную переменную (менять ей значение) до или после лямбд, иначе будет ошибка.
@@ -206,7 +215,7 @@ a = 2; // нельзя переприсваивать до / после
 ```
 
 
-<hr>
+***
 
 ### Example 4:
 У лямбда выражений нет своего scope (своей области видимости).
@@ -234,7 +243,7 @@ public int execute(int x, int y) {
 });
 ```
 
-<hr>
+***
 
 ### Example 5:
 ```java
@@ -278,7 +287,7 @@ The java.util.function package contains more than 40 functional interfaces and t
 * `Predicate<T> {...}`
 * `Function<T, R> {...}`
 
-<hr>
+***
 
 ## `Function<T,R>`
 `Function<T,R>` computes the argument type `T` and returns the type `R`. It contains an abstract method `R apply(T t)`.
@@ -294,7 +303,7 @@ public static void main(String[] args) {
 static Function<Integer,Integer> incrementByOneFunction = number -> number + 1;
 ```
 
-<hr>
+***
 
 ## `BiFunction<T,U,R>`
 Потребляет `T` и `U`, возвращает `R`. Вызов через метод `apply(T t, U u)`:
@@ -313,7 +322,7 @@ static int incrementByOneAndMultiply(int number, int numToMultiplyBy) {
 }
 ```
 
-<hr>
+***
 
 ## `Consumer<T>`
 `Consumer<T>` processes the argument type `T` and doesn’t return anything. It contains an abstract method `void accept(T t)`.
@@ -335,7 +344,7 @@ static void greetCustomer(Customer customer) {
 }
 ```
 
-<hr>
+***
 
 ## `BiConsumer<T, U>`
 Потребляет два объекта, и ничего не возвращает.
@@ -355,7 +364,7 @@ static void greetCustomerV2(Customer customer, boolean showPhoneNumber) {
 }
 ```
 
-<hr>
+***
 
 ## `Supplier<T>`
 `Supplier<T>` is used to get a result of type `T`. It contains an abstract method `T get()`.
@@ -378,7 +387,7 @@ static String getDBConnectionUrl() {
 }
 ```
 
-<hr>
+***
 
 ## `Predicate<T>`
 `Predicate<T>` negates the argument type `T` and returns the type `boolean`. It contains an abstract method `boolean test(T t)`.

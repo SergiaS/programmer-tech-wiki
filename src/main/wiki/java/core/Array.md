@@ -90,6 +90,11 @@ Source: [stackoverflow](https://stackoverflow.com/questions/1073919/how-to-conve
 ```java
 Integer[] leftSubArr = list.toArray(new Integer[0]);
 ```
+```java
+LinkedList<int[]> ans = new LinkedList<>();
+// ...
+ans.toArray(new int[ans.size()][]);
+```
 
 ## Sort
 

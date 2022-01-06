@@ -1,4 +1,5 @@
 # Spring Expression Language (SpEL)
+* [Spring Expression Language Guide](https://www.baeldung.com/spring-expression-language)
 
 Помогает указывать названия с помощью констант, а не писать вручную сами названия.
 Это сделано для устранения ошибок при ручном наборе - если что-то указано неверно и 

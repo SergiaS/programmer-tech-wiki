@@ -590,8 +590,11 @@ const findMaxConsecutiveOnes = (nums) => {
     all([4, 2, 3], x => x > 1); // true
     all([1, 2, 3]); // true
     ```
-
-<hr>
+* Получени текущей даты и образка до времени:
+  ```js
+  new Date().toISOString().replace(/T.*/, "")
+  ```
+***
 
 ## Литература, статьи, видео
 * [Примеры записи функций, свойст объекта](https://www.youtube.com/watch?v=dOnAC2Rr-6A)

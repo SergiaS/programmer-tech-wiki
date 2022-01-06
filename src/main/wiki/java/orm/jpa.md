@@ -175,6 +175,7 @@ protected String name;
 
 ### @Enumerated
 Указывается ожидаемый тип поля, метода или класса.
+Ставится над `enum` или коллекцией `enum`.
 
 ### @ElementCollection
 Указывается над коллекцией.

@@ -2,27 +2,17 @@
 * [Developing with Spring Boot](https://docs.spring.io/spring-boot/docs/current/reference/html/using.html)
 * [How to avoid SSL validation in Spring Boot RestTemplate?](https://medium.com/@reachansari/how-to-avoid-ssl-validation-in-spring-boot-resttemplate-3876a7fc2c4a)
 * [Как работает Spring Boot Auto-Configuration](https://habr.com/ru/post/487980/)
+* [Quick Guide on Loading Initial Data with Spring Boot](https://www.baeldung.com/spring-boot-data-sql-and-schema-sql)
+* [Common application Data properties](https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html#application-properties.data)
+* [Database Initialization](https://docs.spring.io/spring-boot/docs/2.6.2/reference/html/howto.html#howto.data-initialization)
+  > By default, SQL database initialization is only performed when using an embedded in-memory database.
+* [SpringBoot Common Application Properties - JSON Properties](https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html#application-properties.json)
 
 
-Spring Boot включает в себя интерфейс командной строки.
+> Spring Boot включает в себя интерфейс командной строки.
 
-## CommandLineRunner
-Один из способов популяции БД - создание бина:
-```java
-// Пример на ReactiveCrudRepository
-@Bean
-public CommandLineRunner initConfig(ReactiveCrudRepository<NodeRoot, String> repo) {
-    return (p) -> {
-        repo.deleteAll().block();
-        repo.save(new NodeRoot("Bob")).block();
-        repo.save(new NodeRoot("Matt")).block();
-        repo.save(new NodeRoot("Elis")).block();
-        repo.save(new NodeRoot("Ted")).block();
-        repo.save(new NodeRoot("Jenny")).block();
-        repo.save(new NodeRoot("Nora")).block();
-    };
-}
-```
+> Чтобы посмотреть какие бины инициализированы (автоконфигурация классов), нужно в `application.properties` добавить
+> `logging.level.org.springframework=debug` и запустить приложение. Смотрим **Positive matches** и **Negative matches**.
 
 ## MessageSource
 Работа и локалями и интернализацией, обращается к папке `resources` и решает какую локаль брать.
@@ -43,7 +33,26 @@ public MessageSource messageSource() {
 
 
 ## Дефолтная предзагрузка данных
-Можно использовать для простых приложений.
+* [Spring Boot: ApplicationRunner and CommandLineRunner](https://dzone.com/articles/spring-boot-applicationrunner-and-commandlinerunne)
+
+### CommandLineRunner
+Один из способов популяции БД - создание бина:
+```java
+// Пример на ReactiveCrudRepository
+@Bean
+public CommandLineRunner initConfig(ReactiveCrudRepository<NodeRoot, String> repo) {
+    return (p) -> {
+        repo.deleteAll().block();
+        repo.save(new NodeRoot("Bob")).block();
+        repo.save(new NodeRoot("Matt")).block();
+        repo.save(new NodeRoot("Elis")).block();
+        repo.save(new NodeRoot("Ted")).block();
+        repo.save(new NodeRoot("Jenny")).block();
+        repo.save(new NodeRoot("Nora")).block();
+    };
+}
+```
+Можно использовать для простых приложений `CommandLineRunner`.
 ```java
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

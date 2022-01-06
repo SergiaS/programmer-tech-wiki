@@ -99,6 +99,18 @@ SessionFactory factory = new Configuration()
 * `detached`. После того, как сессия закрыта, экземпляр класса становится отдельным, независимым экземпляром класса.
 
 
+## equals and hashcode
+* [Ultimate Guide to Implementing equals() and hashCode() with Hibernate](https://thorben-janssen.com/ultimate-guide-to-implementing-equals-and-hashcode-with-hibernate/)
+
+### When and Why you need to Implement equals() and hashCode()
+1. You need to implement the `equals()` and `hashCode()` methods for primary key classes if you map **composite primary keys**.
+2. If you **map an association to a Map**, your map key needs to implement the `equals()` and `hashCode()` methods. 
+   So, if use an entity as the key, it needs to provide both methods.
+3. You can map _one-to-many_ and _many-to-many_ associations to different sub-types of Collection. 
+   If you use a **Set**, your entities have to have `equals()` and `hashCode()` methods.
+
+
+
 ## Annotations
 
 ### @MappedSuperClass
@@ -272,6 +284,8 @@ private Set<Role> roles;
 ###  
 
 
+
+
 ## Работа с БД
 > Любые изменения (обновления/удаления) в таблице подтверждаем методом `executeUpdate()` после __HQL__ запроса.
 
@@ -326,6 +340,8 @@ Hibernate тоже позволяет указывать `CascadeType` для у
 
 
 ## Relationships, отношения, связи
+* [Стратегии загрузки коллекций в Hibernate](https://dou.ua/lenta/articles/hibernate-fetch-types/)
+
 ### Ассоциативное связывание
 Связывание ассоциаций – это связывание (`mapping`) классов и отношений между таблицами в БД. 
 

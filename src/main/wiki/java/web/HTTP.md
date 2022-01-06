@@ -1,5 +1,8 @@
 # HTTP
 
+> Креденшилы в header'ы можно устанавливать и посылать запрос, если на сервере используется базовая авторизация (http-basic).
+> При переадресации использование header'ов бесполезно.
+
 ***
 
 * [Руководство по выбору между GET и POST](https://handynotes.ru/2009/08/get-versus-post.html)
@@ -9,6 +12,8 @@
 ***
 
 ## REST
+* [Java Interview Series: Spring RESTful Web Services](https://medium.com/@.midi/interview-questions-on-spring-restful-web-services-86d0e5e28a14)
+* [Java Interview Series: REST API](https://medium.com/@.midi/rest-api-interview-questions-2f2ef9329a13)
 * [10 Best Practices for Better RESTful API](https://medium.com/@mwaysolutions/10-best-practices-for-better-restful-api-cbe81b06f291)
 
 
