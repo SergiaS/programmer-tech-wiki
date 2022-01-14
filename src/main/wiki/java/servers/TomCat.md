@@ -1,5 +1,10 @@
 # TomCat
 
+> Логи сервера можно включить в конфе IDEA (`Edit Configurations...` > `Logs`). Найти файлы можно в папке IDEA
+> ```yaml
+> C:\Users\SK88\AppData\Local\JetBrains\IntelliJIdea2021.2\tomcat\
+> ```
+
 > У TomCat есть свой сервлет-api, и в сборку проекта зависимость `servlet-api` НЕ должна идти (она там не нужна) - противном случае будут ошибки.
 > Поэтому, у данной зависимости должна быть область действия зависимости scope `provided`:
 > ```xml

@@ -1,4 +1,5 @@
 # Spring Web MVC
+* [Spring Web MVC - DOCUMENTATION](https://docs.spring.io/spring-framework/docs/5.3.10/reference/html/web.html#mvc-servlet)
 * [Spring MVC hello world example](https://mkyong.com/spring-mvc/spring-mvc-hello-world-example/)
 * [habr - Spring Web MVC](https://habr.com/ru/post/490586/#:~:text=свойства%20не%20существует.-,Spring%20Web%20MVC,-Spring%20Web%20MVC)
 * [habr - Как генерировать JSON/XML (представления) с помощью Spring Web MVC](https://habr.com/ru/post/490586/#:~:text=Как%20генерировать%20JSON%20/%20XML%20(представления)%20с%20помощью%20Spring%20Web%20MVC)
@@ -9,7 +10,6 @@
 * [Spring и JDK 8: использование @Param и name/value в Spring MVC аннотациях не обязательно](https://habr.com/ru/post/440214/)
   > Аннотации `@PathVariable` и `@RequestParam` все еще часто нужны, чтобы приложение работало корректно. 
   > Но их атрибуты **value/name** уже не обязательны: соответствие ищется по именам переменных.
-
 ***
 
 > Если вы хотите обслуживать представления/view (HTML-страницы, которые отображаются на стороне сервера), вы должны использовать `@Controller`, а ваши методы контроллера должны возвращать имя вашего шаблона/страницы представления. 
@@ -259,7 +259,62 @@ public class BrowserCORSFilter implements Filter {
 > If an opaque response serves your needs, set the request's mode to 'no-cors' to fetch the resource with CORS disabled.
 
 
+## DispatcherServlet by Java config
+Сначало создаем веб-конфигурацию, где бин `ViewResolver` будет перенаправлять нас на страницы `.jsp`:
+```java
+@Configuration
+@ComponentScan("sk.springdemo.mvc.controller")
+public class AppConfig implements WebMvcConfigurer {
+    @Bean
+    public ViewResolver viewResolver() {
+        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+        viewResolver.setPrefix("/WEB-INF/jsp/");
+        viewResolver.setSuffix(".jsp");
+        return viewResolver;
+    }
+}
+```
 
+Далее указываем чтобы через `DispatcherServlet` проходили все запросы по адресу `/`. 
+Первый простой вариант:
+```java
+// достаточно создать отдельный класс без аннотаций - прочитается автоматически
+public class SpringWebAppInitializer 
+        extends AbstractAnnotationConfigDispatcherServletInitializer {
+    @Override
+    protected Class<?>[] getRootConfigClasses() {
+        return null;
+    }
+
+    @Override
+    protected Class<?>[] getServletConfigClasses() {
+        return new Class[]{AppConfig.class};
+    }
+
+    @Override
+    protected String[] getServletMappings() {
+        return new String[]{"/"};
+    }
+}
+```
+
+Второй вариант с конфигурированием:
+```java
+public class SpringWebAppInitializer implements WebApplicationInitializer {
+    @Override
+    public void onStartup(ServletContext servletContext) throws ServletException {
+        AnnotationConfigWebApplicationContext webAppCxt = new AnnotationConfigWebApplicationContext();
+        webAppCxt.register(AppConfig.class);
+
+        DispatcherServlet dispatcherServlet = new DispatcherServlet(webAppCxt);
+
+        // register dispatcher servlet with servlet context
+        ServletRegistration.Dynamic customDispatcherServlet = servletContext.addServlet("springDispatcherServlet", dispatcherServlet);
+        customDispatcherServlet.setLoadOnStartup(1);
+        customDispatcherServlet.addMapping("/");
+    }
+}
+```
 
 ## RestTemplate
 Для совершения HTTP-запросов из REST-клиента, можно использовать вспомогательный класс от __Spring__'a - `RestTemplate`.
@@ -302,6 +357,10 @@ public String showEmpDetails(HttpServletRequest request, Model model){
 
 
 ## Annotations
+
+### @EnableWebMvc
+`@EnableWebMvc` — добавление этой аннотации к классу импортирует конфигурацию Spring MVC из `WebMvcConfigurationSupport`.
+
 
 ### @Controller
 This annotation is used to make a class as a web controller, which can handle client requests and send a response back to the client. This is a class-level annotation, which is put on top of your controller class. 

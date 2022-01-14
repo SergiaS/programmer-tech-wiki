@@ -100,6 +100,10 @@ Spring Container получает инструкции какие объекты
 ## Configuration
 
 ### Аналоги конфигураций разными способами
+* [Configuring Spring MVC](https://docs.spring.io/spring-framework/docs/3.2.x/spring-framework-reference/html/mvc.html#mvc-config-enable)
+* [Spring app migration: from XML to Java-based config](https://robinhowlett.com/blog/2013/02/13/spring-app-migration-from-xml-to-java-based-config/)
+
+
 | JAVA config                                       | XML config                                                                |
 |:--------------------------------------------------|:------------------------------------------------------------------------- |
 | @Configuration                                    | `application-context.xml`                                                 |
@@ -107,6 +111,7 @@ Spring Container получает инструкции какие объекты
 | @ComponentScan(basePackages = "com.spring.rest")  | `<context:component-scan base-package="com.spring.mvc_hibernate_aop"/>`   |
 | @EnableWebMvc                                     | `<mvc:annotation-driven/>`                                                |
 | @EnableTransactionManagement                      | `<tx:annotation-driven transaction-manager="transactionManager"/>`        |
+
 
 ### Set up Environment and then load xml configuration
 Бывают случаи когда нужно настройть объект context (например, указать профили или определить драйвер БД (обычно при компиляции не работает - требует константу)), а потом загрузить ресурсы с `.xml`.

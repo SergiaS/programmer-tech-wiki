@@ -1,5 +1,4 @@
 # Java Virtual Machine (JVM)
-
 * [Java Memory Leaks | How to Avoid? | Prevention Techniques](https://seagence.com/blog/java-memory-leaks-how-to-avoid-prevention-techniques/)
 
 
@@ -102,7 +101,8 @@ In the JVM architecture there are 3 main components named as:
        The heap area, which is created during virtual machine startup and from which memory is allocated for all class instances and arrays, represents the runtime data area.
    * __Stack__ - 
        In Java, stack memory is used for static memory allocation and thread execution. It’s made for each thread. 
-       When threads start, the JVM creates a separate runtime stack in which method calls are stored. For each method call, a frame will be produced and pushed into the runtime stack’s storage. 
+       When threads start, the JVM creates a separate runtime stack in which method calls are stored. 
+       For each method call, a frame will be produced and pushed into the runtime stack’s storage. 
        When a frame’s method invocation is finished, it is destroyed.
    * __Program Counter Register (PC Register)__ -
        Each thread will have its own PC Register, which will store the address of the currently executing instruction. 

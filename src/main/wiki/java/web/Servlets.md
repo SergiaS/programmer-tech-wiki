@@ -165,6 +165,21 @@ request.setAttribute("mealsTo",
 * `pageContext` - Ссылка на объект pageContext (см. описание служебных объектов автоматически создаваемых внутри jsp-страницы).
 
 
+## Работа с web.xml
+
+***
+
+Чтобы подключить конфиг на основе аннотаций (Java Config), нужно использовать **contextClass**:
+```xml
+<context-param>
+   <param-name>contextClass</param-name>
+   <param-value>
+      org.springframework.web.context.support.AnnotationConfigWebApplicationContext
+   </param-value>
+</context-param>
+```
+
+***
 
 ## Работа со Spring на примере TopJava
 Для работы с web с помощью Spring подключим к проекту следующие зависимости:
