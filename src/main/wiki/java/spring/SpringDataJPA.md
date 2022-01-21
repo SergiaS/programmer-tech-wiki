@@ -1,5 +1,5 @@
 # [Spring Data JPA](https://spring.io/projects/spring-data-jpa)
-
+* [The Best Spring Data JPA Logging Configuration in Spring Boot](https://thorben-janssen.com/spring-data-jpa-logging/)
 
 ## Settings
 Помимо указания адреса контекста (что и где будет сканироваться), нужно указать явно jpa namespace с репозиториями:
@@ -131,7 +131,7 @@ public class Post {
 
 > For queries with named parameters you need to use provide names for method parameters. Use @Param for query method parameters
 
-Тип стратегии графа LOAD позволяет достать все значения сузности.
+Тип стратегии графа LOAD позволяет достать все значения сущности.
 
 ```java
 @Query("SELECT u FROM User u WHERE u.id=:userId")

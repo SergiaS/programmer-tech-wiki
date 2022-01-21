@@ -10,6 +10,7 @@
 * [Spring и JDK 8: использование @Param и name/value в Spring MVC аннотациях не обязательно](https://habr.com/ru/post/440214/)
   > Аннотации `@PathVariable` и `@RequestParam` все еще часто нужны, чтобы приложение работало корректно. 
   > Но их атрибуты **value/name** уже не обязательны: соответствие ищется по именам переменных.
+
 ***
 
 > Если вы хотите обслуживать представления/view (HTML-страницы, которые отображаются на стороне сервера), вы должны использовать `@Controller`, а ваши методы контроллера должны возвращать имя вашего шаблона/страницы представления. 
@@ -878,21 +879,21 @@ public abstract class AbstractControllerTest {
 ```java
 public class RootControllerTest extends AbstractControllerTest {
 
-   @Test
-   public void getUsers() throws Exception {
-      perform(get("/users"))
-              .andDo(print())
-              .andExpect(status().isOk())
-              .andExpect(view().name("users"))
-              .andExpect(forwardedUrl("/WEB-INF/jsp/users.jsp"))
-              .andExpect(model().attribute("users", hasSize(2)))
-              .andExpect(model().attribute("users", hasItem(
-                      allOf(
-                              hasProperty("id", is(START_SEQ)),
-                              hasProperty("name", is(UserTestData.user.getName()))
-                      )
-              )));
-   }
+    @Test
+    public void getUsers() throws Exception {
+        perform(get("/users"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(view().name("users"))
+                .andExpect(forwardedUrl("/WEB-INF/jsp/users.jsp"))
+                .andExpect(model().attribute("users", hasSize(2)))
+                .andExpect(model().attribute("users", hasItem(
+                        allOf(
+                                hasProperty("id", is(START_SEQ)),
+                                hasProperty("name", is(UserTestData.user.getName()))
+                        )
+                )));
+    }
 }
 ```
 В параметры метода `andExpect()` передается реализация `ResultMatcher`, в которой мы определяем как должен быть обработан ответ контроллера.

@@ -189,7 +189,7 @@ Map - это отдельная коллекция во главе которо�
 **Основные реализации:**
 * [HashMap](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/java/core/Collections.md#принцип-работы-hashmap)
 * [LinkedHashMap](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/java/core/Collections.md#принцип-работы-linkedhashmap)
-* TreeMap
+* [TreeMap](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/java/core/Collections.md#принцип-работы-treehashmap)
 
 
 * [Обход Map'ы, подсчет количества вхождений подстроки](https://habr.com/ru/company/luxoft/blog/278313/)
@@ -325,6 +325,7 @@ This is the right way to sort a `Map` by values in Java 8 because now the orderi
 * Поддерживает порядок вставки.
 * Медленнее, чем `HashMap`.
 * Ожидается, что итерация быстрее, чем в `HashMap`.
+
 
 ### Принцип работы TreeMap
 Реализация, основанная на красно-чёрных деревьях.
