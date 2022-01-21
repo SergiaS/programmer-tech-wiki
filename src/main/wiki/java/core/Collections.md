@@ -5,14 +5,15 @@
 ***
 
 ## List
-List - это упорядоченный список, здесь допустимы дублирующие значения, объекты хранятся в порядке их добавления в список. 
+`List` - это упорядоченный список, здесь допустимы дублирующие значения, объекты хранятся в порядке их добавления в список.
+
 Доступ к элементам списка осуществляется по индексу.
 
 **Основные реализации:**
-* ArrayList
-* LinkedList
-* Vector
-* Stack
+* [ArrayList](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/java/core/Collections.md#принцип-работы-arraylist)
+* [LinkedList](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/java/core/Collections.md#принцип-работы-linkedlist)
+* [Vector](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/java/core/Collections.md#принцип-работы-vector)
+* [Stack](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/java/core/Collections.md#принцип-работы-stack)
 
 
 ### Инициализация
@@ -80,136 +81,13 @@ private static void calc(List<String> list) {
 
 
 
-
-
-## Map interface
-* [Обход Map'ы, подсчет количества вхождений подстроки](https://habr.com/ru/company/luxoft/blog/278313/)
-```java
-Map<String, PersonEmpl> map = new HashMap<>() {{
-    put("IT", new PersonEmpl("Ted", 34));
-    put("Market", new PersonEmpl("Liza", 27));
-    put("Admin", new PersonEmpl("Carl", 30));
-}};
-```
-
-
-### Принцип работы HashMap
-* [Using a Custom Class as a Key in a Java HashMap](https://www.baeldung.com/java-custom-class-map-key?fbclid=IwAR11QS0x_2Y57f1FsI6fruEedzKgmocB1Xw1LmIts6L67NF0hOtNYHuv8Vg)
-
-Пример работы алгоритма вставки пары ключ-значение:
-
-1. У объекта вызывается метод `158-865-A.hashCode()` для получения хешкода.
-2. Проверяется, есть ли существующий ключ с таким хешкодом.
-3. Далее производится сравнение всех ключей в списке с методом equals - `158-865-A.equals(key)`.
-   1. Первое сходство идентифицируется как уже существующий ключ, и его значение будет заменено на новое.
-   2. Если сравнения не выявлено, вставляется новая пара ключ-значение.
-
-
-***
-
-* [How HashMap works in Java](https://javarevisited.blogspot.com/2011/02/how-hashmap-works-in-java.html?utm_source=dlvr.it&utm_medium=facebook&m=1)
-
-HashMap состоит из «корзин» (bucket`ов). «корзины» — это элементы массива, которые хранят ссылки на списки элементов.
-
-При добавлении новой пары ключ-значение, вычисляет хеш-код ключа, на основании которого вычисляется номер корзины (номер ячейки массива), в которую попадет новый элемент. 
-Если корзина пустая, то в нее сохраняется ссылка на вновь добавляемый элемент, если же там уже есть элемент, то происходит последовательный переход по ссылкам между элементами в цепочке, 
-в поисках последнего элемента, от которого и ставится ссылка на вновь добавленный элемент. Если в списке был найден элемент с таким же ключом, то он заменяется.
-
-Добавление, поиск и удаление элементов выполняется за константное время. Хеш-функций должны равномерно распределять элементы по корзинам, 
-в этом случае временная сложность для этих 3 операций будет не ниже O(log(n)), а в среднем случае как раз константное время.
-
-
-### Добавление
-Пример добавления в мапу из другой коллекции - подсчет одинаковых элементов.
-
-```java
-Map<Integer, Integer> map = new HashMap<>();
-for (int n : array) {
-    map.put(n, map.getOrDefault(n, 0) + 1);
-}
-```
-Хорошо подходит для заполнения мапы в цикле, здесь нет необходимости использовать методы `computeIfPresent()`, `putIfAbsent()`...
-
-
-### Сортировка по значению в обратном порядке
-Пример сортировки по значению в обратном порядке через `Comparator` через stream.
-```java
-// to List
-List<Integer> list = map.entrySet().stream()
-        .sorted(Entry.<Integer, Integer>comparingByValue().reversed())
-        .limit(k)
-        .map(Entry::getKey)
-        .collect(Collectors.toList());
-```
-
-```java
-// to int[] array
-int[] arr = map.entrySet().stream()
-        .sorted(Entry.<Integer, Integer>comparingByValue().reversed())
-        .limit(k)
-        .map(Entry::getKey)
-        .mapToInt(i -> i)
-        .toArray();
-```
-
-### [Пример сортировки HashMap](https://mishrasuraj.medium.com/sorting-hashmap-in-java-8-6fadc1cacb2b)
-```java
-Map<String, PersonEmpl> map = new HashMap<>() {{
-    put("JAVA", new PersonEmpl("Ted", 34));
-    put("Perl", new PersonEmpl("Liza", 27));
-    put("Python", new PersonEmpl("Carl", 30));
-    put("C++", new PersonEmpl("Zina", 33));
-    put("C#", new PersonEmpl("Tomas", 41));
-    put("GO", new PersonEmpl("Lucas", 31));
-    put("Ruby", new PersonEmpl("Sam", 24));
-    put("Scala", new PersonEmpl("Simona", 29));
-    put("JS", new PersonEmpl("Andy", 32));
-    put("C", new PersonEmpl("Sara", 29));
-}};
-```
-
-Sort by name - declarative:
-```java
-List<Map.Entry<String, PersonEmpl>> mapEmpl = new ArrayList<>(map.entrySet());
-Collections.sort(mapEmpl, (a,b) -> a.getValue().getName().compareTo(b.getValue().getName()));
-mapEmpl.forEach(System.out::println);
-```
-
-Provide a sorting logic as lambda function:
-```java
-map.entrySet().stream()
-        .sorted((a,b) -> a.getValue().getName().compareTo(b.getValue().getName()))
-        .forEach(System.out::println);
-```
-
-### [How to sort HashMap by values in Java 8 - using Lambdas and Stream](https://www.java67.com/2017/07/how-to-sort-map-by-values-in-java-8.html)
-Интересный момент - для сборки мапы и сохранения порядка (после сортировки) нужно использовать `LinkedHashMap`, - в противном случае порядок не сохранится!
-```java
-// wrong way
-// now, let's collect the sorted entries in Map
-Map<String, Integer> sortedByPrice = ItemToPrice.entrySet().stream()
-        .sorted(Map.Entry.<String, Integer>comparingByValue())
-        .collect(Collectors.toMap(e->e.getKey(),e->e.getValue()));
-```
-> The `Map` returned by the previous statement was not sorted because the order was lost while collecting results in Map you need to use the `LinkedHashMap` to preserve the order
-```java
-// right way
-Map<String, Integer> sortedByValue=ItemToPrice.entrySet().stream()
-        .sorted(Map.Entry.<String, Integer>comparingByValue())
-        .collect(toMap(Map.Entry::getKey,
-                       Map.Entry::getValue,(e1,e2)->e1,LinkedHashMap::new));
-```
-This is the right way to sort a `Map` by values in Java 8 because now the ordering will not be lost as `Collector` is using `LinkedHashMap` to store entries.
-
-
-
 ## Set
 `Set` - множество неповторяющихся элементов - каждый элемент хранится только в одном экземпляре.
 
 **Основные реализации:**
-* HashSet
-* LinkedHashSet
-* TreeSet (SortedSet)
+* [HashSet](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/java/core/Collections.md#принцип-работы-hashset)
+* [LinkedHashSet](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/java/core/Collections.md#принцип-работы-linkedhashset)
+* [TreeSet (SortedSet)](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/java/core/Collections.md#принцип-работы-treeset)
 
 
 ### Принцип работы HashSet
@@ -253,14 +131,12 @@ System.out.println(set.floor(7));   // 4
 
 
 ## Queue
-Отличительная особенность данной коллекции - Очереди обычно, но не обязательно, упорядочивают элементы в `FIFO` (First-In-First-Out). 
+Отличительная особенность данной коллекции - очереди обычно, но не обязательно, упорядочивают элементы в `FIFO` (First-In-First-Out). 
 
 **Основные реализации:**
-* Однонаправленная очередь PriorityQueue
-* Двунаправленная очередь ArrayDeque
-* Двусвязный список LinkedList
-
-
+* [Однонаправленная очередь PriorityQueue](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/java/core/Collections.md#принцип-работы-priorityqueue)
+* [Двунаправленная очередь ArrayDeque](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/java/core/Collections.md#принцип-работы-arraydeque)
+* [Двусвязный список LinkedList](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/java/core/Collections.md#принцип-работы-linkedlist)
 
 ### Принцип работы PriorityQueue
 Особенностью `PriorityQueue` является возможность управления порядком элементов. 
@@ -304,6 +180,158 @@ class Solution {
 - Методы позволяют обращаться как к голове, так и к хвосту: `addFirst`/`addLast`, `getFirst`/`getLast`, `offerFirst`/`offerLast`...
 
 
+
+## Map interface
+Map - это отдельная коллекция во главе которой используется интерфейс Map. 
+Главное отличие - сохранение ключа со значением. 
+Повторяющиеся ключи не допустимы, будут перезатерты их значения.
+
+**Основные реализации:**
+* [HashMap](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/java/core/Collections.md#принцип-работы-hashmap)
+* [LinkedHashMap](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/java/core/Collections.md#принцип-работы-linkedhashmap)
+* TreeMap
+
+
+* [Обход Map'ы, подсчет количества вхождений подстроки](https://habr.com/ru/company/luxoft/blog/278313/)
+```java
+Map<String, PersonEmpl> map = new HashMap<>() {{
+    put("IT", new PersonEmpl("Ted", 34));
+    put("Market", new PersonEmpl("Liza", 27));
+    put("Admin", new PersonEmpl("Carl", 30));
+}};
+```
+
+
+### Принцип работы HashMap
+Хэш-таблица. Позволяет использовать `null` в качестве значения или ключа и не является упорядоченной.
+
+***
+
+#### [Using a Custom Class as a Key in a Java HashMap](https://www.baeldung.com/java-custom-class-map-key?fbclid=IwAR11QS0x_2Y57f1FsI6fruEedzKgmocB1Xw1LmIts6L67NF0hOtNYHuv8Vg)
+
+Пример работы алгоритма вставки пары ключ-значение:
+
+1. У объекта вызывается метод `158-865-A.hashCode()` для получения хеш-кода.
+2. Проверяется, есть ли существующий ключ с таким хеш-кодом.
+3. Далее производится сравнение всех ключей в списке с методом equals - `158-865-A.equals(key)`.
+   1. Первое сходство идентифицируется как уже существующий ключ, и его значение будет заменено на новое.
+   2. Если сравнения не выявлено, вставляется новая пара ключ-значение.
+
+***
+
+#### [How HashMap works in Java](https://javarevisited.blogspot.com/2011/02/how-hashmap-works-in-java.html?utm_source=dlvr.it&utm_medium=facebook&m=1)
+
+HashMap состоит из «корзин» (bucket`ов). «корзины» — это элементы массива, которые хранят ссылки на списки элементов.
+
+При добавлении новой пары ключ-значение, вычисляет хеш-код ключа, на основании которого вычисляется номер корзины (номер ячейки массива), в которую попадет новый элемент.
+Если корзина пустая, то в нее сохраняется ссылка на вновь добавляемый элемент, если же там уже есть элемент, то происходит последовательный переход по ссылкам между элементами в цепочке,
+в поисках последнего элемента, от которого и ставится ссылка на вновь добавленный элемент. Если в списке был найден элемент с таким же ключом, то он заменяется.
+
+Добавление, поиск и удаление элементов выполняется за константное время. Хеш-функций должны равномерно распределять элементы по корзинам,
+в этом случае временная сложность для этих 3 операций будет не ниже O(log(n)), а в среднем случае как раз константное время.
+
+***
+
+#### Добавление
+Пример добавления в мапу из другой коллекции - подсчет одинаковых элементов.
+
+```java
+Map<Integer, Integer> map = new HashMap<>();
+for (int n : array) {
+    map.put(n, map.getOrDefault(n, 0) + 1);
+}
+```
+Хорошо подходит для заполнения мапы в цикле, здесь нет необходимости использовать методы `computeIfPresent()`, `putIfAbsent()`...
+
+***
+
+#### Сортировка по значению в обратном порядке
+Пример сортировки по значению в обратном порядке через `Comparator` через stream.
+```java
+// to List
+List<Integer> list = map.entrySet().stream()
+        .sorted(Entry.<Integer, Integer>comparingByValue().reversed())
+        .limit(k)
+        .map(Entry::getKey)
+        .collect(Collectors.toList());
+```
+
+```java
+// to int[] array
+int[] arr = map.entrySet().stream()
+        .sorted(Entry.<Integer, Integer>comparingByValue().reversed())
+        .limit(k)
+        .map(Entry::getKey)
+        .mapToInt(i -> i)
+        .toArray();
+```
+
+***
+
+#### [Пример сортировки HashMap](https://mishrasuraj.medium.com/sorting-hashmap-in-java-8-6fadc1cacb2b)
+```java
+Map<String, PersonEmpl> map = new HashMap<>() {{
+    put("JAVA", new PersonEmpl("Ted", 34));
+    put("Perl", new PersonEmpl("Liza", 27));
+    put("Python", new PersonEmpl("Carl", 30));
+    put("C++", new PersonEmpl("Zina", 33));
+    put("C#", new PersonEmpl("Tomas", 41));
+    put("GO", new PersonEmpl("Lucas", 31));
+    put("Ruby", new PersonEmpl("Sam", 24));
+    put("Scala", new PersonEmpl("Simona", 29));
+    put("JS", new PersonEmpl("Andy", 32));
+    put("C", new PersonEmpl("Sara", 29));
+}};
+```
+
+Sort by name - declarative:
+```java
+List<Map.Entry<String, PersonEmpl>> mapEmpl = new ArrayList<>(map.entrySet());
+Collections.sort(mapEmpl, (a,b) -> a.getValue().getName().compareTo(b.getValue().getName()));
+mapEmpl.forEach(System.out::println);
+```
+
+Provide a sorting logic as lambda function:
+```java
+map.entrySet().stream()
+        .sorted((a,b) -> a.getValue().getName().compareTo(b.getValue().getName()))
+        .forEach(System.out::println);
+```
+
+#### [How to sort HashMap by values in Java 8 - using Lambdas and Stream](https://www.java67.com/2017/07/how-to-sort-map-by-values-in-java-8.html)
+
+Интересный момент - для сборки мапы и сохранения порядка (после сортировки) нужно использовать `LinkedHashMap`, - в противном случае порядок не сохранится!
+```java
+// wrong way
+// now, let's collect the sorted entries in Map
+Map<String, Integer> sortedByPrice = ItemToPrice.entrySet().stream()
+        .sorted(Map.Entry.<String, Integer>comparingByValue())
+        .collect(Collectors.toMap(e->e.getKey(),e->e.getValue()));
+```
+> The `Map` returned by the previous statement was not sorted because the order was lost while collecting results in Map you need to use the `LinkedHashMap` to preserve the order
+```java
+// right way
+Map<String, Integer> sortedByValue=ItemToPrice.entrySet().stream()
+        .sorted(Map.Entry.<String, Integer>comparingByValue())
+        .collect(toMap(Map.Entry::getKey,
+                       Map.Entry::getValue,(e1,e2)->e1,LinkedHashMap::new));
+```
+This is the right way to sort a `Map` by values in Java 8 because now the ordering will not be lost as `Collector` is using `LinkedHashMap` to store entries.
+
+
+### Принцип работы LinkedHashMap
+Упорядоченная реализация хэш-таблицы.
+
+* Поддерживает порядок вставки.
+* Медленнее, чем `HashMap`.
+* Ожидается, что итерация быстрее, чем в `HashMap`.
+
+### Принцип работы TreeMap
+Реализация, основанная на красно-чёрных деревьях.
+Обеспечивает хранение элементов множества ключей в порядке возрастания или сортировка по Компаратору.
+
+* DOC: время выполнения `log(n)` для методов `containsKey`, `get`, `put` и `remove`.
+* Данная имплементация не синхронизирована. Для этих целей есть статический класс `SynchronizedSortedMap` в классе `Collections`.
 
 
 ## Interview questions
