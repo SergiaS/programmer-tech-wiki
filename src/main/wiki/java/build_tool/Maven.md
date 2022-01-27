@@ -12,6 +12,16 @@
 > Если зависимость имеет `<scope>runtime</scope>`, то она не будет индексироваться IDEA.
 
 
+## Установка Maven
+Maven нужно установить, чтобы использовать его команды. Есть 2 способа:
+
+1. [Установка Maven на ОС](https://maven.apache.org/install.html)
+> Важный момент - [скачивать](https://maven.apache.org/download.cgi) нужно БИНАРНУЮ версию zip-архива, чтобы была папке `bin`.
+
+2. Использовать wrapper'ы (как при [spring-initializr](https://start.spring.io/)). Maven будет виден только проекту 
+> Каталог `.mvn` нужен если на компе не установлены средства сборки Maven, а также 2 командых файла запуска `mvnw` и `mvnw.cmd`.
+
+
 ## Репозитории Мавена
 * [Maven Central Repository Search](https://search.maven.org/)
   * `-Mx` означают предварительные milestone версии
@@ -21,7 +31,7 @@
 Для добавления `web.xml` и его структуры нужно зайти в:<br>
 `Project Structure` > `Modules` > на проекте выбрать `+` > `Web` ...
 
-в `Deployment Descriptors` указать адресс размещения, например:
+в `Deployment Descriptors` указать адрес размещения, например:
 ```text
 C:\java\projects\tt_rss-reader\src\main\webapp\WEB-INF\web.xml
 ```
