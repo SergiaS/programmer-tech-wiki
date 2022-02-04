@@ -1,7 +1,12 @@
 # Java Virtual Machine (JVM)
 * [Java Memory Leaks | How to Avoid? | Prevention Techniques](https://seagence.com/blog/java-memory-leaks-how-to-avoid-prevention-techniques/)
 
-> String Pool является частью Кучи
+> String Pool является частью Кучи.
+
+## Как работает Java
+При запуске команды `javac`, приложение Java компилируется из Java-кода в байткод JVM, который является бинарным представлением приложения.
+Но обычный процессор компьютера не может просто так выполнить байткод JVM.
+Для работы вашей программы JVM нужен ещё один компилятор уже для этого байткода, который преобразуется в машинный код - процессор уже в состоянии использовать.
 
 
 ## [Стек и куча в Java + пример | TOPJAVA](https://topjava.ru/blog/stack-and-heap-in-java)

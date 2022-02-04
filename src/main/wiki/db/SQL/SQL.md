@@ -26,7 +26,7 @@
 
 
 
-## Join'ы
+## JOIN'ы
 * [Объяснение SQL объединений JOIN: LEFT/RIGHT/INNER/OUTER](http://www.skillz.ru/dev/php/article-Obyasnenie_SQL_obedinenii_JOIN_INNER_OUTER.html)
 * `OUTER JOIN` - это когда данные в таблицах не имеют между собой связей/ссылок.
 * `INNER JOIN` - Внутреннее объединение `INNER JOIN` (синоним `JOIN`, ключевое слово `INNER` можно опустить).
@@ -49,9 +49,8 @@
     5       Юрий          Логистика
     ```
   Ключевое слово `OUTER` можно опускать. Запись `LEFT JOIN` идентична `LEFT OUTER JOIN`.
+
 * `RIGHT JOIN` - аналогично `LEFT JOIN`, только главная таблица указанная в запросе справа.
-
-
 
 
 ***
@@ -61,6 +60,9 @@
 * READ_COMMITTED
 * REPEATABLE_READ
 * SERIALIZABLE
+
+
+
 
 ## DISTINCT
 Устраняет дублирующие записи - будут отображены только уникальные записи.
@@ -83,15 +85,13 @@ WHERE u.id=100001
 
 
 ## User with his Roles
-ЗАДАЧА: достать юзера с его ролями. Дано две таблицы `user` и `user_roles`.
-У одного рользователя может быть пара ролей.
-Чтобы рез-т не выводился отдельно для каждой роли на юзера, нужно использовать агрегированную функцию
-и сгрупировать по `id`:
+ЗАДАЧА: достать юзера с его ролями. Дано две таблицы `user` и `user_roles`. У одного пользователя может быть пара ролей.
 
+Чтобы рез-т не выводился отдельно для каждой роли на юзера, нужно использовать агрегированную функцию и сгруппировать по `id`:
 ```postgresql
 SELECT u.*, string_agg(r.role, ',') AS roles
 FROM users u
-  JOIN user_roles r ON u.id=r.user_id
+JOIN user_roles r ON u.id=r.user_id
 GROUP BY u.id
 ```
 

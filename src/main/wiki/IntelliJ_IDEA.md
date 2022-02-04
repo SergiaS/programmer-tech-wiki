@@ -32,6 +32,7 @@
 * `Ctrl + R` - замена.
 * `Ctrl + Shift + F9` - restart JVM HotSpot. Горячая перезагрузка.
 * `Ctrl + Shift + I` - To preview a referenced image in a popup instead of in a separate editor tab, press.
+* `Ctrl + Alt + Shift + U` - отображение UML диаграммы класса.
 
 
 ### Debug

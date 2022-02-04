@@ -1,11 +1,11 @@
 # String и всё что касается их
 Инфа о классах по работы со строками:
-* String
-* StringBuilder
-* StringBuffer
+* [String](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/java/core/String.md#string)
+* [StringBuilder](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/java/core/String.md#stringbuilder)
+* [StringBuffer](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/java/core/String.md#stringbuffer)
 
 ## Какая разница между String, StringBuilder и StringBuffer?
-`String` - значения хранятся в пуле стрингов. 
+`String` - значения хранятся в пуле стрингов.
 Это неизменяемый объект - тут всегда будет возвращаться новый экземпляр - ссылка на другой объект.
 
 `StringBuilder` - то же самое что и `StringBuffer`, только не синхронизирован, и работает быстрее. 

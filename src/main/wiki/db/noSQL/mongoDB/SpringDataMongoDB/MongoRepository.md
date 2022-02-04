@@ -387,7 +387,7 @@ All code from course you can look at [GitHub](https://github.com/SergiaS/testMon
 
 ## Tips
 ### Annotation `@PersistenceConstructor`
-Если модель содержит более одного конструктора (без дефолтного), то необходимо указать конструктор который будет использоваться по умолчанию:
+Если модель содержит более одного конструктора (без дефолтного), то необходимо указать конструктор, который будет использоваться по умолчанию:
 ```java
 @PersistenceConstructor
 public ItemOptions(String group, BigDecimal price, String status) {

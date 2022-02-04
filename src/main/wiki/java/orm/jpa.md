@@ -242,7 +242,7 @@ private Set<Role> roles;
 ```
 
 ### @CollectionTable
-Отражает таблицу которая используется для маппинга коллекций базового или встраиваемого типов...
+Отражает таблицу, которая используется для маппинга коллекций базового или встраиваемого типов...
 
 **DOC**: Specifies the table that is used for the mapping of collections of basic or embeddable types. Applied to the collection-valued field or property.
 ```java
@@ -255,7 +255,7 @@ private Set<Role> roles;
 ```
 
 ### @PersistenceContext
-**DOC**: Expresses a dependency on a container-managed EntityManager and its associated persistence context.
+**DOC**: Expresses a dependency on a container-managed `EntityManager` and its associated persistence context.
 
 Как гласит глава "7.1 Persistence Contexts" спецификации JPA, сущности в мире JPA живут в некотором пространстве, которое называется "Контекст персистенции" (или Контексте постоянства, Persistence Context). 
 Но напрямую мы не работаем с Persistence Context. Для этого мы используем `EntityManager` или "менеджер сущностей". 
