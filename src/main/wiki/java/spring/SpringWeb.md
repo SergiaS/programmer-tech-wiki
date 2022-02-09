@@ -179,8 +179,22 @@
 * Все запросы будут читаться по `/`.
 
 
-## [How Spring MVC Framework works? How HTTP Request is processed?](https://javarevisited.blogspot.com/2017/06/how-spring-mvc-framework-works-web-flow.html)
+## DispatcherServlet
 
+### [Spring MVC — основные принципы](https://habr.com/ru/post/336816/)
+Вся логика работы Spring MVC построена вокруг DispatcherServlet, который принимает и обрабатывает все HTTP-запросы (из UI) и ответы на них.
+
+![img](https://raw.githubusercontent.com/SergiaS/programmer-tech-wiki/master/src/main/resources/img/DispatcherServlet.png)
+
+Ниже приведена последовательность событий, соответствующая входящему HTTP-запросу от клиента:
+* После получения HTTP-запроса `DispatcherServlet` обращается к интерфейсу `HandlerMapping`, который определяет, какой **Контроллер** должен быть вызван, после чего, отправляет запрос на него.
+* **Контроллер** с нужным адресом принимает запрос и вызывает соответствующий служебный метод. 
+  Вызванный метод определяет данные **Модели**, основанные на определённой бизнес-логике и возвращает в `DispatcherServlet` имя **Вида** (View).
+* При помощи интерфейса ViewResolver DispatcherServlet определяет, какой Вид нужно использовать на основании полученного имени.
+* После того как **Вида** (View) создан, `DispatcherServlet` отправляет данные **Модели** в виде атрибутов в **Вид**, который в конечном итоге отображается в браузере.
+
+
+### [How Spring MVC Framework works? How HTTP Request is processed?](https://javarevisited.blogspot.com/2017/06/how-spring-mvc-framework-works-web-flow.html)
 Here is the flow of an HTTP-request in Java application created using the Spring MVC framework:
 
 1) The client sends an HTTP-request to a specific URL.
@@ -215,18 +229,19 @@ Here is the flow of an HTTP-request in Java application created using the Spring
 </web-app>
 ```
 
-### Difference between Controller and RESTController
-The flow of the RESTful Web Service request is also not very different from this. It follows the same path but in the
-case of REST, the Controller methods are annotated with `@ResponseBody` which means it doesn't return a logical view
-name to `DispatcherServlet`, instead it write the output directly to the HTTP response body.
-
-
-## More about `DispatcherServlet`
+### More about `DispatcherServlet`
 * [How does Spring MVC Process HTTP Request [Flow]? DispatcherServlet Example Tutorial](https://www.java67.com/2019/08/how-dispatcherservlet-process-request-in-spring-mvc-application.html?fbclid=IwAR3dJogejj__xC0tbZEkeSw1o6o983fO5YFMQRv-ab-ZHgqgHG-B21lkmbk)
 
 `DispatcherServlet` plays a significant role in Spring MVC. It acts as a front controller, and all incoming request
 passes through it, of course, you can configure this in URL pattern of `DispatcherServlet`
 declaration in `web.xml`, but this is the case for many Spring based web application.
+
+
+
+### Difference between Controller and RESTController
+The flow of the RESTful Web Service request is also not very different from this. It follows the same path but in the
+case of REST, the Controller methods are annotated with `@ResponseBody` which means it doesn't return a logical view
+name to `DispatcherServlet`, instead it write the output directly to the HTTP response body.
 
 
 ## CORS
@@ -237,9 +252,8 @@ declaration in `web.xml`, but this is the case for many Spring based web applica
 
 <u>Второй вариант</u> - написание своего фильтра.
 
-RESTful web-сервис будет включать CORS заголовки контроля доступа в свой ответ. Нужно написать фильтр, который добавляет
-заголовки к ответу.
-
+RESTful web-сервис будет включать CORS заголовки контроля доступа в свой ответ. 
+Нужно написать фильтр, который добавляет заголовки к ответу.
 ```java
 @Component
 public class BrowserCORSFilter implements Filter {
@@ -400,7 +414,7 @@ public class RestFulController {
 #### Над методом
 ```java
 @ModelAttribute("headerMessage")
-public String populateHeaderMessage(){
+public String populateHeaderMessage() {
     return"Welcome to our website";
 }
 ```
@@ -414,7 +428,7 @@ website.
 Что именно делает `@ModelAttribute`:
 * Создание нового объекта
 * Добавление значений из HTML-формы
-* Добавление созданого объекта в модель
+* Добавление созданного объекта в модель
 
 Равнозначный результат:
 
@@ -918,3 +932,10 @@ public class RootControllerTest extends AbstractControllerTest {
 * передавать параметры в url
 * использовать `HttpPutFormContentFilter` фильтр
 * настроить Tomcat в обход спецификации. См. Handle request parameters for an HTTP PUT method
+
+### Расскажи о DispatcherServlet
+1. Клиент делает запрос на конкретный адрес.
+2. `DispatcherServlet` получает запрос, и обращается к `HandlerMapping`, который определяет, какой **Контроллер** должен быть вызван, после чего, отправляет запрос на него.
+3. **Контроллер** с нужным адресом принимает запрос и вызывает метод, который возвращает имя **Вида** (View).
+4. Далее `DispatcherServlet` при помощи интерфейса `ViewResolver` определяет, какой **Вид** нужно использовать на основании полученного имени.
+5. После того как **Вид** создан, `DispatcherServlet` отправляет данные **Модели** в виде атрибутов в **Вид**, который в конечном итоге возвращается клиенту как ответ в качестве отображения в браузере.
