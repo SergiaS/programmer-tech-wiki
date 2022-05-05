@@ -8,6 +8,7 @@
 Вместе с конструктором по умолчанию их нужно добавить в свою модель.
 
 
+
 ## RowMapper
 `RowMapper<T>` отображает/переводит строки из таблицы в сущности (модели). Используется при выборке с БД методом `jdbcTemplate.query()`.
 
@@ -59,7 +60,13 @@ The names are matched either directly or by transforming a name separating the p
 `SimpleJdbc` - предоставляет простой путь конфигурирования и запуска SQL операторов.
 
 
-## Запись в БД
+## Batch
+Это групповая операция, которая накапливает в себе SQL, а потом выполняет их за один запрос.
+
+
+## Examples
+
+### Пример записи в БД
 Имплементировать можно используя объект 
 * `MapSqlParameterSource` - implementation that holds a given Map of parameters;
 * или `BeanPropertySqlParameterSource` - implementation that obtains parameter values from bean properties of a given JavaBean object.
@@ -110,16 +117,15 @@ return user;
 ```
 
 
-## Инициализация и популирование DB
+### Пример инициализация и популирование DB
 * [Initializing a Database by Using Spring XML](https://docs.spring.io/spring-framework/docs/current/reference/html/data-access.html#jdbc-initializing-datasource-xml)
 
-Сначало нужно добавить namespaces:
+Сначала нужно добавить namespaces:
 ```
 xmlns:jdbc="http://www.springframework.org/schema/jdbc"
 xsi:schemaLocation=http://www.springframework.org/schema/jdbc 
                    http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
 ```
-
 ```xml
 <jdbc:initialize-database data-source="dataSource" enabled="${database.init}">
     <jdbc:script location="classpath:db/initDB.sql"/>
@@ -137,6 +143,29 @@ xsi:schemaLocation=http://www.springframework.org/schema/jdbc
 </bean>
 ```
 
+### Пример поочередной вставки в БД
+```java
+public int insert(MP3 mp3) {
+    String sqlInsertAuthor = "insert into author (name) VALUES (:authorName)"; // запрос для автора
 
-## Batch
-Это групповая операция, которая накапливает в себе SQL, а потом выполняет их за один запрос.
+    Author author = mp3.getAuthor();
+
+    MapSqlParameterSource params = new MapSqlParameterSource();
+    params.addValue("authorName", author.getName());
+
+    KeyHolder keyHolder = new GeneratedKeyHolder();
+
+    jdbcTemplate.update(sqlInsertAuthor, params, keyHolder);
+
+    int author_id = keyHolder.getKey().intValue(); // получаем id вставленного автора
+
+    String sqlInsertMP3 = "insert into mp3 (author_id, name) VALUES (:authorId, :mp3Name)";  // запрос для mp3
+
+    params = new MapSqlParameterSource();
+    params.addValue("mp3Name", mp3.getName());
+    params.addValue("authorId", author_id);
+
+    return jdbcTemplate.update(sqlInsertMP3, params); 
+}
+```
+

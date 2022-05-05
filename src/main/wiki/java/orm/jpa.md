@@ -255,9 +255,12 @@ private Set<Role> roles;
 ```
 
 ### @PersistenceContext
-**DOC**: Expresses a dependency on a container-managed `EntityManager` and its associated persistence context.
+> @PersistenceContext говорит о том, что наш компонент / репозиторий зависит от EntityManager, который управляется контейнером бинов Spring.
 
-Как гласит глава "7.1 Persistence Contexts" спецификации JPA, сущности в мире JPA живут в некотором пространстве, которое называется "Контекст персистенции" (или Контексте постоянства, Persistence Context). 
+> **DOC**: Expresses a dependency on a container-managed `EntityManager` and its associated persistence context.
+
+Как гласит глава "7.1 Persistence Contexts" спецификации JPA, сущности в мире JPA живут в некотором пространстве, 
+которое называется "Контекст персистенции" (или Контексте постоянства, Persistence Context). 
 Но напрямую мы не работаем с Persistence Context. Для этого мы используем `EntityManager` или "менеджер сущностей". 
 Именно он знает про контекст и про то, какие там живут сущности. Мы же взаимодействуем с Entity Manager'ом.
 

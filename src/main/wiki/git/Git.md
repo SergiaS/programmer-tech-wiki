@@ -4,18 +4,23 @@
 * [Интерактивная обучалка](https://learngitbranching.js.org/)
     Here you can pass up to rampup4 level - **Just these concepts are enough to leverage 90%**.
 
+Колись доведеться писати команди в консолі, і тут стає вибір - чим користуватися (Bash, cmd, PowerShell...)
+Також консольні термінали використовують консольний текстовий редактор, наприклад, Vim.
+Його можна змінити командою `git config --global core.editor "nano"`.
+
+
 ## GitHub
 * [What is GitHub](https://guides.github.com/activities/hello-world/)
 * [Mastering Markdown](https://guides.github.com/features/mastering-markdown/)
-
 
 > To manage access and invite a collaborator go to **Settings — Manage access**.
 
 > To set default branch Go to **Settings — Branches**.
 
-> Разница между `issue` и `task` - в том, что issue это работа с кодом.
+> Різниця між `issue` і `task` - в тому, що **issue** це робота з кодом.
 
-> Для автозакрытия issue используй спец-слово `closes #` и номер issue.  
+> Для автозакриття **issue** використовуй спец-слово `closes #` і номер **issue**.  
+
 
 ### [GitHub Pages](https://guides.github.com/features/pages/)
 Разрешает размещать простые-сайт/веб-страницы, которые будут читать и отрисовывать браузеры.
@@ -30,10 +35,10 @@ Your site is published at https://sergias.github.io/resume/
 
 
 ## Git commands
-> По замовчуванню `git` не пушить теги, тому ключ `--tags` корисний для того, щоб запушити теги, якщо вони є. 
+> За замовчуванням `git` не пушить теги, тому ключ `--tags` корисний для того, щоб запушити теги, якщо вони є. 
 > У випадку, якщо їх немає, можна просто використовувати `git push`.
 
-> `git stash` аналог в IntelliJ IDEA `Shelve Changes...`.
+> `git stash` аналог у **IntelliJ IDEA** `Shelve Changes...`.
 
 > Можно ссылаться, относительно коммита или `HEAD`, к другим коммитам без знания их хеша.
 > Переместиться на `1` коммит назад: `^` (на `2` назад: `^^`). Переместиться на `n` коммитов: `~n`.
@@ -74,6 +79,8 @@ Your site is published at https://sergias.github.io/resume/
 | `git log`                         | Отображает историю коммитов |
 | `git show`                        | Отображает подробную инфу по коммиту |
 | `git rebase -i HEAD~2`            | Позволяет изменить коммиты, даже удалить |
+| `git rebase --abort`              | Виходить з гілки `Rebasing...` |
+
 
 ## Как восстановить коммиты которые откатил
 Например, ты откатился на каком-то коммите - сделал hard reset, и все коммиты после этого исчезли.
@@ -96,3 +103,23 @@ git rebase --interactive HEAD~2
 
 Далее открывается `.txt` файл для изменения, где можно указать сообщения которое будет у финального коммита.
 Также паралельно можно изменять данные в коде.
+
+
+## Як внести зміни у файл старого commit'а
+Пишемо команду в терміналі `git rebase -i --root`.
+
+Якщо все добре git відкриє свій текстовий редактор для змін.
+
+В консолі замість `pick` пишемо `e`, тобто edit.
+Також вибираємо потрібний коміт командою типу `^O` (це `CTRL+O` - Write Out).
+
+Далі можемо змінювати файли (гілка буде `Rebasing...`).
+
+Всі зміни потрібно додати `git add .`. Якщо потрібно, перевіряємо статус - `git status`.
+
+Після всіх змін `git rebase --continue` для продовження.
+
+І знову в нашому редакторі тиснимо `^O` (це `CTRL+O` - Write Out).
+
+Вийти з редактора `CTRL+X`.
+

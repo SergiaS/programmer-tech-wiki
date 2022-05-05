@@ -16,3 +16,9 @@ SELECT *
 FROM users u
 RIGHT JOIN user_roles ur ON u.id = ur.user_id
 ```
+
+
+## Reset auto increment counter
+```postgresql
+ALTER SEQUENCE student_seq RESTART WITH 1001;
+```

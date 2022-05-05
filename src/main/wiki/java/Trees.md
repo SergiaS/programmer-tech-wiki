@@ -1,5 +1,11 @@
 # Trees / Деревья
-Binary Search Tree (BST). 
+
+## Binary Search Tree (BST)
+A binary search tree is a tree that satisfies these constraints:
+* The left subtree of a node contains only nodes with keys less than the node's key.
+* The right subtree of a node contains only nodes with keys greater than the node's key.
+* Both the left and right subtrees must also be binary search trees.
+
 
 ## TreeNode
 Пример последовательного создания (заполнения) дерева по значениям из массива типа `Integer` включая `null` значения:
