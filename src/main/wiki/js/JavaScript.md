@@ -1,6 +1,10 @@
 # JavaScript
 * [Pure JS Table Filter or Search | How to add Filter In HTML CSS Table](https://morioh.com/p/51dbc30377fc?f=5c21fb01c16e2556b555ab32&fbclid=IwAR0g9F8mHU7gMEGSFde-Sc_hs8y--VSmHxI2PjbOoo0YAyvT2sgaLUAJ3Vc)
 
+> Коли ставити дужки у метода `()`, а коли - ні?
+> Метод з дужками каже що при читанні скрипта функція одразу виконається, 
+> а без - тільки за якоїсь дії користувача.
+
 ## Fetch API
 * [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch)
 * [Отличия fetch() от jQuery](https://developer.mozilla.org/ru/docs/Web/API/Fetch_API#отличия_от_jquery)
