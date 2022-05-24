@@ -280,3 +280,74 @@ var elementClasses = elem.classList;
 
 <hr>
 <hr>
+
+
+### Snippets
+* Пример окрашивания кнопки в выбранный цвет.
+    ```html
+    <button id="one">Click me</button>
+    <button id="two">Click me</button>
+    ```
+    ```js
+    document.querySelector("button#two").onclick = () => {
+        // присваиваем кнопке стиль
+        document.querySelector("button#two").style.backgroundColor = "red";
+    };
+    ```
+* Вешаем событие на блок/элемент.
+  Помещаем в досье элемента (Elements - Properties -имя_элемента) one в поле `onclick` ссылку на функцию `myClick` (указывать надо без скобок).
+    ```html
+    <button id="one">Click me</button>
+    ```
+    ```js
+    let one = document.querySelector("#one");
+    console.log(one);
+    function myClick() {
+        console.log("click"); // click - при нажатии
+        one.onclick = null;
+    }
+    one.onclick = myClick;
+    ```
+* Получаем данные с поля по селектору с HTML-страницы и добавляем инфу на HTML-страницу (то что было + Hello):
+    ```js
+    function func(param) {
+        document.querySelector(param).innerHTML += " Hello";
+    }
+    func("#three");
+    func("#two");
+    func("#four");
+    ```
+* Пример сортировки JSON объекта => [Sort JSON Object Array Based On A Key Attribute](https://www.c-sharpcorner.com/UploadFile/fc34aa/sort-json-object-array-based-on-a-key-attribute-in-javascrip/)
+    ```js
+    fetch('https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json')
+        .then(response => response.json())
+        .then(data => {
+            ans.sort(sortByProperty("cc"));
+            addNewOptions();
+        });
+    
+    function sortByProperty(property) {
+        return (a, b) => {
+            if (a[property] > b[property]) return 1;
+            else if (a[property] < b[property]) return -1;
+            return 0;
+        }
+    }
+    
+    function addNewOptions() {
+        let result = document.querySelector("#listOfCurrencies");
+        let newSelect = document.createElement("select");
+        for (let i = 0; i < ans.length; i++) {
+            let newOption = document.createElement("option");
+            newOption.value = ans[i]["txt"];
+            newOption.text = ans[i]["cc"];
+            newSelect.add(newOption);
+        }
+        result.appendChild(newSelect);
+    }
+    ```
+* Добавление `event` к `select`:
+    ```js
+    let newSelect = document.createElement("select");
+    newSelect.setAttribute("onchange","getRate()");
+    ```

@@ -211,7 +211,7 @@ console.log(c); // { a: 89 }
 
 > Интерполяция не работает с одинарными и двойными кавычками!
 >
-> Нужно ставить обратные кавычки (backtick - `` ` ``) и оборачивать действия в них `` `${}\` ``:
+> Нужно ставить обратные кавычки (backtick - `` ` ``) и оборачивать действия в них `` `${}` ``:
 ```js
 for (let i = 1; i <= 9; i++) {
     out.innerHTML += "3*" + i + "=" + (i * 3) + "<br>";
@@ -226,9 +226,8 @@ for (let i = 1; i <= 9; i++) {
 }
 ```
 
-
-<hr>
-<hr>
+***
+***
 
 
 
@@ -253,7 +252,7 @@ const findMaxConsecutiveOnes = (nums) => {
 
 ### Как программист Java учил JavaScript...
 
-* Всплытие / поднятие (Hoisting) переменных (var) относитя только к их объявлению (даже если она инициализирована).
+* Всплытие / поднятие (Hoisting) переменных (var) относится только к их объявлению (даже если она инициализирована).
 
 * С помощью `===` можно сравнить две строки или два булевых значения.
   Если же сравнивать так значения разных типов, ответом всегда будет `false`.
@@ -306,6 +305,7 @@ const findMaxConsecutiveOnes = (nums) => {
     addNewElements = () => {
         // some code
     }
+  
     addNewElements2 = (arr) => {
         // some code
     }
@@ -338,74 +338,6 @@ const findMaxConsecutiveOnes = (nums) => {
 * Задержка выполнения метода:
     ```js
     setTimeout(move, 250); // метод, время в мс
-    ```
-* Пример окрашивания кнопки в выбранный цвет.
-    ```html
-    <button id="one">Click me</button>
-    <button id="two">Click me</button>
-    ```
-    ```js
-    document.querySelector("button#two").onclick = () => {
-        // присваиваем кнопке стиль
-        document.querySelector("button#two").style.backgroundColor = "red";
-    };
-    ```
-* Вешаем событие на блок/элемент.
-  Помещаем в досье элемента (Elements - Properties -имя_элемента) one в поле `onclick` ссылку на функцию `myClick` (указывать надо без скобок).
-    ```html
-    <button id="one">Click me</button>
-    ```
-    ```js
-    let one = document.querySelector("#one");
-    console.log(one);
-    function myClick() {
-        console.log("click"); // click - при нажатии
-        one.onclick = null;
-    }
-    one.onclick = myClick;
-    ```
-* Получаем данные с поля по селектору с HTML-страницы и добавляем инфу на HTML-страницу (то что было + Hello):
-    ```js
-    function func(param) {
-        document.querySelector(param).innerHTML += " Hello";
-    }
-    func("#three");
-    func("#two");
-    func("#four");
-    ```
-* Пример сортировки JSON объекта => [Sort JSON Object Array Based On A Key Attribute](https://www.c-sharpcorner.com/UploadFile/fc34aa/sort-json-object-array-based-on-a-key-attribute-in-javascrip/)
-    ```js
-    fetch('https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json')
-        .then(response => response.json())
-        .then(data => {
-            ans.sort(sortByProperty("cc"));
-            addNewOptions();
-        });
-    
-    function sortByProperty(property) {
-        return (a, b) => {
-            if (a[property] > b[property]) return 1;
-            else if (a[property] < b[property]) return -1;
-            return 0;
-        }
-    }
-    
-    function addNewOptions() {
-        let result = document.querySelector("#listOfCurrencies");
-        let newSelect = document.createElement("select");
-        for (let i = 0; i < ans.length; i++) {
-            let newOption = document.createElement("option");
-            newOption.value = ans[i]["txt"];
-            newOption.text = ans[i]["cc"];
-            newSelect.add(newOption);
-        }
-        result.appendChild(newSelect);
-    }
-    ```
-* Добавление `event` к `select`:
-    ```js
-    let newSelect = document.createElement("select");
-    newSelect.setAttribute("onchange","getRate()");
     ```
 * Проверка на `null || undefined || ''` и присваивание значения через `||` - выполняется коротко:
     ```js
@@ -443,11 +375,17 @@ const findMaxConsecutiveOnes = (nums) => {
     ```js
     // длинный вариант
     const x = 1920, y = 1080;
-    const obj = { x:x, y:y };
+    const obj = { 
+        x: x, 
+        y: y 
+    };
     ```
     ```js
     // короткий вариант
-    const obj = { x, y };
+    const obj = { 
+        x, 
+        y 
+    };
     ```
 * Примеры записи стрелочной функции:
     ```js
@@ -597,7 +535,7 @@ const findMaxConsecutiveOnes = (nums) => {
 ***
 
 ## Литература, статьи, видео
-* [Примеры записи функций, свойст объекта](https://www.youtube.com/watch?v=dOnAC2Rr-6A)
+* [Примеры записи функций, свойств объекта](https://www.youtube.com/watch?v=dOnAC2Rr-6A)
 * [Деструктурирующее присваивание](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)
 * [20 Killer JavaScript One Liners](https://dev.to/saviomartin/20-killer-javascript-one-liners-94f?fbclid=IwAR01WZ6eZokN-vSF5CHQI5pk48N49ULjNWYcN25YHCy7Q6G65DPCKf8YCaE)
 * [Top 35 JavaScript Shorthands for Beginners](https://morioh.com/p/05414714e685?f=5c21fb01c16e2556b555ab32&fbclid=IwAR2mgqPBKtBzkyQ1CgwdwkddazUDcV3aFZ22RKOoOMi90_LcqqLMfddFbP8)
@@ -605,4 +543,4 @@ const findMaxConsecutiveOnes = (nums) => {
 * [127 Useful JavaScript Snippets You Can Understand in 30 Seconds](https://morioh.com/p/a76bc7d72226?fbclid=IwAR1-GSnx2r_2hD-yLZt7-bibFqzz3Tv655yddI4Yf2MXEg3EZahPzZT3u7I)
 
 ## Additional info
-* `ESLint` - следит за установленным стандартом, т.е. используются качывки одинарные или двойные, ставится точка с запятой в конце или нет... В IDEA есть плагин.
+* `ESLint` - следит за установленным стандартом, т.е. используются кавычки одинарные или двойные, ставится точка с запятой в конце или нет... В IDEA есть плагин.

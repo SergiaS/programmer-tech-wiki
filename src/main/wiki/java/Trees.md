@@ -99,6 +99,7 @@ public TreeNode mergeTrees(TreeNode root1, TreeNode root2) {
 ***
 
 [LeetCode - 226. Invert Binary Tree](https://leetcode.com/problems/invert-binary-tree/discuss/1540810/Easy-Java-Solution-or-0-ms-or-Beats-100)
+
 When dealing with trees (and most importantly recursion), the first thin you need to do is to apply one of the most important algorithmic principles: **divide and conquer**.
 Usually what you want to do is to divide the problem in actions that you need to apply to current nodes, supposing that you did the same to children nodes.
 
@@ -135,5 +136,34 @@ public TreeNode invertTree(TreeNode root) {
     root.right = invertTree(left);
     
     return root;
+}
+```
+
+***
+
+[LeetCode - 1302. Deepest Leaves Sum](https://leetcode.com/problems/deepest-leaves-sum/)
+
+Потрібно підрахувати суму найглибших листів:
+```java
+class Solution {
+    public int deepestLeavesSum(TreeNode root) {
+        int h = height(root);
+        return sum(root, h);
+    }
+    
+    private int height(TreeNode n) {
+        int hl = n.left == null ? 0 : height(n.left);
+        int hr = n.right == null ? 0 : height(n.right);
+        return 1 + Math.max(hl, hr);
+    }
+    
+    private int sum(TreeNode n, int h) {
+        if (h == 1)
+            return n.val;
+        
+        int sl = n.left == null ? 0 : sum(n.left, h - 1);
+        int sr = n.right == null ? 0 : sum(n.right, h - 1);
+        return sl + sr;
+    }
 }
 ```

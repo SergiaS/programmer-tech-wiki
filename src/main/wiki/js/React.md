@@ -1,12 +1,16 @@
 # React
-* [Приклади React дивися в курсі на GitHub](https://github.com/SergiaS/c_react) 
+* [Приклади React дивися в курсі на GitHub](https://github.com/SergiaS/c_react)
+* Современный React с Нуля (08 - Самостоятельная Работа - Челлендж №1: 
+[YouTube](https://www.youtube.com/playlist?list=PLcBbiWbF2bIxORYMi7R7t_Ga_SpTHTcmu) ||
+[GitHub](https://github.com/SergiaS/c_react_challenge/commits/main)
+
+> Дізнатися версію React можна в терміналі командою `npm view react version`.
 
 > За допомогою **React** ми створюємо дерево компонентів.
 
 > `index.js` файл запускається найперший. 
 
-
-> Щоб запустити сервер **React**, потрібно перейти в теку з `package.json`. Працюємо з терміналом.
+> Щоб запустити сервер **React**, потрібно перейти у теку з `package.json`. Працюємо з терміналом.
 > При запуску сервера React `npm start` використовується `index.html`, який знаходиться в теці `public`.
 
 
@@ -69,6 +73,11 @@
 >     </div>
 > );
 > ```
+
+
+> Портали - використовуються для створення коректної html-структури, інаше можливі сематичні (зміст) проблеми - наприклад, 
+> коли в якомусь `div` з одним змістом лежить інший `div` з іншим змістом - який суди не підходить. 
+> Портал пересуває код туди куди треба розробнику. Часто юзають при роботі з модальними вікнами.
 
 
 ## Створення проекту React
@@ -497,7 +506,7 @@ import React, { useState } from "react";
 Краще **EventListener** ставити не на `<button onClick={}>`, а на тегу `<form onSubmit={}`>.
 
 **Мінус**: при натисканні на кнопку буде оновлена сторінка.
-Щоб цього не було, використовуй `event.preventDefault()`:
+Щоб цього не було, використовуй `event.preventDefault()` - для форми не буде відправляти запити (дефолтна поведінка):
 
 > <details>
 > <summary>ПРИКЛАД</summary>
@@ -835,5 +844,53 @@ import React, { useState } from "react";
 
 3. Динамічні стилі та CSS модулі
 
+## Хукі
+
+### Хук `Fragment`
+Оскільки при синтаксисі JSX потрібно повертати 1 елемент, існує ймовірність великої вкладеності, наприклад тегу `<div>`.
+Щоб цього небуло, треба використовувати існуючий функціонал **React** - обертати свій код в компонент `Fragment`,
+який треба імпортувати: 
+```jsx
+import React, { Fragment } from "react";
+```
+
+### Хук `useRef`
+**Refs** (лінк) - дозволяє встановлювати з'єднання між html-елементов та js-кодом.
+```jsx
+import React, { useRef } from "react";
+```
+
+### Хук `useEffect`
+**useEffect** - використовується для переоцінки компонентів. 
+Метод буде виконуватися тільки коли завантажується сторінка, або коли змінюються його залежності (другий аргумент).
+```jsx
+import React, { useEffect } from "react";
+```
+```jsx
+// Функція працює тільки при завантаженні сторінки без залежностей
+useEffect(() => {
+    const storedLoginInfo = localStorage.getItem('isLoggedIn');
+    if (storedLoginInfo === '1') {
+        setIsLoggedIn(true);
+    }
+}, [])
+```
+```jsx
+// Функція буде працювати при зміні залежностей (inputEmail чи inputPassword)
+useEffect(() => {
+    setFormIsValid(
+        inputEmail.includes("@") && inputPassword.trim().length > 7
+    );
+}, [inputEmail, inputPassword])
+```
+
+### Хук `useReducer`
+**useReducer** - допомагає керувати станом додатка як і useState, але useReducer призначений для більш складних станів. 
+Використовується, наприклад, для роботи з декількома станами, з декількома способами змін стану, в залежності від інших станів, 
+там де useState важко використовувати - де велика ймовірність багів.
+
 
 ### Debugging
+> Для браузера можна встановити Google-розширення 
+> [React Developer Tools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=ua).
+> В панелі інструментів розробника з'являться нові вкладки.
