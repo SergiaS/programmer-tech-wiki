@@ -80,12 +80,14 @@
 > Портал пересуває код туди куди треба розробнику. Часто юзають при роботі з модальними вікнами.
 
 
+
 ## Створення проекту React
 Найлегший спосіб створення React-проекту, це використання інструменту
 **[create-react-app](https://github.com/facebook/create-react-app)**.
 
 Але спочатку необхідно встановити **NodeJS** (з ним набагато легче працювати - буде виконувати команди в терміналі) - він відноситься не тільки до React-фреймворка,
 це середа для виконання JavaScript, яка дозволяє запускати js-код поза браузером.
+
 
 
 ## Завантаження проекту React
@@ -254,7 +256,7 @@
 ***
 
 ### Композиція
-Конфігурування компонента БЕЗ props.
+Конфігурування компонента БЕЗ **props**.
 Композиція, це передача даних поміж тегами компонента.
 Це робиться для того щоб мінімізувати шаблоний код, об'єднати однакові властивості, наприклад в `.css`.
 Для цього також потрібно передавати props - навідь якщо його немає, використовуй властивість `props.children`.
@@ -326,63 +328,6 @@ children це зарезервоване слово, його результат
 > }
 > 
 > export default Card;
-> ```
-> </details>
-
-***
-
-### useState - стан
-> Без використання концепції стану (useState), користувацький інтерфейс ніколи б не змінювався!
-
-Фіча надає змогу змінювати значення змінної, так потрібно для **React**.
-
-**useState**, це, так би мовити, react hook.
-
-Коли потрібно змінити дані, наприклад по кліку, **React** їх не оновить, 
-оскільки на старті код вже був прочитаний, і більше ніде немає визову цієї функції. 
-Для цього треба використовувати стан. Тобто **React** ще раз викличе функцію. 
-Для цього потрібно додати спеціальний імпорт з функцією:
-```js
-import React, { useState } from "react";
-```
-Далі, на початку нашої функції компонента, викликати цю імпортовану функцію. 
-Вона працює тільки всередині функції компонента. 
-Також не можна використовувати всередині вкладених у компонент функцій.
-В якості аргумента функції треба передати змінні які необхідно оновлювати.
-
-**useState** повертає масив, де перший елемент само значення, а друге - це оновлена функція.
-
-> <details>
-> <summary>ПРИКЛАД</summary>
->
-> ```js
-> // Цей код буде оновлювати значення змінної description
-> import './CostItem.css';
-> import CostDate from "./CostDate";
-> import Card from "../UI/Card";
-> import React, { useState } from "react";
-> 
-> const CostItem = (props) => {
->     const [description, setDescription] = useState(props.description);
-> 
->     const changeDescriptionHandler = () => {
->         // description = 'New cost';
->         setDescription("New description");  // update value
->         console.log(description);
->     }
->     return (
->         <Card className='cost-item'>
->             <CostDate date={props.date}/>
->             <div className='cost-item__description'>
->                 <h2>{description}</h2>
->                 <div className='cost-item__price'>${props.amount}</div>
->             </div>
->             <button onClick={changeDescriptionHandler}>Змінити опис</button>
->         </Card>
->     );
-> }
-> 
-> export default CostItem;
 > ```
 > </details>
 
@@ -845,6 +790,60 @@ import React, { useState } from "react";
 3. Динамічні стилі та CSS модулі
 
 ## Хукі
+Готовий функціонал присутній у **React**.
+
+### Хук `useState` - стан
+> Без використання концепції стану (useState), користувацький інтерфейс ніколи б не змінювався!
+
+Хук надає змогу змінювати значення змінної, так потрібно для **React**.
+
+Коли потрібно змінити дані, наприклад по кліку, **React** їх не оновить,
+оскільки на старті код вже був прочитаний, і більше ніде немає визову цієї функції.
+Для цього треба використовувати стан. Тобто **React** ще раз викличе функцію.
+Для цього потрібно додати спеціальний імпорт з функцією:
+```js
+import React, { useState } from "react";
+```
+Далі, на початку нашої функції компонента, викликати цю імпортовану функцію.
+Вона працює тільки всередині функції компонента.
+Також не можна використовувати всередині вкладених у компонент функцій.
+В якості аргумента функції треба передати змінні які необхідно оновлювати.
+
+**useState** повертає масив, де перший елемент само значення, а друге - це оновлена функція.
+
+> <details>
+> <summary>ПРИКЛАД</summary>
+>
+> ```js
+> // Цей код буде оновлювати значення змінної description
+> import './CostItem.css';
+> import CostDate from "./CostDate";
+> import Card from "../UI/Card";
+> import React, { useState } from "react";
+> 
+> const CostItem = (props) => {
+>     const [description, setDescription] = useState(props.description);
+> 
+>     const changeDescriptionHandler = () => {
+>         // description = 'New cost';
+>         setDescription("New description");  // update value
+>         console.log(description);
+>     }
+>     return (
+>         <Card className='cost-item'>
+>             <CostDate date={props.date}/>
+>             <div className='cost-item__description'>
+>                 <h2>{description}</h2>
+>                 <div className='cost-item__price'>${props.amount}</div>
+>             </div>
+>             <button onClick={changeDescriptionHandler}>Змінити опис</button>
+>         </Card>
+>     );
+> }
+> 
+> export default CostItem;
+> ```
+> </details>
 
 ### Хук `Fragment`
 Оскільки при синтаксисі JSX потрібно повертати 1 елемент, існує ймовірність великої вкладеності, наприклад тегу `<div>`.
