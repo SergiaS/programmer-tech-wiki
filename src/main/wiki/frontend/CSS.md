@@ -1,12 +1,18 @@
 # CSS
+
+ARTICLES:
+* [Чи знаєте ви селектори?](https://learn.javascript.ru/css-selectors)
+
 TOOLS:
 * [Specificity Calculator](https://specificity.keegan.st/) - показує пріоритети стилів.
 
 EXAMPLES:
 * [Responsive web design in 37 minutes + layout. You don’t need Bootstrap!](https://www.youtube.com/watch?v=XbnAKjjlgc4)
 
+
 ## Examples
 * [GitHub - CSS Demystified - Проста структура статті](https://github.com/SergiaS/c_svg_css/tree/5181369fc157b2e900f454de02cbde60b4574249)
+
 
 ## Properties - Властивості
 > Батьківське значення можна перезаписати. Наприклад, селектор `body` має властивість `line-height: 1.6;`,
@@ -44,6 +50,7 @@ body {
   line-height: 1.6;
 }
 ```
+
 
 ## Особливості
 

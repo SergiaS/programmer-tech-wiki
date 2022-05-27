@@ -6,11 +6,55 @@
 Это такие же ноды, как в алгоритмах - они имеют вложенность.
 Внутри `<p>` может быть лист, у листа - другие листы, заголовки, теги оформления...
 
-<hr>
+
+# Коротко про Document у прикладах
+```js
+// Отримуємо елемент або лист елементів:
+const box = document.getElementById('box'),
+      btns = document.getElementsByTagName('button'),
+      circles = document.getElementsByClassName('circle'),
+      hearts = document.querySelectorAll('.heart'),
+      oneHeart = document.querySelector('.heart'),
+      wrapper = document.querySelector('.wrapper');
+
+// задаємо стилі по одинці:
+box.style.backgroundColor = 'blue';
+box.style.width = '500px';
+
+// задаємо одразу кількох стилів за раз:
+box.style.cssText = `background-color: blue; width: 500px`;
+
+// додавання всім елементам колікції стилю через forEach:
+hearts.forEach(item => item.style.backgroundColor = 'blue');
+
+// через звичайний цикл:
+for (let i = 0; i < hearts.length; i++) {
+    hearts[i].style.backgroundColor = 'blue';
+}
+
+// створюємо новий елемент для html сторінки:
+const newDiv = document.createElement('newDiv');
+
+// наділяємо створений елемент класом:
+newDiv.classList.add('black');
+
+wrapper.append(newDiv);   // додає елемент в кінець
+wrapper.prepend(newDiv);  // додає елемент на початок
+
+hearts[0].before(newDiv); // додає елемент перед
+hearts[0].after(newDiv);  // додає елемент після
+
+circles[0].remove();      // видаляє елемент
+
+hearts[0].replaceWith(circles[0]); // замінює елемент
+```
+
+
+# Детальний опис Document
 
 ## `getElementById`
 Будет браться только первый элемент.
-`id` элемент должен быть вссегда уникален.
+`id` элемент должен быть всегда уникален.
 ```html
 <h1 id="heading">Hi there</h1>
 <h3 id="heading">Test</h3>
@@ -54,7 +98,7 @@ list.textContent = "Hi there";
 
 ## `querySelector`
 Достает только на первый попавшийся селектор.
-Вернет содержимое селестора с HTML-кодом.
+Вернет содержимое селектора с HTML-кодом.
 Если ничего не найдено - возвращает `null`.
 ```js
 let list = document.querySelector("ul");
