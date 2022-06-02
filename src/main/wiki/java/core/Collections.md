@@ -4,6 +4,9 @@
 
 > В коллекциях хранятся не объекты, а лишь ссылки на эти объекты. А у всех ссылок размер один и тот же, и он известен.
 
+* [List](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/java/core/Collections.md#list)
+* [Map](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/java/core/Collections.md#map-interface)
+
 ***
 
 ## List
@@ -218,7 +221,7 @@ Map - это отдельная коллекция во главе которо�
 **Основные реализации:**
 * [HashMap](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/java/core/Collections.md#принцип-работы-hashmap)
 * [LinkedHashMap](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/java/core/Collections.md#принцип-работы-linkedhashmap)
-* [TreeMap](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/java/core/Collections.md#принцип-работы-treehashmap)
+* [TreeMap](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/java/core/Collections.md#принцип-работы-treemap)
 
 
 ### Принцип работы HashMap
@@ -374,7 +377,7 @@ This is the right way to sort a `Map` by values in Java 8 because now the orderi
 Реализация, основанная на красно-чёрных деревьях.
 Обеспечивает хранение элементов множества ключей в порядке возрастания или сортировка по Компаратору.
 
-* DOC: время выполнения `log(n)` для методов `containsKey`, `get`, `put` и `remove`.
+* DOC: время выполнения `O(log(n))` для методов `containsKey`, `get`, `put` и `remove`.
 * Данная имплементация не синхронизирована. Для этих целей есть статический класс `SynchronizedSortedMap` в классе `Collections`.
 
 ### Методы Map

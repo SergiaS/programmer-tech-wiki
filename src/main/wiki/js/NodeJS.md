@@ -1,13 +1,6 @@
 # NodeJS
 Node Package Manager (npm) comes when you install [NodeJS](nodejs.org).
 
-### How to start app
-У головному каталозі __frontend__ необхідно виконати команду `npm start`.
-
-By default, application will lunch at the address `http://localhost:3000/`. 
-
-### How to stop app
-Use keyword `CTRL+C` to stop NodeJS server.
 
 
 ## `npm` commands
@@ -26,19 +19,22 @@ Use keyword `CTRL+C` to stop NodeJS server.
 
 * `cat package.json` - читає у консолі файл зі стеком технологій для поточного проекту.
 
+
 ## Errors
 - When you use frontend with backend, and you get an error in your brother like: 
   `Access to XMLHttpRequest at 'http://localhost:8080/api/v1/user-profile' from origin 'http://localhost:3000' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.`
 ... You need to add to your backend REST-controller annotation `@CrossOrigin("*")`. 
 
-## Packages
 
+
+## Packages
 
 ### [co package](https://www.npmjs.com/package/co)
 To use package you need to import it:
 ```js
 import co from "co";
 ```
+
 
 ## package.json
 
@@ -58,16 +54,31 @@ import co from "co";
 ...далі в своїх скриптах вже можна опустити домен і писати `api/v1/students`.
 
 
+## Як додати React до свого Java проекту?
+Повинен бути встановлений **NodeJS**.
+
+1. Переходимо у терміналі до теки `src` та набираємо команду `cd src`.
+2. Ініціалізуємо React командою `npx create-react-app frontend` - у src буде створена тека frontend, в якій і буде react.
+
+### How to start app
+У головному каталозі __frontend__ необхідно виконати команду `npm start`.
+
+By default, application will lunch at the address `http://localhost:3000/`.
+
+### How to stop app
+Use keyword `CTRL+C` to stop NodeJS server.
+
+
 ## Зв'язування серверів FrondEnd з BackEnd.
 Щоб відповідь генерувалась на React та поверталась на вказану адресу.
 
 **Спосіб зробити це руцями:**
 
-Потрібно сгенерувати файли командою `npm run build`.
+Потрібно згенерувати файли командою `npm run build`.
 
-Далі з'явиться тека `build`, і її потрібно перенести до своїх ресурсів в папку `static`.
+Далі з'явиться тека `build` - її потрібно перенести до своїх ресурсів у теку `static`.
 
-Спосіб щоб сгенеровані файли в React переправлялися автоматично в потрібний каталог - використовуй плагін Maven `frontend-maven-plugin` з налаштуваннями:
+Спосіб, щоб згенеровані файли в React переправлялися автоматично в потрібний каталог - використовуй плагін Maven `frontend-maven-plugin` з налаштуваннями:
 ```xml
 <profiles>
   <profile>
@@ -145,12 +156,12 @@ import co from "co";
 
 Що робить плагін на прикладі консолі пошагово:
 * переходить в потрібну теку `cd src/frontend`;
-* встановить всі необходні залежності командою `npm install`;
+* встановить всі необхідні залежності командою `npm install`;
 * збере все до купи `npm run build`;
 
 Плагін запускається командою в терміналі `mvn clean install`.
 
-Усі сконфігурені файли з **React** потраплять в в теку `target` - вміст якої відображається в браузері при старті сервера Spring'a.
+Усі сконфігуровані файли з **React** потраплять до теки `target` - вміст якої відображається в браузері при старті сервера Spring'a.
 
 Далі запускаємо наш `.jar` командою `java -jar ./target/{your-project-name}-0.0.1-SNAPSHOT.jar`.
 Далі наш джарнік стартує.

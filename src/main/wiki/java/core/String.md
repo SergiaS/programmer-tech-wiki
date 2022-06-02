@@ -4,6 +4,8 @@
 * [StringBuilder](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/java/core/String.md#stringbuilder)
 * [StringBuffer](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/java/core/String.md#stringbuffer)
 
+> String Pool є частиною Купи (heap).
+
 ## Какая разница между String, StringBuilder и StringBuffer?
 `String` - значения хранятся в пуле стрингов.
 Это неизменяемый объект - тут всегда будет возвращаться новый экземпляр - ссылка на другой объект.

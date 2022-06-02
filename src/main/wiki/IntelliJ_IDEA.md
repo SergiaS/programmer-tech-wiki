@@ -6,6 +6,7 @@
 
 ## Combinations
 
+* Натискаємо двічі `Shift` - пошук класів, методів в файлах Java та бібліотеках.
 * `Ctrl + Alt + L` - code formatting.
 * `Ctrl + Alt + V` - на основе метода создает и присваивает переменной результат.
 * `Ctrl + Alt + N` - убирает все переменные на указанном объекте.
@@ -29,7 +30,7 @@
 * `Ctrl + Alt + M` - Вынести код в отдельный метод.
 * `Ctrl + Alt + U` - Графическое отображение наследования.
 * `Ctrl + Alt + F7` - Show you all usages of the property, method, class... First of all you need to click on it then use key combination.
-* `Ctrl + R` - замена.
+* `Ctrl + R` - заміна.
 * `Ctrl + Shift + F9` - restart JVM HotSpot. Горячая перезагрузка.
 * `Ctrl + Shift + I` - To preview a referenced image in a popup instead of in a separate editor tab, press.
 * `Ctrl + Alt + Shift + U` - отображение UML диаграммы класса.

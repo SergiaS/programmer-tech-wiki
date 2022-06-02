@@ -164,17 +164,27 @@ var elementClasses = elem.classList;
 
 <hr>
 
-## Events (события)
-Ивенты это экшены, которые происходят на веб-странице - клик по кнопке, нажатие на клавишу...
+## Events (події)
 
-Есть несколько способов назначить событие:
-1. Пример появления надписи в консоли при нажатии на кнопку и смена стиля при наведении мыши:
+### addEventListener
+Івенти це екшени, що відбуваються на веб-сторінці під час дії користувача- клік по кнопці, натискання на клавішу...
+
+Є кілька способів призначити подію `event`:
+1. Приклад появи тексту у консолі при натисканні на кнопку та зміна стилю при наведенні миші:
+    > Але такий спосіб не дуже гарний та він не дозволяє використовувати декілька функцій!
+
     ```js
     let heading = document.querySelector(".heading");
     let btn = document.querySelector(".btn");
     
+    // 1 - не спрацює
     btn.onclick = () => {
-        console.log("Clicked");
+        console.log("1 Click");
+    };
+    
+    // 2 - спрацює тільки цей останній
+    btn.onclick = () => {
+        console.log("2 Click");
     };
     
     btn.onmouseover = () => {
@@ -182,8 +192,11 @@ var elementClasses = elem.classList;
     }
     ```
 
-2. Здесь нужно указать событие в HTML.
-   В данном примере событие по нажатию на кнопке отработает метод `clickButton`.
+***
+
+2. Тут потрібно вказати подію в HTML:
+   У цьому прикладі подія по натисканні на кнопці відпрацює метод `clickButton`.
+   > Такий спосіб теж не дуже гарний, бо він вшивається у html (hardcode)
     ```html
     <button class="btn" onclick="clickButton()">Click here</button>
     ```
@@ -193,7 +206,10 @@ var elementClasses = elem.classList;
     }
     ```
 
-3. Можно вешать события с помощью [addEventListener](https://developer.mozilla.org/ru/docs/Web/API/EventTarget/addEventListener).
+***
+
+3. Можна вішати прослуховувач події (`eventListener`) за допомогою функції [addEventListener](https://developer.mozilla.org/ru/docs/Web/API/EventTarget/addEventListener).
+    Такий спосіб завжди передає першим аргумент об'єкт події (часто має назву `event` або просто `e`) у стрілкову функцію (можна цей аргумент не писати, якщо він не потрібен, але завжди першим JS буде сприймати саме подію/event):
     ```html
     <button class="btn">Click here</button>
     ```
@@ -202,20 +218,47 @@ var elementClasses = elem.classList;
         heading.style.cssText = "background-color: brown; color: white;";
     })
     ```
+    
+    > При кожній повішеній події автоматично створюється об'єкт події, який зберігає всю інфу - на якому елементі сталося, що було натиснуто і т.д.
+    ```js
+    btn.addEventListener('click',(event) => {
+        console.log(event);
+    })
+    ```
+    Одне з головних полів - `target`:
+ 
+***
 
-4. При каждом повешанном событии, автоматически создается объект события, который хранит всю инфу - на каком элементе произошло, что было нажато и т.д.
-    ```js
-    btn.addEventListener('click',(e) => {
-        console.log(e);
-    })
-    ```
-   Одно из главных полей - `target`:
-    ```js
-    btn.addEventListener('click',(e) => {
-        console.log(e.target);
-    })
-    ```
-<hr>
+Одні з головних властивостей об'єкту event, це:
+* `type` - той тип події котра трапилася;
+* `target` - найглибший елемент ієрархії на котрому трапилася подія.
+* `currentTarget` - той елемент на котрому трапилася подія.
+```js
+btn.addEventListener('click',(e) => {
+    console.log(e.target);
+})
+```
+
+***
+
+### removeEventListener
+Іноді буває потреба у видаленні події - тут потрібно передати функцію другим аргументом.
+Тут не потрібно визивати функцію - ставити круглі дужки `()`, - ми повинні просто передати посилання на цю функцію, яка буде виконана після події юзера:
+```js
+let i = 0;
+const deleteElement = (e) => {
+    console.log(e.target);
+    i++;
+    if(i == 1) {
+        btn.removeEventListener('click', deleteElement);
+    }
+};
+btn.addEventListener('click', deleteElement);
+```
+> Але краще до функції `addEventListener` додавати третім аргументом опцію **once**.
+```js
+overlay.addEventListener('click', deleteElement, {once: true});
+```
 
 ## Attributes (аттрибуты полей)
 С помощью данных команд, можно читать/задавать значения для аттрибутов.

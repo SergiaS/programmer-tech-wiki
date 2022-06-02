@@ -1,4 +1,6 @@
 # SQL
+* [DrawIO - намалювати структуру таблиці](https://app.diagrams.net/)
+
 
 ## [Нормальные формы 1-3](https://www.youtube.com/watch?v=_GQaTW6N1GY)
 
