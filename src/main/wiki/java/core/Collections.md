@@ -1,11 +1,15 @@
 # Collections framework
+
+* [List](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/java/core/Collections.md#list)
+* [Set](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/java/core/Collections.md#set)
+* [Queue](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/java/core/Collections.md#queue)
+* [Map](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/java/core/Collections.md#map-interface)
+
 > Коллекции в Java перед тем как сравнить объекты с помощью `equals` всегда ищут/сравнивают их с помощью метода `hashCode`.
 > И если у одинаковых объектов будут разные `hashCode`, то объекты будут считаться разными — до сравнения с помощью `equals` просто не дойдет.
 
 > В коллекциях хранятся не объекты, а лишь ссылки на эти объекты. А у всех ссылок размер один и тот же, и он известен.
 
-* [List](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/java/core/Collections.md#list)
-* [Map](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/java/core/Collections.md#map-interface)
 
 ***
 

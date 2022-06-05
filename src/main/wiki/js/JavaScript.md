@@ -4,8 +4,7 @@
 * [JSON generator](https://randomuser.me/api/?results=50)
 
 > Коли ставити дужки у метода `()`, а коли - ні?
-> Метод з дужками каже що при читанні скрипта функція одразу виконається, 
-> а без - тільки за якоїсь дії користувача.
+> Метод з дужками каже що при читанні скрипта функція одразу виконається, а без - тільки за якоїсь дії користувача.
 
 > Значення які дорівнюють `false` - `0, '', null, underfined, NaN`.
 > А для `true` - `1`.
@@ -14,7 +13,7 @@
 > console.log(typeof(!!'444')); // boolean
 > ```
 
-> Передача по значенню відбувається при роботі з примітивними типами даних (Number, String),
+> Передача по значенню відбувається при роботі з примітивними типами даних (`Number`, `String`),
 > а передача по лінку - коли працюємо з об'єктами (функції, масиви, об'єкти).
 > ```js
 > // Передача за значенням
@@ -199,10 +198,11 @@
 ## Fetch API
 * [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch)
 * [Отличия fetch() от jQuery](https://developer.mozilla.org/ru/docs/Web/API/Fetch_API#отличия_от_jquery)
+* [Fetch для відправки POST запиту](https://developer.mozilla.org/en-US/docs/Web/API/fetch)
 
 После `fetch` получаем объект с ответом - [Response](https://developer.mozilla.org/ru/docs/Web/API/Response).
 
-После `join` получаем объект Promise.
+После `json` получаем объект **Promise**.
 
 ```js
 // Пример чтения json-данных (курсы валют) с сервера НБУ:
@@ -245,6 +245,55 @@ const getRandomUser = n => {
 
 getRandomUser(100);
 ```
+
+***
+
+### Promise при роботі з `fetch`
+
+У звичайному синхронному методі коли отримуємо **Promise**, ми працюємо методами `then` для обробки і `catch` для відловлювання помилок, 
+а у `async` - асинхронному - методі замість `then` використовуємо `await` і замість `catch` обертати код у блок `try-catch`.
+**Await** та **async** це свого роду синтетичний цукор **Promise** який має іншу форму запису.
+
+> Функція, яка є асинхронною `async` - завжди повертає **Promise**.
+```js
+const delay = ms => {
+    return new Promise(r => setTimeout(() => r(), ms))
+}
+
+const url = 'https://jsonplaceholder.typicode.com/todos'
+
+
+// Звичайний метод
+function fetchTodos() {
+    console.log('Fetch todo started...')
+    return delay(2000)
+        .then(() => fetch(url))
+        .then(response => response.json())
+}
+
+fetchTodos()
+    .then(data => {
+        console.log('Data: ', data)
+    })
+    .catch(e => console.log(e))
+
+
+// Той самий код переписаний для асинхронного метода
+async function fetchAsyncTodos() {
+    console.log('Fetch todo started...')
+    try {
+        await delay(2000)
+        const response = await fetch(url)
+        const data = await response.json()
+        console.log('Data: ', data)
+    } catch (e) {
+        console.error(e)
+    }
+}
+
+fetchAsyncTodos()
+```
+
 
 ### Пример итерации по мапе
 [Object.entries](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Object/entries) используется с деструктаризацией:
