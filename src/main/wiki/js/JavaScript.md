@@ -36,6 +36,17 @@
 > console.log(copy.a); // false
 > ```
 
+> Як сховати/відобразити html-елемент:
+> ```js
+> // hide an element
+> document.getElementById("hide_0").style.display = "none";
+> 
+> // show a block element
+> document.getElementById("hide_1").style.display = "block";
+> 
+> // to go back to the default or CSS specified value
+> document.getElementById("hide_2").style.display = "";
+> ```
 
 ## Типи даних JS
 
@@ -508,7 +519,7 @@ logName("antonio").then(res => {
 ### [Массивы](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array)
 > Ні розмір JavaScript-масиву, ні типи його елементів не є фіксованими. 
 
-> Перебір по масиву робиться завдяки циклу `for of`, а для об'єкту - `for in`.
+> Перебір по масиву робиться завдяки циклу `for of`, а об'єкту - `for in`.
 
 Поскольку размер массива может увеличиваться и уменьшаться в любое время, то нет гарантии, что массив окажется плотным. 
 Т.е., при работе с массивом может возникнуть ситуация, что элемент массива, к которому вы обратитесь, будет пустым и вернёт `undefined`. 
@@ -643,7 +654,7 @@ const biggerNums = nums.map((n) => n * 2);
 [dev.to](https://dev.to/ibn_abubakre/spread-vs-rest-operator-199d)
 || [stackoverflow](https://stackoverflow.com/questions/33898512/spread-syntax-vs-rest-parameter-in-es2015-es6)
 
-Оператор **spread** `...` используется чтобы разбить массив на отдельные элементы, а также используется для копирования массивов.
+Оператор **spread** `...` используется чтобы разбить массив на отдельные элементы, а также используется для копирования массивов (shallow copy).
 
 > Spread-оператор, в отличии от rest-оператора может появляться в любой части массива, и можно применять несколько spread-операторов в одном вызове функции.
 ```js
@@ -924,6 +935,8 @@ console.log(a); // { one: 'Hello', name: 23, c: { x: 7, y: 2 } }
 console.log(b); // { one: 'World', name: 23, c: { x: 7, y: 2 } }
 ```
 Такий самий результат можно отримати використавши замість циклу функцію [`Object.assign()`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Object/assign):
+
+> Метод `Object.assign()` копіює з вихідних об'єктів у цільовий об'єкт лише перераховані та власні властивості.
 ```js
 Object.assign(b,a);
 ```

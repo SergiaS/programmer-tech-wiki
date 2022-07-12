@@ -49,3 +49,24 @@
 * `Alt + F9` - Переход к курсору.
 * `Alt + F8` - В режиме отладки вы можете вычислить любое выражение, с помощью очень мощного инструмента вызываемого нажатием.
 
+
+# Reset IntelliJ IDEA trial
+1. cd:
+```text
+C:%HOMEPATH%\.IntelliJIdea*\config
+
+example:
+C:\Users\SK88\AppData\Roaming\JetBrains\IntelliJIdea2021.2
+```
+
+2. del dir `eval /s /q`:
+
+```text
+del options\other.xml
+```
+
+3. regdel dir `idea`:
+```text
+HKEY_CURRENT_USER\Software\JavaSoft\Prefs\jetbrains\idea
+```
+

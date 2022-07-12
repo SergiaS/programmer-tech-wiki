@@ -24,6 +24,10 @@
 
 > [Dockerfile reference - Документация с командами](https://docs.docker.com/engine/reference/builder/)
 
+> ERROR: failed to read dockerfile
+> 
+> нужно создать dockerfile со всеми необходимыми командами
+
 Docker can build images automatically by reading the instructions from a `Dockerfile`.
 A `Dockerfile` is a text document that contains all the commands a user could call on the command line to assemble an image.
 
@@ -192,6 +196,8 @@ Each instruction creates one layer:
 ## Docker commands
 > [Docker run reference - Документация с командами](https://docs.docker.com/engine/reference/run/)
 
+> `CTRL+C` - выйти с зависшего терминала.
+
 The basic docker run command takes this form:
 ```shell
 $ docker run [OPTIONS] IMAGE[:TAG|@DIGEST] [COMMAND] [ARG...]
@@ -202,6 +208,43 @@ The docker run command must specify an IMAGE to derive the container from. An im
 * container identification
 * network settings
 * runtime constraints on CPU and memory
+
+***
+
+* `-d` - run the container in detached mode (in the background).
+* `-p` - 80:80 - map port 80 of the host to port 80 in the container.
+* `docker images` - отображает доступные образы в системе.
+* `docker ps` - отображает доступные контейнеры в системе. Контейнер работает до тех пор, пока работает приложение.
+* `docker ps -a` - отображает все контейнеры включая остановленные.
+* `docker ps -a -q` - отображает только ид всех контейнеров.
+* `docker run --name hello hello-world` - задает имя контейнеру `hello`.
+* `docker run --name hello -d hello-world` - запуск контейнера в фоне.
+* `docker run --name hello -d --rm hello-world` - контейнер после отработки или остановки сам удалится.
+* `docker stop hello` - остановить контейнер, <u>далее указывается ID или имя контейнера</u> (`hello`).
+* `docker container rm -f HASH` - принудительно останавливает и удаляет контейнер:
+  * `-f` = force
+  * `HASH` = хеш контейнера, Х: f899aec5eac0.
+* `docker container ls` - показывает данные текущего контейнера.
+* `docker rm f7b247168a6e` - удаляет контейнер, далее указывается ID или имя контейнера.
+* `docker rm $(docker ps -qa)` - удаляет все контейнеры - команда в команде.
+* `docker build -t hello-world .` - создает образ, где `hello-world` - имя образа. а точка говорит собрать из текущего каталога.
+* `docker run hello-world` - запуск образа, где `hello-world` - имя образа. Запуск равносилен выполнению программы.
+* `docker volume ls` - отображает список `volume`.
+* `docker volume create web` - создает volume с именем `web`.
+
+***
+
+Приклад:
+
+* `docker run --rm --name web -p 8080:8080 -e TZ=Europe/Kyiv -v /Users/.../web-hello/resources:/usr/app/resources web-hello`:
+  * `docker run` = запуск контейнера.
+  * `--rm` = удалить контейнер после исполнения или остановки.
+  * `--name web` = запускает контейнер с именем web.
+  * `-p 8080:8080` = запускает контейнер на портах 8080.
+  * `-e TZ Europe/Kyiv` = установка переменной окружения, аналог в dockerfile - ENV TZ.
+  * `web-hello` = имя образа.
+  * `-v` = будет использоваться абсолютный адрес, т.е. при смене данных в приложении, docker будет подхватывать изменения".
+
 
 ## Options
 

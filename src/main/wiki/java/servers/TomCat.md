@@ -1,17 +1,17 @@
 # TomCat
 
-> Логи сервера можно включить в конфе IDEA (`Edit Configurations...` > `Logs`). Найти файлы можно в папке IDEA
+> Логи сервера можно включить в конфе **IDEA** (`Edit Configurations...` > `Logs`). Найти файлы можно в папке IDEA
 > ```yaml
 > C:\Users\SK88\AppData\Local\JetBrains\IntelliJIdea2021.2\tomcat\
 > ```
 
-> У TomCat есть свой сервлет-api, и в сборку проекта зависимость `servlet-api` НЕ должна идти (она там не нужна) - противном случае будут ошибки.
+> У **TomCat** есть свой сервлет-api, и в сборку проекта зависимость `servlet-api` НЕ должна идти (она там не нужна) - противном случае будут ошибки.
 > Поэтому, у данной зависимости должна быть область действия зависимости scope `provided`:
 > ```xml
 > <scope>provided</scope> 
 > ```
 
-> Деплоиться в Tomcat лучше как `war exploded`: нет упаковки в war и при нажатой кнопке `Update Resources on Frame Deactivation` 
+> Деплоиться в **Tomcat** лучше как `war exploded`: нет упаковки в war и при нажатой кнопке `Update Resources on Frame Deactivation` 
 > могут обновляться `css`, `html`, `jsp` без передеплоя. 
 > При изменении `web.xml`, добавлении методов, классов необходим redeploy.
 
@@ -24,7 +24,7 @@
    Если надо в режиме дебага: `catalina.bat jpda start`.
 
 ## Запуск в браузере
-1. В главной папке TomCat открыть файл `TOMCAT_HOME\conf\tomcat-users.xml`
+1. В главной папке **TomCat** открыть файл `TOMCAT_HOME\conf\tomcat-users.xml`
 2. И добавить строку (пользователя) до закрытия тега `<tomcat-users>`:
    ```xml
    <user username="tomcat" password="tomcat" roles="tomcat,manager-gui,admin-gui"/>
@@ -35,34 +35,34 @@
 ## Конфигурирование Tomcat через maven plugin. Jndi-lookup.
 **Из лекции TopJava:**
 
-Многие настройки сервера(web-контейнера) можно вынести в отдельный файл-конфигурацию. 
+Многие настройки сервера (web-контейнера) можно вынести в отдельный файл-конфигурацию. 
 Настройки TomCat определим в отдельном файле `context.xml`.
 
-Настройка пула TomCat для соединения с базой данных
+Настройка пула **TomCat** для соединения с базой данных:
 ```xml
 <!-- Имя ресурса, к которому мы будем получать доступ из приложения по JNDI -->
-    <Resource name="jdbc/topjava"
-              auth="Container"
-              type="javax.sql.DataSource"
-              
-              <!-- Настройки подключения к базе данных -->
-              url="jdbc:postgresql://localhost:5432/topjava"
-              username="user"
-              password="password"
-              driverClassName="org.postgresql.Driver"
-              
-              <!-- Настройки пула коннектов к базе данных -->
-              validationQuery="SELECT 1"
-              maxTotal="10"
-              minIdle="2"
-              maxWaitMillis="20000"
-              initialSize="2"
-              maxIdle="5"
-              testOnBorrow="true"
-              removeAbandonedOnBorrow="true"
-              testWhileIdle="true"/>
+ <Resource name="jdbc/topjava"
+           auth="Container"
+           type="javax.sql.DataSource"
+           
+           <!-- Настройки подключения к базе данных -->
+           url="jdbc:postgresql://localhost:5432/topjava"
+           username="user"
+           password="password"
+           driverClassName="org.postgresql.Driver"
+           
+           <!-- Настройки пула коннектов к базе данных -->
+           validationQuery="SELECT 1"
+           maxTotal="10"
+           minIdle="2"
+           maxWaitMillis="20000"
+           initialSize="2"
+           maxIdle="5"
+           testOnBorrow="true"
+           removeAbandonedOnBorrow="true"
+           testWhileIdle="true"/>
 ```
-Для того чтобы **TomCat** при запуске создавал пул коннектов, требуется добавить maven плагин в секцию **build**
+Для того чтобы **TomCat** при запуске создавал пул коннектов, требуется добавить **Maven-плагин** в секцию **build**:
 ```xml
 <!-- http://stackoverflow.com/questions/4305935/is-it-possible-to-supply-tomcat6s-context-xml-file-via-the-maven-cargo-plugin#4417945 -->
 <!-- https://codehaus-cargo.github.io/cargo/Tomcat+9.x.html -->
@@ -118,9 +118,9 @@
 
 ***
 
-> Томкат сам управляет пулом коннектов? На каждый запрос в браузере будет даваться свой коннект?
+> **Tomcat** сам управляет пулом коннектов? На каждый запрос в браузере будет даваться свой коннект?
 
-Да, в Томкате есть реализация пула коннектов **tomcat-jdbc** (мы его подключаем со `scope=provided`). 
+Да, в **Tomcat** есть реализация пула коннектов **tomcat-jdbc** (мы его подключаем со `scope=provided`). 
 Если запускаемся с профилем `tomcat`, приложение на каждую транзакцию (или операцию не в транзакции) берет коннект к базе из пула, 
 сконфигурированного в подкладываемом **Tomcat** `context.xml`.
 
@@ -145,4 +145,8 @@
 mvn clean package -DskipTests=true org.codehaus.cargo:cargo-maven3-plugin:1.9.5:run
 ```
 
-
+## В чём разница между jar и war?
+* `.jar`-файлы содержат библиотеки, ресурсы и дополнительные файлы типа property.
+* `.war`-файлы содержат веб-приложение, которое может быть развернуто (задеплоино) любым servlet/jsp контейнере.
+  Превращение JAVA-кода из JSP в HTML-код осуществляет именно контейнер сервлетов.
+  `.war`-файлы содержат jsp, html, javascript и другие файлы которые необходимы для разработки веб-приложения.

@@ -1,5 +1,9 @@
 # Collections framework
 
+* [Big-O summary for Java Collections Framework](https://stackoverflow.com/a/559862)
+
+***
+
 * [List](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/java/core/Collections.md#list)
 * [Set](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/java/core/Collections.md#set)
 * [Queue](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/java/core/Collections.md#queue)
@@ -9,7 +13,6 @@
 > И если у одинаковых объектов будут разные `hashCode`, то объекты будут считаться разными — до сравнения с помощью `equals` просто не дойдет.
 
 > В коллекциях хранятся не объекты, а лишь ссылки на эти объекты. А у всех ссылок размер один и тот же, и он известен.
-
 
 ***
 
@@ -214,7 +217,10 @@ class Solution {
 
 > DOC: Коллекция работает быстрее чем Stack, если используется как LIFO коллекция, а также быстрее чем LinkedList, если используется как FIFO.
 - Методы позволяют обращаться как к голове, так и к хвосту: `addFirst`/`addLast`, `getFirst`/`getLast`, `offerFirst`/`offerLast`...
-
+- Time Complexity - Most ArrayDeque operations run in amortized constant time. 
+  Amortized constant time operation means most of the time the operation cost will `O(1)`, except possibly in some cases, for eg. when the ArrayDeque needs to be resized:
+  - `O(1)` для методів offer, peak, poll, size;  
+  - `O(n)` для методу remove;  
 
 
 ## Map interface
@@ -483,13 +489,13 @@ while(it.hasNext()){
 
 ***
 
-6. **Зачем нужен HashMap, если есть HashTable?**
+6. **Навіщо потрібен `HashMap`, якщо є `Hashtable`?**
 
-HashTable - это устаревший класс и его использование не рекомендовано.
+`Hashtable` - це застарілий клас та його використання не рекомендовано.
 
-- Методы класса HashTable синхронизированы, что приводит к снижению производительности, а HashMap - нет;
-- HashTable не может содержать элементы `null`, тогда как HashMap может содержать один ключ `null` и любое количество значений `null`;
-- `Iterator` у HashMap, в отличие от `Enumeration` у HashTable, работает по принципу `fail-fast` (выдает исключение при любой несогласованности данных).
+- Методи класу `HashTable` синхронізовані, що призводить до зниження продуктивності, а `HashMap` - ні;
+- `Hashtable` не може містити ключи та елементи `null`, тоді як HashMap може містити один ключ `null` і будь-яку кількість значень `null`;
+- `Iterator` у HashMap, на відміну від `Enumeration` у HashTable, працює за принципом `fail-fast` (видає виключення за будь-якої неузгодженості даних).
 
 ***
 
