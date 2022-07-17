@@ -75,9 +75,11 @@
 
 
 > Портали - використовуються для створення коректної html-структури, інаше можливі сематичні (зміст) проблеми - наприклад, 
-> коли в якомусь `div` з одним змістом лежить інший `div` з іншим змістом - який суди не підходить. 
+> коли в якомусь `div` з одним змістом лежить інший `div` з іншим змістом - який сюди не підходить. 
 > Портал пересуває код туди куди треба розробнику. Часто юзають при роботі з модальними вікнами.
 
+
+> You can't render a default component from promise like that.
 
 
 ## Створення проекту React
@@ -127,9 +129,11 @@
 ### Концепція props
 Як використовувати атрибути компонента так, щоб вони працювали, а не копіювався один й той самий компонент з тими ж самими даними?
 
-Для цього в компоненті вказують всього один параметр.
+Є 2 варіанти:
+
+**<u>Перший</u>** - в компоненті вказують всього один параметр.
 Назва його може бути будь-яка, але найчастіше називають **props**.
-Далі через **props** викликають потрібний атрибут.
+Далі через **props** викликають потрібний атрибут. Це свого роду масив масивів.
 
 > <details>
 > <summary>ПРИКЛАД</summary>
@@ -195,6 +199,63 @@
 >             ></CostItem>
 >         </div>
 >     );
+> }
+> 
+> export default App;
+> ```
+> </details>
+
+**<u>Другий варіант</u>** - це деструктуризація, де замість аргумента props параметрах компонента використовуємо
+спеціальний синтаксис `{ costs }`:
+> <details>
+> <summary>ПРИКЛАД</summary>
+>
+> ```js
+> // наш створений компонент CostItem
+> export default function CostItem({costs}) {
+>     return <>
+>         <div className='cost-item'>
+>             <div>{costs.date.toISOString()}</div>
+>             <div className='cost-item__description'>
+>                 <h2>{costs.description}</h2>
+>                 <div className='cost-item__price'>${costs.amount}</div>
+>             </div>
+>         </div>
+>     </>;
+> }
+> ```
+> ```js
+> // використання нашого компонента CostItem
+> import CostItem from "./components/CostItem";
+> 
+> function App() {
+> const costs = [
+>     {
+>         id: 1,
+>         date: new Date(2021, 2, 12),
+>         description: "Холодильник",
+>         amount: 999.99
+>     },
+>     {
+>         id: 2,
+>         date: new Date(2021, 11, 25),
+>         description: "MacBook",
+>         amount: 1254.72
+>     },
+>     {
+>         id: 3,
+>         date: new Date(2021, 4, 1),
+>         description: "Джинси",
+>         amount: 49.99
+>     }
+> ];
+> 
+> return <>
+>     <h1>Ready to learn</h1>
+>     {costs.map(cost =>
+>         <CostItem costs={cost} key={cost.id}/>
+>     )}
+> </>;
 > }
 > 
 > export default App;
@@ -788,6 +849,9 @@ children це зарезервоване слово, його результат
 3. Динамічні стилі та CSS модулі
 
 ## Хукі
+* [DOC: Ознайомлення з Хуками](https://uk.reactjs.org/docs/hooks-intro.html)
+* [DOC: Правила хуків](https://uk.reactjs.org/docs/hooks-rules.html)
+
 Готовий функціонал присутній у **React**.
 Починаються зі слова **use**.
 Хуки працюють тільки всередині функції компонента - не може використовувати їх за межами компонента чи всередині функції.
@@ -907,7 +971,80 @@ useEffect(() => {
 там де useState важко використовувати - де велика ймовірність багів.
 
 
-### Debugging
+## Debugging
 > Для браузера можна встановити Google-розширення 
 > [React Developer Tools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=ua).
 > В панелі інструментів розробника з'являться нові вкладки.
+
+
+## Solutions to the Errors
+
+### [⚠️ ReactJS Error: Objects are not valid as a React child (found: [object Promise])](https://peaku.co/questions/131948-error-de-reactjs:-los-objetos-no-son-validos-como-hijos-de-react-(encontrado:-[promesa-de-objeto])) 
+Проблема з керуванням даними при роботі функції fetch - Promise
+
+> <details>
+> <summary>❌ ПРИКЛАД ПРОБЛЕМИ</summary>
+>
+> ```jsx
+> export default function getWeatherFromApiAsync() {
+>   return fetch(
+>     "https://api.openweathermap.org/data/2.5/weather?q=brighton,uk&appid=8b609354454cdb6c5a7092a939861ace&units=metric"
+>   )
+>     .then((response) => response.json())
+>     .then((responseJson) => {
+>       return (
+>         <div className="App">
+>           {responseJson.map((weather) => (
+>             <div>
+>               <h6> {weather.coord.lon}</h6>
+>             </div>
+>           ))}
+>         </div>
+>       );
+>     })
+>     .catch((error) => {
+>       console.error(error);
+>     });
+> }
+> ```
+> </details>
+
+Притримуйся цим правил:
+* You can't render a default component from `Promise` like that.
+* You can take an advantages of `useState`, `useEffect` hook to fetch and render data into the component.
+* You can learn more about React Hooks from [this link](https://uk.reactjs.org/docs/hooks-intro.html).
+* And also your api response is a json object and you're trying to map over it.
+* Note: You can map over array type of data only.
+
+> <details>
+> <summary>✔️ ВИРІШЕННЯ ПРОБЛЕМИ</summary>
+>
+> ```jsx
+> import { useEffect, useState } from "react";
+> 
+> const App = () => {
+>     const [data, setData] = useState({});
+>     useEffect(() => {
+>         const getWeatherFromApiAsync = async () => {
+>             const resopnse = await fetch(
+>                 "https://api.openweathermap.org/data/2.5/weather?q=brighton,uk&appid=8b609354454cdb6c5a7092a939861ace&units=metric"
+>             );
+>             const resopnseJson = await resopnse.json();
+>             console.log("json", resopnseJson);
+>             setData(resopnseJson);
+>         };
+>         getWeatherFromApiAsync();
+>     }, []);
+> 
+>     return (
+>         <div className="App">
+>             <h6>{data?.coord?.lon}</h6>
+>         </div>
+>     );
+> };
+> 
+> export default App;
+> ```
+> </details>
+
+***
