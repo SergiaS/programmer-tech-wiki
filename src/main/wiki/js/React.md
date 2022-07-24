@@ -1,17 +1,21 @@
 # React
 * [Приклади React дивися в курсі на GitHub](https://github.com/SergiaS/c_react)
-* Современный React с Нуля (08 - Самостоятельная Работа - Челлендж №1: 
-[YouTube](https://www.youtube.com/playlist?list=PLcBbiWbF2bIxORYMi7R7t_Ga_SpTHTcmu) ||
-[GitHub](https://github.com/SergiaS/c_react_challenge/commits/main)
+* Современный React с Нуля:
+  * 03 - Состояние и Работа с Событиями
+    [YouTube](https://www.youtube.com/playlist?list=PLcBbiWbF2bIxMEzvYdCEGoMn_0oB1T-s4) ||
+    [GitHub](https://github.com/SergiaS/c_react/tree/478c6f3c3e33a341057c9516f9fad3a07fdae133)
+  * 08 - Самостоятельная Работа - Челлендж №1:
+    [YouTube](https://www.youtube.com/playlist?list=PLcBbiWbF2bIxORYMi7R7t_Ga_SpTHTcmu) ||
+    [GitHub](https://github.com/SergiaS/c_react_challenge/commits/main)
 
 > Дізнатися версію **React** можна в терміналі командою `npm view react version`.
 
 > За допомогою **React** ми створюємо дерево компонентів.
 
-> `index.js` файл запускається найперший. 
+> `index.js` файл запускається найперший.
 
 > Щоб запустити сервер **React**, потрібно перейти у теку з `package.json`. Працюємо з терміналом.
-> При запуску сервера **React** `npm start` використовується `index.html`, який знаходиться в теці `public`.
+> При запуску сервера **React** `npm start` (те саме, щой `npm run start`) використовується `index.html`, який знаходиться в теці `public`.
 
 
 > Перед рендерінгом (показ в браузері) код преобразиться у файл з розширенням `.jsx` (JavaScript XML - 
@@ -82,6 +86,9 @@
 > You can't render a default component from promise like that.
 
 
+> Щоб закоментувати конструкцію `.jsx`, окрім стандартного синтаксису html `/*...*/` або `//`, 
+> треба додатково обертати у фігурні дужки: `{ /* <p>{props.name}</p> */ }`
+
 ## Створення проекту React
 Найлегший спосіб створення React-проекту, це використання інструменту
 **[create-react-app](https://github.com/facebook/create-react-app)**.
@@ -101,6 +108,7 @@
 
 
 ## Компонент
+
 > Компонентами є кастомні html-елементи.
 
 > Кожен елемент повинен находитися у новому файлі.
@@ -122,7 +130,10 @@
 
 > В **React**'і аргументи компонента називаються **props** або **properties**.
 
-> Для прослуховування введення даних від користувача потрібно додати **EventListeners**.
+> **Коли використовувати функціональні компоненти, а коли класові?**
+> Функціональний компонент (наприклад, без наслідування класу Component і інші реалізації React) пишуть тоді,
+> коли не потрібно працювати ані зі станом (setState), ані з життєвим циклом компонента.
+
 
 ***
 
@@ -395,8 +406,8 @@ children це зарезервоване слово, його результат
 #### Як використовувати один стан замість декількох в одному компоненті
 
 Коли ми використовуємо один стан з кількома властивостями замість кількох станів для кожного, 
-при зміні стану потрібно також дбати і про всі інші властивості! 
-Тут треба використовувати spread `...`, 
+при зміні стану потрібно також дбати і про всі інші властивості - інакше вони зникнуть!
+Тут треба використовувати **spread** `...`, 
 тобто властивості передадуть собі ж всі дані що маються у `userInput` + змініться значення однієї властивості:
 
 > <details>
@@ -590,9 +601,12 @@ children це зарезервоване слово, його результат
 
 #### Ітерація структури з даними та ідентифікування компонентів
 
+> `key` and `ref` aren't really `props`. They're used internally by **React** and not passed to components as `props`.
+> If you need `id` `props` you need to create it.
+
 Щоб при ітерації листа чи масиву **React** не сповіщав про помилку типу - 
 `Warning: Each child in a list should have a unique "key" prop.` (відображається в консолі), 
-необхідно до компоненту додати аргумент `key` - це якесь унікальне значення, краще використовувати `id`:
+необхідно до компоненту додати аргумент `key` - це якесь унікальне значення, краще використовувати `id` котрий повинен буди в об'єкті json:
 
 > <details>
 > <summary>ПРИКЛАД</summary>
@@ -619,6 +633,192 @@ children це зарезервоване слово, його результат
 
 > З помилкою код наче і працює, проте він не надійний. React може проходити по масиву декілька разів - це не ефективно!
 > Тому треба ідентифікувати компоненти завжди!
+>
+> Також не слід використовувати індекси при ітерації функцією `map()`, краще щоб об'єкти мали свої `id`. 
+> Це пов'язано з тим, що **React** для ідентифікування `key` через `index` в функції `map()` потребує більш ресурсів:
+> 
+> <details>
+> <summary>ПРИКЛАД з index в функції map</summary>
+>
+> ```jsx
+> // НЕ РЕКОМЕНДУЄТЬСЯ
+> return (
+>     <div className="App">
+>         {this.state.posts.map((post, index) => (
+>             <h2 key={index}>{post.name}</h2>
+>         ))}
+>     </div>
+> )
+> ```
+> 
+> </details>
+
+***
+
+### Класові компоненти
+При роботі з класовим компонентом (наприклад, `React.Component`) треба працювати через `this`,
+коли звертаєшся до змінних чи передаєш їх у `props`:
+
+> <details>
+> <summary>ПРИКЛАД</summary>
+>
+> ```jsx
+> // Приклад з лічильником по кліку кнопки
+> import React, {Component} from "react";
+> 
+> class App extends Component {
+>     constructor(props) {
+>         super(props);
+>         this.state = {
+>             count: 0
+>         }
+>     }
+> 
+>     // альтернативна форма запису конструктора
+>     // state = {
+>     //    count: 0
+>     // }
+> 
+>     handleClick = () => {
+>         this.setState({count: this.state.count + 1})
+>         // this.setState((prevState) => ({count: prevState.count + 1}))
+>     }
+>     render() {
+>         return (
+>             <div>
+>                 <h1>
+>                     Ready to learn
+>                     <button onClick={this.handleClick}>{this.state.count}</button>
+>                 </h1>
+>             </div>
+>         );
+>     }
+> }
+> 
+> export default App;
+> ```
+</details>
+
+
+#### Нюанси створення методів у класових компонентах
+Три різних способа роботи з функціями:
+
+1. Використовувати звичайну функцію `handleClick()`.
+З таким варіантом необхідно в конструкторі вказувати прив'язку до контексту функції через метод `bind()` - `this.handleClick = this.handleClick.bind(this)`.
+Інакше контекст буде губитися та отримаємо помилку: **Cannot read properties of undefined (reading 'setState')**.
+    ```jsx
+    export default class App extends Component {
+        constructor(props) {
+            super(props);
+            this.state = {
+                count: 0
+            }
+            this.handleClick = this.handleClick.bind(this)
+        }
+    
+        handleClick() {
+            this.setState({count: this.state.count + 1})
+        }
+    
+        render() {
+            return (
+                <div>
+                    <h1>
+                        <button onClick={this.handleClick}>{this.state.count}</button>
+                    </h1>
+                </div>
+            );
+        }
+    }
+    ```
+
+2. Використовувати стрілкову функцію `handleClick = () => { ... }`.
+При цьому прив'язка контекста `this` через конструктор методом `bind()` тут **НЕ** потрібна:
+    ```jsx
+    export default class App extends Component {
+        state = {
+            count: 0
+        }
+    
+        handleClick = () => {
+            this.setState({count: this.state.count + 1})
+        }
+    
+        render() {
+            return (
+                <div>
+                    <h1>
+                        Ready to learn
+                        <button onClick={this.handleClick}>{this.state.count}</button>
+                    </h1>
+                </div>
+            );
+        }
+    }
+    ```
+
+3. Використовувати анонімну функцію напряму `() => { ... }`:
+    ```jsx
+    export default class App extends Component {
+        state = {
+            count: 0
+        }
+    
+        render() {
+            return (
+                <div>
+                    <h1>
+                        Ready to learn
+                        <button onClick={() => this.setState({count: this.state.count + 1})}>
+                            {this.state.count}
+                        </button>
+                    </h1>
+                </div>
+            );
+        }
+    }
+    ```
+
+#### [Рефи та DOM](https://uk.reactjs.org/docs/refs-and-the-dom.html)
+**Коли використовувати рефи**
+
+Існує декілька ситуацій, коли доцільно використовувати рефи:
+
+* Контроль фокусу, виділення тексту чи контроль програвання медіа.
+* Виклик імперативної анімації.
+* Інтеграція зі сторонніми DOM-бібліотеками.
+Уникайте використання рефів для будь-чого, що можна зробити декларативно.
+
+Наприклад, замість виклику методів open() та close() компоненту Dialog, передайте йому проп isOpen.
+
+
+**Реф** (Refs, посилання) - це об'єкт (створюється за допомогою `React.createRef` (часто в конструкторі) - дефолтне значення `null`), котрий можна прікрипити до React-елементів через атрибут `ref`.
+```jsx
+class MyComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.inputRef = React.createRef();
+  }
+
+  render() {
+    return <input type="text" ref={this.inputRef} />;
+  }
+
+  componentDidMount() {
+    this.inputRef.current.focus();
+  }
+}
+```
+
+#### Підходи створення форм в компонентах
+Є форми `<form>` 2 підходів: **керовані компонентами** та **некеровані компонентами**.
+
+**Керовані компоненти** - все що ми робимо з формою, ми повинні зберігати в `state`.
+Наприклад, користувач щось набрав, натиснув `checkbox` або `radiobutton` - все це робить компонент керованим.
+
+Тут описують принцип єдиної відповідальності, де все довіряють **React**'у, щоб він усім керував.
+
+Бажано використовувати керовані компоненти.
 
 
 ## Робота з CSS
@@ -859,6 +1059,10 @@ children це зарезервоване слово, його результат
 ***
 
 ### Хук `useState` - стан
+* [Як використовувати один стан замість декількох в одному компоненті](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/js/React.md#як-використовувати-один-стан-замість-декількох-в-одному-компоненті)
+* [Коли потрібно слухати натискання кнопки від форми?](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/js/React.md#коли-потрібно-слухати-натискання-кнопки-від-форми)
+* [Як стирати значення в полях після введення даних у формі?](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/js/React.md#як-стирати-значення-в-полях-після-введення-даних-у-формі)
+
 > Без використання концепції стану (useState), користувацький інтерфейс ніколи б не змінювався!
 
 > Важливо знати! Дані в оновлювальній функції будуть старі, оскільки присвоювання робиться із затримкою!
@@ -977,6 +1181,579 @@ useEffect(() => {
 > В панелі інструментів розробника з'являться нові вкладки.
 
 
+## Code Snippets, Examples
+
+<details>
+<summary>ПРИКЛАД клікера-лічильника</summary>
+
+```jsx
+import React, {Component} from "react";
+
+export default class App extends Component {
+    state = {
+        count: 0
+    }
+
+    increment = () => {
+        this.setState({count: this.state.count + 1})
+    }
+
+    decrement = () => {
+        this.setState({count: this.state.count - 1})
+    }
+
+    render() {
+        return (
+            <div 
+                className="App" 
+                style={
+                    {
+                        margin: 'auto', 
+                        width: '300px'}
+                }>
+                <button
+                    onClick={this.decrement}
+                >
+                    -
+                </button>
+                <span
+                    style={countStyle}
+                >
+                    {this.state.count}
+                </span>
+                <button
+                    onClick={this.increment}
+                >
+                    +
+                </button>
+            </div>
+        );
+    }
+}
+
+const countStyle = {
+    margin: '0 0.75rem',
+    display: 'inline-block'
+}
+```
+</details>
+
+***
+
+<details>
+<summary>ПРИКЛАД роботи з fetch - componentDidMount, componentDidUpdate, componentWillUnmount</summary>
+
+Якщо просто запросити дані через `fetch` - ми не отримаємо дані:
+```js
+fetch('https://jsonplaceholder.typicode.com/posts')
+    .then(console.log)
+```
+
+треба використовувати метод `json()` з `Prototype` (`__proto_`_) - він преобразує результат в той набір даних, котрий нам потрібен:
+```js
+fetch('https://jsonplaceholder.typicode.com/posts')
+    .then(response => response.json())
+    .then(data => this.setState({posts: data}))
+```
+
+```jsx
+export default class App extends Component {
+    state = {
+        posts: [],
+        loading: true,
+        comments: [],
+    }
+
+    componentDidMount() {
+        console.log('componentDidMount')
+        fetch('https://jsonplaceholder.typicode.com/posts')
+            .then(response => response.json())
+            .then(data => this.setState({
+                posts: data,
+                loading: false
+            }))
+
+        this.timerId = setInterval(() => {
+            fetch('https://jsonplaceholder.typicode.com/comments')
+                .then(response => response.json())
+                .then(data => this.setState({
+                    comments: data,
+                }))
+        }, 3000)
+    }
+    componentDidUpdate() {
+        console.log('componentDidUpdate')
+    }
+    componentWillUnmount() {
+        console.log('componentWillUnmount')
+        clearInterval(this.timerId)
+    }
+
+    render() {
+        return (
+            <div className="App">
+                {this.state.loading
+                    ? <h3>Loading...</h3>
+                    : <h3>{this.state.posts.length} was loaded</h3>}
+            </div>
+        );
+    }
+}
+```
+</details>
+
+***
+
+<details>
+<summary>ПРИКЛАД створення таймера з componentDidMount, componentDidUpdate, componentWillUnmount + LocalStorage</summary>
+
+```jsx
+import React, {Component} from "react";
+
+export default class App extends Component {
+    state = {
+        count: 0,
+        isCounting: false
+    }
+
+    // працює при завантаженні сторінки
+    componentDidMount() {
+        const userCount = localStorage.getItem('timer');
+        if (userCount) {
+            this.setState({count: +userCount});
+        }
+    }
+
+    // працює кожного разу при виклику setState
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        localStorage.setItem('timer', this.state.count);
+    }
+
+    // працює при закритті сторінки 
+    componentWillUnmount() {
+        clearInterval(this.counterId);
+    }
+
+    handleStart = () => {
+        this.setState({isCounting: true});
+        this.counterId = setInterval(() => {
+            this.setState({count: this.state.count + 1});
+        }, 1000);
+    }
+
+    handleStop = () => {
+        this.setState({isCounting: false});
+        clearInterval(this.counterId);
+    }
+
+    handleReset = () => {
+        this.setState({count: 0, isCounting: false})
+        clearInterval(this.counterId);
+    }
+
+    render() {
+        return (
+            <div className="App">
+                <h1>React Timer</h1>
+                <h3>{this.state.count}</h3>
+                {!this.state.isCounting ? (
+                    <button onClick={this.handleStart}>Start</button>
+                ) : (
+                    <button onClick={this.handleStop}>Stop</button>
+                )}
+                <button onClick={this.handleReset}>Reset</button>
+            </div>
+        )
+    }
+}
+```
+
+</details>
+
+***
+
+<details>
+<summary>ПРИКЛАД роботи з CallBack функцією у props</summary>
+
+Якщо передається функція в якості props, щоб до неї звурнутися з якогось компонента, потрібно це робити через CallBack функцію `() => ...` інакшу при завантаженні сторінка функція буде викликатися, і отримаєш не те на що очікуєш:
+
+```jsx
+// не вірно:
+return <h2>{name} <button onClick={props.delete(id)}>delete</button></h2>
+
+// вірно:
+return <h2>{name} <button onClick={() => props.delete(id)}>delete</button></h2>
+```
+</details>
+
+***
+
+<details>
+<summary>ПРИКЛАД видаляє кнопку по кліку - оновлення стану через дочірні компоненти</summary>
+
+```jsx
+// 1/3 file App.js
+import React, {Component} from "react";
+import {Posts} from "./components/Posts";
+
+export default class App extends Component {
+    state = {
+        posts: [
+            {id: 'abc1', name: 'JS Basics'},
+            {id: 'abc2', name: 'JS Advanced'},
+            {id: 'abc3', name: 'React JS'},
+        ]
+    }
+
+    removePost = (id) => {
+        this.setState(
+            {posts: this.state.posts.filter(post => post.id !== id)}
+        )
+    }
+
+    render() {
+        const {posts} = this.state;
+        return (
+            <div className="App">
+                <Posts posts={posts} removePost={this.removePost} />
+            </div>
+        )
+    }
+}
+```
+```jsx
+// 2/3 file Posts.jsx
+import {Post} from "./Post";
+
+export function Posts(props) {
+    return <div>
+        {props.posts.map(post => (
+            <Post
+                key={post.id}
+                id={post.id}
+                name={post.name}
+                removePost={props.removePost}
+            />
+        ))}
+    </div>
+}
+```
+```jsx
+// 3/3 file Post.jsx
+export function Post(props) {
+    const {id, name, removePost} = props;
+    return <h2>{name}
+        <button
+            onClick={() => removePost(id)}
+        >
+            delete
+        </button>
+    </h2>
+}
+```
+
+</details>
+
+***
+
+<details>
+<summary>ПРИКЛАД прослуховування 1 input'у користувача</summary>
+
+> Якщо використовується `state` для `input`, тоді для зміни значення в `input` потрібно використовувати `onChange`.
+
+> `value` увесь час повинен брати значення з нашого `state`.
+```jsx
+import React from "react";
+
+export class Form extends React.Component {
+    state = {
+        firstName: '',
+    }
+
+    handleChange = (event) => {
+        this.setState({firstName: event.target.value})
+    }
+
+    render() {
+        const {firstName} = this.state;
+        
+        return (
+            <div>
+                <input
+                    type="text"
+                    name="firstName"
+                    placeholder="firstName"
+                    value={firstName}
+                    onChange={this.handleChange}
+                />
+            </div>
+        );
+    }
+}
+```
+</details>
+
+***
+
+<details>
+<summary>ПРИКЛАД прослуховування N input'ів користувача</summary>
+
+Щоб не дублювати код (кожне ім'я стану - `firstName`, `email`...) тут слід використовувати ім'я `input`'у, а саме `[event.target.name]`:
+```jsx
+import React from "react";
+
+export class Form extends React.Component {
+    state = {
+        firstName: '',
+        email: '',
+    }
+
+    handleChange = (event) => {
+        this.setState({[event.target.name]: event.target.value})
+    }
+
+    render() {
+        const {firstName, email} = this.state;
+
+        return (
+            <div>
+                <input
+                    type="text"
+                    name="firstName"
+                    placeholder="firstName"
+                    value={firstName}
+                    onChange={this.handleChange}
+                />
+                <input
+                    type="text"
+                    name="email"
+                    placeholder="email"
+                    value={email}
+                    onChange={this.handleChange}
+                />
+            </div>
+        );
+    }
+}
+```
+</details>
+
+***
+
+<details>
+<summary>ПРИКЛАД простої валідації по виходу з поля (onBlur)</summary>
+
+Функція `test()` відноситься до інтерфейсу **RegExp** - перевірка `email` по заданній регулярці:
+```jsx
+import React from "react";
+
+export class Form extends React.Component {
+    state = {
+        firstName: '',
+        email: '',
+    }
+
+    handleChange = (event) => {
+        this.setState({[event.target.name]: event.target.value})
+    }
+
+    validateName = () => {
+        if (this.state.firstName.length < 5) {
+            alert('Your first name can\'t be less than 5 letters');
+        }
+    }
+
+    validateEmail = () => {
+        if (!/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            .test(this.state.email)) {
+            alert('email is not valid');
+        }
+    }
+
+    render() {
+        const {firstName, email} = this.state;
+
+        return (
+            <div>
+                <input
+                    type="text"
+                    name="firstName"
+                    placeholder="firstName"
+                    value={firstName}
+                    onChange={this.handleChange}
+                    onBlur={this.validateName}
+                />
+                <input
+                    type="text"
+                    name="email"
+                    placeholder="email"
+                    value={email}
+                    onChange={this.handleChange}
+                    onBlur={this.validateEmail}
+                />
+            </div>
+        );
+    }
+}
+```
+</details>
+
+***
+
+<details>
+<summary>ПРИКЛАД створення елементів - textarea, select, radio button, checkbox</summary>
+
+Функція `test()` відноситься до інтерфейсу **RegExp** - перевірка `email` по заданній регулярці:
+```jsx
+import React from "react";
+
+export class Form extends React.Component {
+    state = {
+        firstName: '',
+        email: '',
+        message: '',
+        select: '',
+        subscription: false,
+        gender: '',
+    }
+
+    handleChange = (event) => {
+        this.setState({[event.target.name]: event.target.value})
+    }
+
+    handleCheckBoxChange = (event) => {
+        this.setState({[event.target.name]: event.target.checked})
+    }
+
+    render() {
+        const {firstName, email, message, select, subscription, gender} = this.state;
+
+        return (
+            <div>
+                <input
+                    type="text"
+                    name="firstName"
+                    placeholder="firstName"
+                    value={firstName}
+                    onChange={this.handleChange}
+                />
+                <input
+                    type="text"
+                    name="email"
+                    placeholder="email"
+                    value={email}
+                    onChange={this.handleChange}
+                />
+                <br/>
+                <textarea name="message" value={message} onChange={this.handleChange}/>
+                <br/>
+                <select name="select" value={select} onChange={this.handleChange}>
+                    <option value="" disabled/>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                </select>
+                <br/>
+                <label>
+                    <input
+                        type="checkbox"
+                        name="subscription"
+                        checked={subscription}
+                        onChange={this.handleCheckBoxChange}
+                    />
+                    Subscription
+                </label>
+                <br/>
+                <input
+                    type="radio"
+                    name="gender"
+                    value="male"
+                    onChange={this.handleChange}
+                    checked={gender === 'male'}
+                />
+                Male
+                <input
+                    type="radio"
+                    name="gender"
+                    value="female"
+                    onChange={this.handleChange}
+                    checked={gender === 'female'}
+                />
+                Female
+            </div>
+        );
+    }
+}
+```
+</details>
+
+
+***
+
+<details>
+<summary>ПРИКЛАД Автоматичного перемикання фокусу (рефи, посилання, Refs) курсора після умови</summary>
+
+```jsx
+import React from "react";
+
+export default class FormWithRef extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            card: '',
+            email: '',
+        }
+        this.cardRef = React.createRef();
+        this.emailRef = React.createRef();
+    }
+
+    // дефолтна функція, яка працює при завантаженні сторінки
+    componentDidMount() {
+        console.log(this.cardRef)
+        // 1 - фокус на елементі card при завантаженні сторінки
+        this.cardRef.current.focus();
+    }
+
+    handleChange = (event) => {
+        this.setState({[event.target.name]: event.target.value}, () => {
+            if (this.state.card.length === 16) {
+                // 2 - як у полі card буде 16 символів - фокус перемкнеться на email
+                this.emailRef.current.focus();
+            }
+        })
+    }
+
+    render() {
+        const {card, email} = this.state;
+
+        return <div>
+            <input
+                type="text"
+                name="card"
+                placeholder="card"
+                value={card}
+                onChange={this.handleChange}
+                ref={this.cardRef}
+            />
+            <input
+                type="email"
+                name="email"
+                placeholder="email"
+                value={email}
+                onChange={this.handleChange}
+                ref={this.emailRef}
+            />
+        </div>
+    }
+}
+```
+
+</details>
+
+***
+
+
+
 ## Solutions to the Errors
 
 ### [⚠️ ReactJS Error: Objects are not valid as a React child (found: [object Promise])](https://peaku.co/questions/131948-error-de-reactjs:-los-objetos-no-son-validos-como-hijos-de-react-(encontrado:-[promesa-de-objeto])) 
@@ -1009,7 +1786,7 @@ useEffect(() => {
 > ```
 > </details>
 
-Притримуйся цим правил:
+Притримуйся цих правил:
 * You can't render a default component from `Promise` like that.
 * You can take an advantages of `useState`, `useEffect` hook to fetch and render data into the component.
 * You can learn more about React Hooks from [this link](https://uk.reactjs.org/docs/hooks-intro.html).
