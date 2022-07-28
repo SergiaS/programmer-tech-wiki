@@ -69,7 +69,7 @@ By default, application will lunch at the address `http://localhost:3000/`.
 Use keyword `CTRL+C` to stop NodeJS server.
 
 
-## Зв'язування серверів FrondEnd з BackEnd.
+## Зв'язування серверів FrondEnd з BackEnd
 Щоб відповідь генерувалась на React та поверталась на вказану адресу.
 
 **Спосіб зробити це руцями:**
@@ -165,3 +165,25 @@ Use keyword `CTRL+C` to stop NodeJS server.
 
 Далі запускаємо наш `.jar` командою `java -jar ./target/{your-project-name}-0.0.1-SNAPSHOT.jar`.
 Далі наш джарнік стартує.
+
+
+## [package gh-pages](https://www.npmjs.com/package/gh-pages)
+`gh-pages` - це залежність для розробки, вона буде закидувати наші веб-файли на певну гілку нашого репозиторія.
+
+Для встановлення залежності потрібно:
+
+- Спочатку потрібно встановити залежність. Пишемо у терміналі команду `npm install gh-pages --save-dev`, 
+  де `--save-dev` - ключ, щоб залежність не збиралася до підсумкового проєкту.
+- Додати налаштування у файл `package.json`:
+  - додати адресу своєї сторінки на GitHub-Pages перед `"dependencies"`, наприклад:
+    ```json
+    "homepage": "https://sergias.github.io/react-movies",
+    ```
+  - додати у кінець категорії `"scripts"` команди:
+    ```json
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
+    ```
+    де `gh-pages` - це ім'я гілки Git на яку будуть завантажуватися файли.
+- Тепер потрібно лише набрати команду `npm run build`, і для всіх наших веб-файлів автоматично зробиться `commit` і `push`.
+- Щоб **GitHub-Pages** працювало, треба її налаштувати (як мінімум зробити репозиторію публічний доступ).

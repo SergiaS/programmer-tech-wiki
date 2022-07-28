@@ -89,6 +89,18 @@
 > Щоб закоментувати конструкцію `.jsx`, окрім стандартного синтаксису html `/*...*/` або `//`, 
 > треба додатково обертати у фігурні дужки: `{ /* <p>{props.name}</p> */ }`
 
+
+> If you need to hide your API key in **React**:
+> 
+> 1. Create a file called `.env` (maybe `.env.local`) in the root of your project's directory.
+> 2. Всередині вашого файлу `.env` використовуй приставку `REACT_APP_` для свого ключа, наприклад `REACT_APP_API_KEY`.
+> 3. Add the `.env` file to your `.gitignore` file.
+> ```js
+> // читаємо ключ з файлу .env
+> const API_KEY = process.env.REACT_APP_PROJECT_SHOWCASE_API_KEY;
+> ```
+
+
 ## Створення проекту React
 Найлегший спосіб створення React-проекту, це використання інструменту
 **[create-react-app](https://github.com/facebook/create-react-app)**.
@@ -104,6 +116,12 @@
 
 Спочатку переходимо у теку завантаженого проєкту і потім пишемо у терміналі команду `npm install`.
 Чекаємо поки завантажаться всі залежності з файлу проєкту `package.json`, і все.
+
+
+
+## Збірка проекту
+> `npm install gh-pages --save-dev` - це залежність для розробки. 
+> Щоб вона не збиралася до підсумкового проєкту, ми додаємо ключ `--save-dev`
 
 
 
@@ -650,13 +668,12 @@ children це зарезервоване слово, його результат
 >     </div>
 > )
 > ```
-> 
 > </details>
 
 ***
 
 ### Класові компоненти
-При роботі з класовим компонентом (наприклад, `React.Component`) треба працювати через `this`,
+При роботі з класовим компонентом (наприклад, `React.Component`) треба працювати через контекст `this`,
 коли звертаєшся до змінних чи передаєш їх у `props`:
 
 > <details>
@@ -698,6 +715,18 @@ children це зарезервоване слово, його результат
 > export default App;
 > ```
 </details>
+
+***
+
+#### `Fragment`
+Оскільки при синтаксисі JSX потрібно повертати 1 елемент, існує ймовірність великої вкладеності, наприклад тегу `<div>`.
+Щоб цього не було, треба використовувати існуючий функціонал **React** - обертати свій код в компонент `Fragment`,
+який треба імпортувати:
+```jsx
+import React, { Fragment } from "react";
+```
+
+***
 
 
 #### Нюанси створення методів у класових компонентах
@@ -779,6 +808,8 @@ children це зарезервоване слово, його результат
     }
     ```
 
+***
+
 #### [Рефи та DOM](https://uk.reactjs.org/docs/refs-and-the-dom.html)
 **Коли використовувати рефи**
 
@@ -810,6 +841,8 @@ class MyComponent extends React.Component {
 }
 ```
 
+***
+
 #### Підходи створення форм в компонентах
 Є форми `<form>` 2 підходів: **керовані компонентами** та **некеровані компонентами**.
 
@@ -820,6 +853,7 @@ class MyComponent extends React.Component {
 
 Бажано використовувати керовані компоненти.
 
+***
 
 ## Робота з CSS
 Існують декілька варіантів задання стиля якомусь елементу html:
@@ -1048,9 +1082,14 @@ class MyComponent extends React.Component {
 
 3. Динамічні стилі та CSS модулі
 
-## Хукі
+
+
+
+## [Хукі / Hooks](https://uk.reactjs.org/docs/hooks-reference.html)
 * [DOC: Ознайомлення з Хуками](https://uk.reactjs.org/docs/hooks-intro.html)
 * [DOC: Правила хуків](https://uk.reactjs.org/docs/hooks-rules.html)
+
+> Призначені для роботи з функціональними компонентами
 
 Готовий функціонал присутній у **React**.
 Починаються зі слова **use**.
@@ -1065,12 +1104,11 @@ class MyComponent extends React.Component {
 
 > Без використання концепції стану (useState), користувацький інтерфейс ніколи б не змінювався!
 
-> Важливо знати! Дані в оновлювальній функції будуть старі, оскільки присвоювання робиться із затримкою!
+> В функціональних компонентах можна працювати зі звичайними об'єктами (наприклад JSON дані), 
+> але тут буде складніше аніж у класовому компоненті, оскільки тут використовується useState під кожну змінну.
 
 Хук надає змогу змінювати значення змінної, так потрібно для **React**.
 Тобто, ми вказуємо **React**'у, щоб він ще раз звернувся до цього коду.
-
-При створенні, потрібно вказати дефолтне значення стану.
 
 Коли потрібно змінити дані, наприклад по кліку, **React** їх не оновить,
 оскільки на старті код вже був прочитаний, і більше ніде немає виклику цієї функції.
@@ -1123,19 +1161,100 @@ import React, { useState } from "react";
 
 Коли робиться присвоювання (`setDescription`), також робиться і виклик функції компоненту (тобто увесь компонент оновлюється).
 
-***
+При створенні, потрібно вказати дефолтне значення стану, або реалізувати функцію.
 
-### Хук `Fragment`
-Оскільки при синтаксисі JSX потрібно повертати 1 елемент, існує ймовірність великої вкладеності, наприклад тегу `<div>`.
-Щоб цього небуло, треба використовувати існуючий функціонал **React** - обертати свій код в компонент `Fragment`,
-який треба імпортувати: 
-```jsx
-import React, { Fragment } from "react";
-```
+> Важливо знати! Дані в оновлювальній функції будуть старі, оскільки присвоювання робиться із затримкою!
+> Тому, якщо потрібне нове значення, тут краще використовувати функцію замість значення:
+> ```jsx
+> // присвоєння через значення
+> setCount(count + 1);
+> console.log(count);     // old value, count = 0
+> ```
+> ```jsx
+> // присвоєння через функцію
+> setCount((previousCount) => {
+>     previousCount = previousCount + 1;
+>     console.log(previousCount);  // new value, count = 1
+>     return previousCount;
+> })
+> console.log(count);     // old value, count = 0
+> ```
+
+> <details>
+> <summary>ПРИКЛАД оновлення стану з усіма змінними - використовуй spread ...</summary>
+> 
+> Щоб значення не загубилося, потрібно використовувати **spread** оператор `...`, котрий як би каже, що у `setState` ми беремо усі
+> дані що були, і оновлюємо якість окремі змінні, наприклад `count`:
+> ```jsx
+> import React, { useState, useEffect } from "react";
+> 
+> export const State = () => {
+>     const [state, setState] = useState({
+>         count: 0,
+>         isCounting: false,
+>     });
+> 
+>     const handleCount = () => {
+>         setState({
+>             ...state,
+>             count: state.count + 1
+>         });
+>     }
+> 
+>     const handleStatus = () => {
+>         setState({
+>             ...state,
+>             isCounting: !state.isCounting
+>         });
+>     }
+> 
+>     useEffect(() => {
+>         console.log(state);
+>     }, [state]);
+> 
+>     return <div>
+>         <button onClick={handleCount}>count</button>
+>         <button onClick={handleStatus}>status</button>
+>     </div>
+> }
+> ```
+> </details>
+
+
+> <details>
+> <summary>ПРИКЛАД оновлення стану N раз</summary>
+> 
+> ```jsx
+> export const WithState = () => {
+>     const [count, setCount] = useState(0);
+> 
+>     const handleClick = () => {
+>         // count оновиться лише на 1
+>         setCount(count + 1);
+>         setCount(count + 1);
+>         setCount(count + 1);
+> 
+>         // count оновиться на 3
+>         // setCount((prevCount) => prevCount + 1)
+>         // setCount((prevCount) => prevCount + 1)
+>         // setCount((prevCount) => prevCount + 1)
+>     }
+> 
+>     return (
+>         <div>
+>             <button onClick={handleClick}>{count}</button>
+>         </div>
+>     )
+> }
+> ```
+> </details>
+
 
 ***
 
 ### Хук `useRef`
+> Аналог у класовому компоненті - `createRef`.
+
 **Refs** (лінк) - дозволяє встановлювати з'єднання між html-елементів та js-кодом.
 ```jsx
 import React, { useRef } from "react";
@@ -1144,13 +1263,47 @@ import React, { useRef } from "react";
 ***
 
 ### Хук `useEffect`
-**useEffect** - використовується для переоцінки компонентів. 
+**useEffect** - використовується для переоцінки компонентів, тобто відповідає за роботу життєвого циклу компонента. 
+
+`useEffect`, сам по собі повністю асинхроний, тобто той код який буде всередині нього виконуватися - не буде блокувати спільну роботу додатку.
+
+Даний **хук `useEffect` функціонального компонента тримає у собі можливості класового компонента**, а саме: 
+* `componentDidMount` (що працює перед завантаження сторінки - перед змонтуванням компоненту):
+    ```jsx
+    // аналогічно componentDidMount
+    useEffect(() => {
+        console.log("Hello from clicker")
+    }, [])
+    ```
+* `componentDidUpdate` (що дозволяє оновлювати дані компоненту):
+    ```jsx
+    // аналогічно componentDidMount і componentDidUpdate
+    // буде працювати при завантажені сторінки/компонента і при його оновлені
+    useEffect(() => {
+    	console.log("Hello from clicker")
+    }, [count])
+    ```
+* `componentWillUnmount` (що працює на кінцевій стадії компоненту, наприклад вивільняє ресурси).
+    ```jsx
+    // аналогічно componentDidUpdate і componentWillUnmount
+    // використовується оператор `return` у callback-функції
+    // тут буде спрацьовувати кожен раз при оновлені залежностей + при розмонтуванні 
+    useEffect(() => {
+        console.log("Hello from clicker", count);
+        return () => console.log('goodbye clicker');
+    }, [count])
+    ```
+
+`useEffect` - приймає дві сутності (аргумента):
+- **перша** - деяка функція/дія котру хочемо зробити у якийсь-то момент життєвого циклу;
+- **друга** - якийсь набір залежностей, по доброму - повинен бути завжди, інакше компонент буде постійно перемальовуватися (render);
+
 Метод буде виконуватися тільки коли завантажується сторінка, або коли змінюються його залежності (другий аргумент).
 ```jsx
 import React, { useEffect } from "react";
 ```
 ```jsx
-// Функція працює тільки при завантаженні сторінки без залежностей
+// Функція працює тільки при завантаженні сторінки без залежностей 
 useEffect(() => {
     const storedLoginInfo = localStorage.getItem('isLoggedIn');
     if (storedLoginInfo === '1') {
@@ -1166,13 +1319,235 @@ useEffect(() => {
     );
 }, [inputEmail, inputPassword])
 ```
+<br>
+
+`useEffect`'ів може бути багато на сторінці.
+Тому тут часто над кожним `useEffect` пишуть коменти - за що конкретний `useEffect` відповідає, або іменувати функції:
+```jsx
+// what effect does
+useEffect(() => {}, [])
+
+useEffect(function initPlugin() {
+	somePlugin.init();
+}, [])
+```
+
+***
+
+### Хук `useContext`
+Надає доступ до вказаних даних усім хто буде його дочірнім елементом.
+
+> <details>
+> <summary>ПРИКЛАД створення контексту</summary>
+> 
+> ```jsx
+> // 1|4: файл з контекстом
+> import React, { createContext, useState} from "react";
+> 
+> export const CustomContext = createContext();
+> 
+> export const Context = (props) => {
+>     const [books, setBooks] = useState([
+>         {id: 1, title: 'JS'},
+>         {id: 2, title: 'React'},
+>         {id: 3, title: 'NodeJS'},
+>     ]);
+> 
+>     const addBook = (book) => {
+>         setBooks([book], ...books);
+>     }
+> 
+>     const removeBook = (id) => {
+>         setBooks(books.filter(book => book.id !== id));
+>     }
+> 
+>     // вказуємо функції та змінні, які зможуть мати дочірні компоненти
+>     const value = {
+>         books,
+>         addBook,
+>         removeBook,
+>     }
+> 
+>     // передаємо дані через Provider
+>     return <CustomContext.Provider value={value}>
+>         {props.children}
+>     </CustomContext.Provider>
+> }
+> ```
+> ```jsx
+> // 2|4: головний файл App
+> import {Context} from "./hooks/Context";
+> import {Books} from './components/Books'
+> 
+> export function App() {
+>     // обертаємо return у наш контекст
+>     return <Context>
+>         {/* тепер у всіх дочірніх компонентів (після налаштувань у них) */}
+>         {/* зможуть отримати дані Context */}
+>         <Books />
+>     </Context>
+> }
+> ```
+> ```jsx
+> // 3|4: компонент Books
+> import React, { useContext } from "react";    // імпортуємо хук контексту
+> import { CustomContext } from "../hooks/Context"; // імпортуємо наш контекс
+> 
+> import { Book } from './Book';
+> 
+> export function Books() {
+>     // отримуємо книги через наш контекст CustomContext
+>     const { books = [] } = useContext(CustomContext);
+>     console.log(books);
+> 
+>     return <div className="books">
+>         {
+>             books.map(book => {
+>                 return <Book key={book.id} {...book} />
+>             })
+>         }
+>     </div>
+> }
+> ```
+> ```jsx
+> // 4|4: компонент Book
+> import React, { useContext } from "react";  // імпортуємо хук контексту
+> import { CustomContext } from "../hooks/Context";   // імпортуємо наш контекс
+> 
+> export function Book(props) {
+>     // отримуємо функцію для видалення з нашого контексту CustomContext
+>     const { removeBook } = useContext(CustomContext);
+>     return <h2 onClick={() => removeBook(props.id)}>{props.title}</h2>
+> }
+> ```
+> </details>
+
+***
+
+### Хук `useLayoutEffect`
+`useLayoutEffect` дуже схожий на `useEffect`.
+Основна відмінність: якщо `useEffect` працює асинхроно (не блокує відмальовку сторінки), то `useLayoutEffect` виконується синхроно (може пригальмувати завантаження сторінки).
+
+Загалом `useLayoutEffect` використовують коли у рідкісних випадках (коли псують візуальну поведінку) потрібно лізти у звичайний DOM, і щось там змінювати.
+Але у 99% використовують саме `useEffect`.
+
+***
+
+### Хукі `useCallback` і `useMemo`
+`useCallback` і `useMemo` використовуються коли є складні функції та розрахунки з великими числами.
+
+`useCallback` - повертає мемоізовану версію функції, не виконує саму функцію в середині хука.
+
+`useMemo` - завжди повертає мемоізоване значення - результат виконання самої функції.
+
+***
+
+### Хук `useImperativeHandle`
+**React** передає дані знизу у верх (props), але `useImperativeHandle` дає можливість змінити напрямок руху props.
 
 ***
 
 ### Хук `useReducer`
-**useReducer** - допомагає керувати станом додатка як і useState, але useReducer призначений для більш складних станів. 
+* [Code Example](https://codesandbox.io/s/vigorous-tree-74hfc?file=/src/App.js)
+
+**useReducer** - допомагає керувати станом додатка як і useState, але `useReducer` призначений для більш складних станів. 
 Використовується, наприклад, для роботи з декількома станами, з декількома способами змін стану, в залежності від інших станів, 
-там де useState важко використовувати - де велика ймовірність багів.
+там де `useState` важко використовувати - де велика ймовірність багів.
+
+Повертає дві сутності, як і `useState`:
+* Перша сутність (деструктурують) - це стан за замовчуванням - те, з чим ми будемо працювати.
+* Друга сутність - якась функція оновлення, як правило, її називають dispatch.
+
+> <details>
+> <summary>ПРИКЛАД таймеру на useReducer</summary>
+> 
+> ```jsx
+> import React, {useEffect, useReducer} from "react";
+> 
+> const countReducer = (state, {type}) => {
+>     if (type === 'START') {
+>         return {
+>             ...state,
+>             isCounting: true,
+>         }
+>     }
+> 
+>     if (type === 'STOP') {
+>         return {
+>             ...state,
+>             isCounting: false,
+>         }
+>     }
+> 
+>     if (type === 'RESET') {
+>         return {
+>             count: 0,
+>             isCounting: false,
+>         }
+>     }
+> 
+>     if (type === 'TICK') {
+>         return {
+>             ...state,
+>             count: state.count + 1,
+>         }
+>     }
+> 
+>     return state;
+> }
+> 
+> function setDefaultValue() {
+>     const userCount = localStorage.getItem('timer');
+>     return userCount ? +userCount : 0;
+> }
+> 
+> export default function TimerByFunctionalComponent() {
+>     const[{count, isCounting}, dispatch] = useReducer(countReducer, {count: setDefaultValue(), isCounting: false});
+> 
+>     // записує значення в localStorage
+>     useEffect(() => {
+>         localStorage.setItem('timer', count);
+>     }, [count]);
+> 
+>     // займається підрахунком
+>     useEffect(() => {
+>         let timerId = null;
+>         if (isCounting) {
+>             timerId = setInterval(() => {
+>                 dispatch({type: 'TICK'})
+>             }, 1000);
+>         }
+> 
+>         return () => {
+>             timerId && clearInterval(timerId);
+>             timerId = null;
+>         }
+>     }, [isCounting])
+> 
+>     return (
+>         <div className="timer">
+>             <h1>React Timer by Functional Component</h1>
+>             <h3>{count}</h3>
+>             {!isCounting ? (
+>                 <button onClick={() => dispatch({type: 'START'})}>Start</button>
+>             ) : (
+>                 <button onClick={() => dispatch({type: 'STOP'})}>Stop</button>
+>             )}
+>             <button onClick={() => dispatch({type: 'RESET'})}>Reset</button>
+>         </div>
+>     )
+> }
+> ```
+> </details>
+
+***
+
+### Користувацькі хуки
+* [Code Example](https://codesandbox.io/s/staging-resonance-rhpl4?file=/src/App.js)
+
+
+***
+
 
 
 ## Debugging
@@ -1238,7 +1613,9 @@ const countStyle = {
 ```
 </details>
 
+
 ***
+
 
 <details>
 <summary>ПРИКЛАД роботи з fetch - componentDidMount, componentDidUpdate, componentWillUnmount</summary>
@@ -1255,7 +1632,6 @@ fetch('https://jsonplaceholder.typicode.com/posts')
     .then(response => response.json())
     .then(data => this.setState({posts: data}))
 ```
-
 ```jsx
 export default class App extends Component {
     state = {
@@ -1302,15 +1678,22 @@ export default class App extends Component {
 ```
 </details>
 
+
 ***
 
-<details>
-<summary>ПРИКЛАД створення таймера з componentDidMount, componentDidUpdate, componentWillUnmount + LocalStorage</summary>
 
+<details>
+<summary>ПРИКЛАД: Створення таймера на класовому і функціональному компонентах, з життєвим циклом</summary>
+
+Задача створити таймер з використанням `LocalStorage`.
+
+Різниця у тому, що класовий компонент використовує дефолтні методи для керування станом `componentDidMount`, `componentDidUpdate` та `componentWillUnmount`,
+а функціональний компонент - `useState`, `useEffect` та `useRef`.
 ```jsx
+// Таймер на класовому компоненті 
 import React, {Component} from "react";
 
-export default class App extends Component {
+export default class TimerByClassComponent extends Component {
     state = {
         count: 0,
         isCounting: false
@@ -1367,15 +1750,235 @@ export default class App extends Component {
     }
 }
 ```
+```jsx
+// Таймер на функціональному компоненті
+import React, {useState, useEffect, useRef} from "react";
 
+function setDefaultValue() {
+    const userCount = localStorage.getItem('timer');
+    return userCount ? +userCount : 0;
+}
+
+export default function TimerByFunctionalComponent() {
+    const[count, setCount] = useState(setDefaultValue());
+    const[isCount, setIsCount] = useState(false);
+    const timerIdRef = useRef(null);
+
+    const handleStart = () => {
+        setIsCount(true);
+    }
+
+    const handleStop = () => {
+        setIsCount(false);
+    }
+
+    const handleReset = () => {
+        setCount(0);
+        setIsCount(false);
+    }
+
+    // записує значення в localStorage
+    useEffect(() => {
+        localStorage.setItem('timer', count);
+    }, [count]);
+
+    // займається підрахунком
+    useEffect(() => {
+        if (isCount) {
+            timerIdRef.current = setInterval(() => {
+                setCount((prevCount) => prevCount + 1);
+            }, 1000);
+        }
+
+        return () => {
+            timerIdRef.current && clearInterval(timerIdRef.current);
+            timerIdRef.current = null;
+        }
+    }, [isCount])
+
+    return (
+        <div className="timer">
+            <h1>React Timer by Functional Component</h1>
+            <h3>{count}</h3>
+            {!isCount ? (
+                <button onClick={handleStart}>Start</button>
+            ) : (
+                <button onClick={handleStop}>Stop</button>
+            )}
+            <button onClick={handleReset}>Reset</button>
+        </div>
+    )
+}
+```
 </details>
 
+
 ***
+
+
+<details>
+<summary>ПРИКЛАД: Створення пошуку на класовому і функціональному компонентах, без життєвого циклу</summary>
+
+```jsx
+// 1|2: класовий компонент
+import React from "react";
+
+export class Search extends React.Component {
+    state = {
+        search: '',
+        type: 'all',
+    }
+
+    handleKey = (event) => {
+        if (event.key === 'Enter') {
+            this.props.searchMovies(this.state.search, this.state.type);
+        }
+    }
+
+    handleFilter = (event) => {
+        this.setState(() => ({type: event.target.dataset.type}), () => {
+            this.props.searchMovies(this.state.search, this.state.type);
+        });
+    }
+
+    render() {
+        return (
+            <div className="row">
+                <div className="input-field">
+                    <input
+                        className="validate"
+                        placeholder='search'
+                        type="search"
+                        value={this.state.search}
+                        onChange={(e) => this.setState({search: e.target.value})}
+                        onKeyDown={this.handleKey}
+                    />
+                    <button className="btn search-btn"
+                            onClick={() => this.props.searchMovies(this.state.search, this.state.type)}>SEARCH
+                    </button>
+                </div>
+                <div>
+                    <label>
+                        <input className="with-gap"
+                               name="type"
+                               type="radio"
+                               data-type="all"
+                               onChange={this.handleFilter}
+                               checked={this.state.type === 'all'}
+                        />
+                        <span>All</span>
+                    </label>
+                    <label>
+                        <input className="with-gap"
+                               name="type"
+                               type="radio"
+                               data-type="movie"
+                               onChange={this.handleFilter}
+                               checked={this.state.type === 'movie'}
+                        />
+                        <span>Movies</span>
+                    </label>
+                    <label>
+                        <input className="with-gap"
+                               name="type"
+                               type="radio"
+                               data-type="series"
+                               onChange={this.handleFilter}
+                               checked={this.state.type === 'series'}
+                        />
+                        <span>Series</span>
+                    </label>
+                </div>
+            </div>
+        )
+    }
+}
+```
+```jsx
+// 2|2: функціональний компонент
+import React, {useState} from "react";
+
+export const Search = (props) => {
+    const {
+        searchMovies = Function.prototype,
+    } = props;
+
+    const [search, setSearch] = useState('');
+    const [type, setType] = useState('all');
+
+    const handleKey = (event) => {
+        if (event.key === 'Enter') {
+            searchMovies(search, type);
+        }
+    }
+
+    const handleFilter = (event) => {
+        setType(event.target.dataset.type);
+        searchMovies(search, event.target.dataset.type);
+    }
+
+    return (
+        <div className="row">
+            <div className="input-field">
+                <input
+                    className="validate"
+                    placeholder='search'
+                    type="search"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    onKeyDown={handleKey}
+                />
+                <button className="btn search-btn"
+                        onClick={() => searchMovies(search, type)}>SEARCH
+                </button>
+            </div>
+            <div>
+                <label>
+                    <input className="with-gap"
+                           name="type"
+                           type="radio"
+                           data-type="all"
+                           onChange={handleFilter}
+                           checked={type === 'all'}
+                    />
+                    <span>All</span>
+                </label>
+                <label>
+                    <input className="with-gap"
+                           name="type"
+                           type="radio"
+                           data-type="movie"
+                           onChange={handleFilter}
+                           checked={type === 'movie'}
+                    />
+                    <span>Movies</span>
+                </label>
+                <label>
+                    <input className="with-gap"
+                           name="type"
+                           type="radio"
+                           data-type="series"
+                           onChange={handleFilter}
+                           checked={type === 'series'}
+                    />
+                    <span>Series</span>
+                </label>
+            </div>
+        </div>
+    )
+}
+```
+</details>
+
+
+***
+
 
 <details>
 <summary>ПРИКЛАД роботи з CallBack функцією у props</summary>
 
-Якщо передається функція в якості props, щоб до неї звурнутися з якогось компонента, потрібно це робити через CallBack функцію `() => ...` інакшу при завантаженні сторінка функція буде викликатися, і отримаєш не те на що очікуєш:
+Якщо передається функція в якості `props`, щоб до неї звернутися з якогось компонента, потрібно це робити через 
+**CallBack** функцію `() => ...` інакшу при завантаженні сторінка функція буде викликатися, і отримаєш не те на що очікуєш:
 
 ```jsx
 // не вірно:
@@ -1386,7 +1989,9 @@ return <h2>{name} <button onClick={() => props.delete(id)}>delete</button></h2>
 ```
 </details>
 
+
 ***
+
 
 <details>
 <summary>ПРИКЛАД видаляє кнопку по кліку - оновлення стану через дочірні компоненти</summary>
@@ -1451,10 +2056,11 @@ export function Post(props) {
     </h2>
 }
 ```
-
 </details>
 
+
 ***
+
 
 <details>
 <summary>ПРИКЛАД прослуховування 1 input'у користувача</summary>
@@ -1493,7 +2099,9 @@ export class Form extends React.Component {
 ```
 </details>
 
+
 ***
+
 
 <details>
 <summary>ПРИКЛАД прослуховування N input'ів користувача</summary>
@@ -1538,12 +2146,14 @@ export class Form extends React.Component {
 ```
 </details>
 
+
 ***
+
 
 <details>
 <summary>ПРИКЛАД простої валідації по виходу з поля (onBlur)</summary>
 
-Функція `test()` відноситься до інтерфейсу **RegExp** - перевірка `email` по заданній регулярці:
+Функція `test()` відноситьс я до інтерфейсу **RegExp** - перевірка `email` по заданній регулярці:
 ```jsx
 import React from "react";
 
@@ -1598,7 +2208,9 @@ export class Form extends React.Component {
 ```
 </details>
 
+
 ***
+
 
 <details>
 <summary>ПРИКЛАД створення елементів - textarea, select, radio button, checkbox</summary>
@@ -1690,8 +2302,9 @@ export class Form extends React.Component {
 
 ***
 
+
 <details>
-<summary>ПРИКЛАД Автоматичного перемикання фокусу (рефи, посилання, Refs) курсора після умови</summary>
+<summary>ПРИКЛАД автоматичного перемикання фокусу (рефи, посилання, Refs) курсора після умови</summary>
 
 ```jsx
 import React from "react";
@@ -1747,8 +2360,8 @@ export default class FormWithRef extends React.Component {
     }
 }
 ```
-
 </details>
+
 
 ***
 
