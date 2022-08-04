@@ -565,6 +565,19 @@ const findMaxConsecutiveOnes = (nums) => {
   ```js
   new Date().toISOString().replace(/T.*/, "")
   ```
+* Як сховати/відобразити html-елемент:
+  ```js
+  // hide an element
+  document.getElementById("hide_0").style.display = "none";
+  
+  // show a block element
+  document.getElementById("hide_1").style.display = "block";
+  
+  // to go back to the default or CSS specified value
+  document.getElementById("hide_2").style.display = "";
+  ```
+
+
 ***
 
 ## Литература, статьи, видео

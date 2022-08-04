@@ -5,6 +5,11 @@
 
 > Коли ставити дужки у метода `()`, а коли - ні?
 > Метод з дужками каже що при читанні скрипта функція одразу виконається, а без - тільки за якоїсь дії користувача.
+> ```js
+> onclick(doAction());        // виконається одразу
+> onclick(() => doAction());  // виконається по кліку
+> ```
+
 
 > Значення які дорівнюють `false` - `0, '', null, underfined, NaN`.
 > А для `true` - `1`.
@@ -36,17 +41,6 @@
 > console.log(copy.a); // false
 > ```
 
-> Як сховати/відобразити html-елемент:
-> ```js
-> // hide an element
-> document.getElementById("hide_0").style.display = "none";
-> 
-> // show a block element
-> document.getElementById("hide_1").style.display = "block";
-> 
-> // to go back to the default or CSS specified value
-> document.getElementById("hide_2").style.display = "";
-> ```
 
 ## Типи даних JS
 
@@ -204,6 +198,134 @@
 
 
 
+## Теги в **JS**
+* [@use JSDoc - Block Tags](https://jsdoc.app/index.html)
+
+Теги дозволяють фіксувати тип вхідного параметра (`@param`), повертаємого результату `@return` та багато іншого.
+А також дозволяють фіксувати їх імена.
+
+***
+
+### @param
+* [@param - @use JSDoc]([](https://jsdoc.app/tags-param.html))
+
+The `@param` tag provides the <u>**name**</u>, <u>**type**</u>, and <u>**description**</u> of a function parameter.
+```js
+/**
+ * @param {number} start
+ * @param {number} end
+ * @return {boolean}
+ */
+MyCalendar.prototype.book = function(start, end) {
+    for (const nums of map) {
+        if ((start === nums[0]) ||
+            (end === nums[1]) ||
+            (start < nums[0] && end > nums[1]) ||
+            (start > nums[0] && start < nums[1]) ||
+            (end > nums[0] && end < nums[1]))
+        {
+            return false;
+        }
+    }
+    map.push([start, end]);
+    return true;
+};
+```
+***
+
+
+
+## [Promise](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+Об'єкт `Promise` (проміс) використовується для відкладених та асинхронних обчислень.
+
+[Amigoscode](https://youtu.be/dOnAC2Rr-6A?t=11386) > `Promise` - представляє значення, яке може бути доступним в даний момент, або в майбутньому, або ніколи.
+
+`Promise` має 3 стани: перш ніж рез-т готовий, `Promise` перебуває у стані очікування - **Pending**.
+Як тільки рез-т готовий – якщо успішно, то це **Fulfilled**, а якщо з помилкою - **Rejected**.
+
+> Якщо є кілька промісів – порядок виконання не гарантується!
+Для фіксованого порядку використовуй `Promise.all([a,b])`.
+
+
+### Метод then
+У разі успішного обчислення промісу (проміс виконався), щоб отримати від нього якийсь рес-т, потрібно використовувати спеціальний метод через крапку `.then`:
+
+`somePromise.then()` - він (тоді всередині) вказує, що станеться, якщо проміс виконався. У разі помилки справа до цього методу не дійде.
+
+На проміс можна додати метод `then`. Повертає проміс - необхідно обробити, щоб використовувати.
+Метод `then` у проміса називають **Fulfilled handler**.
+```js
+responsePromise.then(response => { 
+    console.log(response) 
+});
+```
+
+***
+
+Приклад послідовного виконання методів з зупинкою якщо метод повертає `false`:
+
+```js
+// функція validateEmail() повертає boolean
+Promise.resolve(validateEmail())
+        // якщо рез-т функції validateEmail() повертає true - ідемо далі
+        .then((res) => res && validateAgreement());
+```
+
+
+***
+
+
+## [async await](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Statements/async_function)
+> __The async is match cleaner than using corotines (co) with generators and promises.__
+```js
+// Пример хорошего использования - раньше так делали
+const getRandomUsers = async n => {
+    try {
+        const fetchRandomUsers = await fetch(`https://randomuser.me/api/?results=${n}`)
+        const data = await fetchRandomUsers.json();
+        data.results.forEach(user => {
+            const {gender, email} = user;
+            log(`${gender} - ${email}`);
+        });
+        return data;
+    } catch (err) {
+        log(err);
+    }
+};
+
+getRandomUsers(5);
+```
+После вызова функция `async` возвращает `Promise`.
+
+Функция `async` может содержать выражение `await`, которое приостанавливает выполнение функции async и ожидает ответа от переданного `Promise`,
+затем возобновляя выполнение функции `async` и возвращая полученное значение.
+
+Ключевое слово `await` допустимо только в асинхронных функциях.
+В другом контексте вы получите ошибку `SyntaxError`.
+
+> Цель функций `async`/`await` упростить использование promises синхронно и воспроизвести некоторое действие над группой `Promises`.
+> Точно так же как `Promises` подобны структурированным колбэкам, `async`/`await` подобна комбинации генераторов и `promises`.
+
+```js
+// пример с промисами
+async function logName(name) {
+    console.log(name);
+    const transformName = new Promise((resolve, reject) => {
+        setTimeout(() => resolve(name.toUpperCase()), 3000);
+    });
+
+    let result = await transformName;
+
+    return result;
+}
+
+logName("antonio").then(res => {
+    console.log("result from async function = " + res);
+});
+```
+
+
+***
 
 
 ## Fetch API
@@ -349,45 +471,6 @@ function addNewOptions() {
 ```
 
 
-
-## [Promise](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Promise) 
-Об'єкт `Promise` (проміс) використовується для відкладених та асинхронних обчислень.
-
-[Amigoscode](https://youtu.be/dOnAC2Rr-6A?t=11386) > `Promise` - представляє значення, яке може бути доступним в даний момент, або в майбутньому, або ніколи.
-
-`Promise` має 3 стани: перш ніж рез-т готовий, `Promise` перебуває у стані очікування - **Pending**.
-Як тільки рез-т готовий – якщо успішно, то це **Fulfilled**, а якщо з помилкою - **Rejected**.
-
-> Якщо є кілька промісів – порядок виконання не гарантується!
-  Для фіксованого порядку використовуй `Promise.all([a,b])`.
-
-
-### Метод then
-У разі успішного обчислення промісу (проміс виконався), щоб отримати від нього якийсь рес-т, потрібно використовувати спеціальний метод через крапку `.then`: 
-
-`somePromise.then()` - він (тоді всередині) вказує, що станеться, якщо проміс виконався. У разі помилки справа до цього методу не дійде.
-
-На проміс можна додати метод `then`. Повертає проміс - необхідно обробити, щоб використовувати.
-Метод `then` у проміса називають **Fulfilled handler**.
-```js
-responsePromise.then(response => { 
-    console.log(response) 
-});
-```
-
-***
-
-Приклад послідовного виконання методів з зупинкою якщо метод повертає `false`:
-
-```js
-// функція validateEmail() повертає boolean
-Promise.resolve(validateEmail())
-        // якщо рез-т функції validateEmail() повертає true - ідемо далі
-        .then((res) => res && validateAgreement());
-```
-
-
-
 ## [Generator](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Generator)
 Генераторы являются функциями с возможностью выхода и последующего входа. 
 Их контекст исполнения (значения переменных) сохраняется при последующих входах.
@@ -472,73 +555,52 @@ getRandomUsers(10).then(randomUsers => {
 
 
 
-## [async await](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Statements/async_function) 
-> __The async is match cleaner than using corotines (co) with generators and promises.__
-```js
-// Пример хорошего использования - раньше так делали
-const getRandomUsers = async n => {
-    try {
-        const fetchRandomUsers = await fetch(`https://randomuser.me/api/?results=${n}`)
-        const data = await fetchRandomUsers.json();
-        data.results.forEach(user => {
-            const {gender, email} = user;
-            log(`${gender} - ${email}`);
-        });
-        return data;
-    } catch (err) {
-        log(err);
-    }
-};
 
-getRandomUsers(5);
-```
-После вызова функция `async` возвращает `Promise`.
-
-Функция `async` может содержать выражение `await`, которое приостанавливает выполнение функции async и ожидает ответа от переданного `Promise`, 
-затем возобновляя выполнение функции `async` и возвращая полученное значение.
-
-Ключевое слово `await` допустимо только в асинхронных функциях. 
-В другом контексте вы получите ошибку `SyntaxError`.
-
-> Цель функций `async`/`await` упростить использование promises синхронно и воспроизвести некоторое действие над группой `Promises`. 
-> Точно так же как `Promises` подобны структурированным колбэкам, `async`/`await` подобна комбинации генераторов и `promises`.
-
-```js
-// пример с промисами
-async function logName(name) {
-    console.log(name);
-    const transformName = new Promise((resolve, reject) => {
-        setTimeout(() => resolve(name.toUpperCase()), 3000);
-    });
-
-    let result = await transformName;
-
-    return result;
-}
-
-logName("antonio").then(res => {
-    console.log("result from async function = " + res);
-});
-```
-
-
-
-## Methods
-
-<hr>
-
-### [Массивы](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array)
+## [Array](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array)
 > Ні розмір JavaScript-масиву, ні типи його елементів не є фіксованими. 
 
-> Перебір по масиву робиться завдяки циклу `for of`, а об'єкту - `for in`.
+> Перебір по масиву робиться завдяки циклу `for of`, а по об'єкту - `for in`.
 
-Поскольку размер массива может увеличиваться и уменьшаться в любое время, то нет гарантии, что массив окажется плотным. 
-Т.е., при работе с массивом может возникнуть ситуация, что элемент массива, к которому вы обратитесь, будет пустым и вернёт `undefined`. 
-В целом, это удобная характеристика, но если эта особенность массива не желательна в вашем специфическом случае, вы можете рассмотреть возможность использования типизированных массивов.
+> Приклад тестів для функції, наприклад LeetCode:
+> ```js
+> let searchInsert = function(nums, target) {
+>     // some code
+> };
+> 
+> const tests = [
+>     [[1,3,5,6], 5],
+>     [[1,3,5,6], 2],
+>     [[1,3,5,6], 7],
+>     [[1,3,5,6], 0],
+>     [[1], 0],
+> ];
+> tests.forEach((params) => console.log(searchInsert(...params)));
+> ```
+
+> Приклад створення дво вимірного масиву:
+> ```js
+> const twoDimensionalArray = new Array(3)
+>     .fill(0)
+>     .map(row => new Array(7)
+>             .fill(0))
+> 
+> console.log(twoDimensionalArray);
+> // [
+> //   [0, 0, 0, 0, 0, 0, 0],
+> //   [0, 0, 0, 0, 0, 0, 0],
+> //   [0, 0, 0, 0, 0, 0, 0]
+> // ]
+> ```
+
+Оскільки розмір масиву може збільшуватися і зменшуватися в будь-який час, немає гарантії, що масив виявиться щільним.
+Тобто, при роботі з масивом може виникнути ситуація, що елемент масиву, до якого ви звернетеся, буде пустим і вернеться `undefined`.
+
+В цілому, це зручна характеристика, але якщо ця особливість масиву не бажана у вашому конкретному випадку, 
+ви можете розглянути можливість використання типізованих масивів.
 
 Array can store values of any type like this:
 ```js
-// простые значения, объекты, функции
+// прості значення, об'єкти, функції
 let arr = [
     "Orange", 
     {
@@ -550,14 +612,14 @@ let arr = [
     }
 ];
 ```
-В примере выше можно обратиться к анонимной функции так: `arr[3]()`.
+У прикладі вище можна звернутися до анонімної функції так: `arr[3]()`.
 
 ***
 
-#### `sort`
-Цей метод сортирує по символьно, оскільки навідь цифри сприймає за строки.
+### [`sort`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/sort)
+Цей метод сортує по символьно, оскільки навіть цифри сприймає за строки.
 
-Для вирішення цієї проблеми треба написати свою функцію (типу Comparator в JAVA):
+Для розв'язання цієї проблеми треба написати свою функцію (типу Comparator в JAVA):
 ```js
 let nums = [12,4,27,11,6];
 
@@ -569,19 +631,23 @@ nums.sort(mySort);
 console.log(nums);  // [ 4, 6, 11, 12, 27 ]
 ```
 
-<hr>
+***
 
-#### `reduce`
-Применяет действие для каждого элемента в массиве - условие и дефолтное значение.
+### [`reduce`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce)
+Застосовує дію для кожного елемента в масиві - умова і дефолтне значення.
+Повертаючи одне результуюче значення.
 ```js
+// пошук макстмального значення в масиві
+// Math.max(++cur, max) або (cur = 0, max) одна з умов
+// а 0 дефолтне значенння
 const findMaxConsecutiveOnes2 = (nums, cur = 0) =>
     nums.reduce((max, num) => num ? Math.max(++cur, max) : (cur = 0, max), 0);
 ```
 
-<hr>
+***
 
-#### `filter`
-Создание массива на основе другого с использованием фильтра:
+### [`filter`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/filter)
+Фільтрує/Перебирає елементи за написаною умовою у функції, на основі елементів що пройшли умову, буде створює новий масив:
 ```js
 let a = [3, -12, 0, 4, 5, -8];
 let c = a.filter(function (a) {
@@ -589,20 +655,26 @@ let c = a.filter(function (a) {
 });
 ```
 
-<hr>
+***
 
-#### `push`
-Добавление элемента в конец массива, возвращает актуальную длину массива.
+### [`push`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/push)
+Додає один або більше елементів у кінець масиву та повертає нову довжину масиву.
 
-<hr>
+***
 
-#### `shift` и `unshift`
-Добавляет элемент в начало массива, и удаляет соответственно.
+### [`shift`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/shift) 
+Метод `shift()` видаляє елемент за нульовим індексом, зсуває значення за послідовними індексами вниз, а потім повертає віддалене значення.
+Якщо властивість `length` масиву дорівнює `0`, повернеться значення `undefined`.
 
-<hr>
+***
 
-#### `pop`
-Возвращает последний элемент массива и удаляет его из массива.
+### [`unshift`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/unshift)
+Метод `unshift()` вставляє передані значення початку масивоподібного об'єкта.
+
+***
+
+### [`pop`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/pop)
+Метод `pop()` видаляє останній елемент з масиву та повертає віддалене значення.
 ```js
 let a = [5, 6, 8];
 console.log(a); // [ 5, 6, 8 ]
@@ -611,12 +683,12 @@ console.log(a); // [ 5, 6 ]
 console.log(b); // 8
 ```
 
-<hr>
+***
 
-#### `every`
-Метод возвращает `true` или `false`, если КАЖДЫЙ элемент соответствует заданному условию. 
-Для отображения рез-а нужно вывести либо на консоль, либо занести в переменную. 
-Метод делает проверки с каждым элементом, если хотя бы в одном `false` - вернет `false`.
+### [`every`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/every)
+Метод повертає `true` або `false`, якщо КОЖНИЙ елемент відповідає заданій умові.
+
+Метод робить перевірки з кожним елементом, якщо хоча б в одному `false` - поверне `false`.
 ```js
 let arr = [3, 4, 5, 9];
 let a = arr.every(function (b) {
@@ -625,11 +697,10 @@ let a = arr.every(function (b) {
 console.log(a); // false
 ```
 
-<hr>
+***
 
-#### `some`
-Метод возвращает `true` или `false`, если хотя бы один элемент массива соответствует заданному условию. 
-Для отображения рез-а нужно вывести либо на консоль, либо занести в переменную.
+### [`some`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/some)
+Метод повертає `true` або `false`, якщо хоча б один елемент масиву відповідає заданій умові.
 ```js
 let arr = [3,4,5,9];
 let a = arr.some(function (b) {
@@ -638,20 +709,20 @@ let a = arr.some(function (b) {
 console.log(a); // true
 ```
 
-<hr>
+***
 
-#### `Array.from`
-Метод [Array.from()](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/from) 
-создаёт новый экземпляр `Array` из массивоподобного или итерируемого объекта.
-
+### [`Array.from`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/from)
+Метод `Array.from()` створює новий екземпляр `Array` з масивоподібного або ітеруємого об'єкта.
 ```js
 console.log(Array.from('foo')); // Array ["f", "o", "o"]
 console.log(Array.from([1, 2, 3], x => x + x)); // Array [2, 4, 6]
 ```
 
-<hr>
+***
 
-#### `map` 
+### [`map`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/map)
+Метод `map()` створює новий масив з результатом виклику зазначеної функції для кожного елемента масиву.
+
 Mapping is an operation which applies a function to every element of a collection and __ALWAYS__ returns a new collection with elements changed by the mentioned function.
 ```js
 const nums = [1, 2, 3, 4];
@@ -659,9 +730,48 @@ const biggerNums = nums.map((n) => n * 2);
 // >> [2, 4, 6, 8];
 ```
 
-<hr>
+***
 
-#### Spread and Rest operators - `...` 
+### [`findIndex`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex)
+Метод `findIndex()` викликає передану функцію callback один раз для кожного елемента, що є в масиві, доти, доки вона не поверне `true`. 
+Якщо такий елемент знайдено, метод `findIndex()` негайно поверне індекс цього елемента. 
+В іншому випадку, метод `findIndex()` поверне `-1`.
+
+***
+
+### [`Array.prototype.flat()`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/flat)
+Метод `flat()` повертає новий масив, у якому всі елементи вкладених підмасивів були рекурсивно "підняті" на 
+вказаний рівень `depth`.
+
+Тобто може з многомірного масива зробити одномірний - шляхом перенесенням усіх елементів в новий масив:
+```js
+let arr = [[1,3,5,7,9], [2,4,6,8,10], [11,13,15,17,19], [12,14,16,18,20], [21,22,23,24,25]];
+console.log(arr);
+// було:
+// [
+//   [ 1, 3, 5, 7, 9 ],
+//   [ 2, 4, 6, 8, 10 ],
+//   [ 11, 13, 15, 17, 19 ],
+//   [ 12, 14, 16, 18, 20 ],
+//   [ 21, 22, 23, 24, 25 ]
+// ]
+
+arr = arr.flat();
+console.log(arr);
+// стало:
+// [
+//   1,  3,  5,  7,  9,  2,  4,  6,
+//   8, 10, 11, 13, 15, 17, 19, 12,
+//   14, 16, 18, 20, 21, 22, 23, 24,
+//   25
+// ]
+
+```
+
+
+***
+
+### Spread and Rest operators - `...` 
 [dev.to](https://dev.to/ibn_abubakre/spread-vs-rest-operator-199d)
 || [stackoverflow](https://stackoverflow.com/questions/33898512/spread-syntax-vs-rest-parameter-in-es2015-es6)
 
@@ -688,7 +798,7 @@ console.log(sum(1,2,3,4))// sum(1, 2, 3, 4) == 10;
 
 ***
 
-#### Деструктуризація масиву
+### Деструктуризація масиву
 * [Деструктурирующее присваивание - learn.javascript.ru](https://learn.javascript.ru/destructuring-assignment)
 
 > **«Деструктуризація»** не означає **«руйнування»**.
@@ -744,21 +854,6 @@ const {
 
 ***
 
-Пример тестов для метода, например LeetCode:
-```js
-let searchInsert = function(nums, target) {
-    // some code
-};
-
-const tests = [
-    [[1,3,5,6], 5],
-    [[1,3,5,6], 2],
-    [[1,3,5,6], 7],
-    [[1,3,5,6], 0],
-    [[1], 0],
-];
-tests.forEach((params) => console.log(searchInsert(...params)));
-```
 
 
 ## [Об'єкти](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)
@@ -1096,7 +1191,7 @@ console.log(human2.profession); // IT
 
 ***
 
-### Спадкування в JS
+### Наслідування в JS
 Таке саме як у Java. 
 Використовується ключове слово`extend`. 
 Звернення до батька також через `super`.
