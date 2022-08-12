@@ -2,6 +2,7 @@
 * [JavaScript Equality Table](https://dorey.github.io/JavaScript-Equality-Table/)
 * [Pure JS Table Filter or Search | How to add Filter In HTML CSS Table](https://morioh.com/p/51dbc30377fc?f=5c21fb01c16e2556b555ab32&fbclid=IwAR0g9F8mHU7gMEGSFde-Sc_hs8y--VSmHxI2PjbOoo0YAyvT2sgaLUAJ3Vc)
 * [JSON generator](https://randomuser.me/api/?results=50)
+* [Простые решения для сложных задач с Intersection Observer API](https://www.youtube.com/watch?v=ZYqBZmU-tA0)
 
 > Коли ставити дужки у метода `()`, а коли - ні?
 > Метод з дужками каже що при читанні скрипта функція одразу виконається, а без - тільки за якоїсь дії користувача.
@@ -616,6 +617,18 @@ let arr = [
 
 ***
 
+### `foreach`
+Зазвичай, функція `foreach` лише перебирає елементи, але якщо використати додаткові аргументи, 
+то можна навіть модифікувати масив (але це погана практика):
+```js
+const numbers = [1,2,3,4,5];
+
+const result = numbers.forEach((num,index, arr) => arr[index] = num ** 2);
+console.log('result', result);  // result undefined
+console.log(numbers);	        // [ 2, 4, 6, 8, 10 ]
+```
+
+***
 ### [`sort`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/sort)
 Цей метод сортує по символьно, оскільки навіть цифри сприймає за строки.
 
@@ -632,17 +645,48 @@ console.log(nums);  // [ 4, 6, 11, 12, 27 ]
 ```
 
 ***
-
 ### [`reduce`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce)
 Застосовує дію для кожного елемента в масиві - умова і дефолтне значення.
-Повертаючи одне результуюче значення.
+Поверне те що ми від нього хочемо.
 ```js
-// пошук макстмального значення в масиві
+// пошук максимального значення в масиві
 // Math.max(++cur, max) або (cur = 0, max) одна з умов
 // а 0 дефолтне значенння
 const findMaxConsecutiveOnes2 = (nums, cur = 0) =>
     nums.reduce((max, num) => num ? Math.max(++cur, max) : (cur = 0, max), 0);
 ```
+
+Функція приймає декілька значень, де перший аргумент це callback функція, котра буде виконуватися для кожного елементу.
+Приклад з підрахунком ціни товарів у кошику:
+```js
+const basket = [
+    {
+        id: 1,
+        name: 'JS Book',
+        price: 900,
+        quantity: 0,
+    },
+    {
+        id: 2,
+        name: 'CSS Book',
+        price: 700,
+        quantity: 2,
+    },
+    {
+        id: 3,
+        name: 'PHP Book',
+        price: 1200,
+        quantity: 3,
+    },
+];
+
+const result = basket.reduce((acc, item) => {
+    if (item.quantity <= 0) return acc;
+    return acc + item.quantity * item.price
+}, 0);
+console.log('result', result);  // result 5000
+```
+
 
 ***
 
@@ -1245,4 +1289,61 @@ class MinStack {
 ***
 
 
+
+## Форматування чисел в JavaScript
+
+### [toLocaleString](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Number/toLocaleString)
+Один з способів форматування даних - використання методу `toLocaleString()`, котрий автоматично приведе число до локального стандарту. 
+Але можна обрати іншу локаль/налаштувати свою - наприклад, передавши першим аргументом `'uk'` чи `'uk-UA'`. А другим - об'єкт з налаштуваннями - [див. усі параметри](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Number/toLocaleString#parameters).
+
+```html
+<div id="app" style="font-size: 40px"></div>
+```
+```jsx
+document.getElementById("app").innerHTML = `
+    <h1>JS NumberFormat</h1>
+    <div>
+        ${sum3.toLocaleString('en-GB', {
+            style: "currency", // вказує стиль
+            currency: "USD", // вказує валюту
+            currencyDisplay: 'code', // відобразить тільки код валюти - USD
+            // currencyDisplay: 'name', // відобразить тільки ім'я валюти - US dollars
+            useGrouping: false, // прибирає сепаратори 
+        })}
+    </div>
+`;
+```
+...якщо не потрібно відображати `0` у цілого числа (160,0 => 160), додай до об'єкта `minimumFractionDigits: 0`.
+
+***
+
+### [Intl.NumberFormat](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat)
+
+Те саме можна виконати передавши той самий об'єкт (з прикладу toLocaleString вище):
+```jsx
+document.getElementById("app").innerHTML = `
+    <h1>JS NumberFormat</h1>
+    <div>
+        ${sum3.toLocaleString('en-GB', {
+            style: "currency", // вказує стиль
+            currency: "USD", // вказує валюту
+            currencyDisplay: 'code', // відобразить тільки код валюти - USD
+            // currencyDisplay: 'name', // відобразить тільки ім'я валюти - US dollars
+            useGrouping: false, // прибирає сепаратори 
+        })}
+        
+        </br>
+        
+        ${new Intl.NumberFormat('en-GB', {
+            style: "currency", // вказує стиль
+            currency: "USD", // вказує валюту
+            currencyDisplay: 'code', // відобразить тільки код валюти - USD
+            // currencyDisplay: 'name', // відобразить тільки ім'я валюти - US dollars
+            useGrouping: false, // прибирає сепаратори 
+        }).format(sum2)}
+    </div>
+`;
+```
+
+***
 

@@ -19,6 +19,7 @@ Node Package Manager (npm) comes when you install [NodeJS](nodejs.org).
 
 * `cat package.json` - читає у консолі файл зі стеком технологій для поточного проекту.
 
+* `npm init -y` - згенерувати `package.json`.
 
 ## Errors
 - When you use frontend with backend, and you get an error in your brother like: 
@@ -34,6 +35,29 @@ To use package you need to import it:
 ```js
 import co from "co";
 ```
+
+***
+
+### create-react-app package
+Встановлює React.
+
+> `create-react-app` пропонує стандартну нормалізацію стилів: 
+> 
+> To start using it, add `@import-normalize;` anywhere in your CSS file(s).
+> * [Adding a CSS Reset](https://create-react-app.dev/docs/adding-css-reset/)
+
+
+***
+
+### [react-icons](https://react-icons.github.io/react-icons/) package
+Велика база іконок.
+
+***
+
+### [react-select](https://react-select.com/home) package
+Звичайний select важко стилізувати, тому тут допоможе цей пакет.
+
+***
 
 
 ## package.json

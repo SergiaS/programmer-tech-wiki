@@ -4,7 +4,7 @@
 >
 > [Створення контенту для редагування](https://developer.mozilla.org/ru/docs/Web/Guide/HTML/Editable_content)
 
-> Для позиціонування елементів використовують Flexbox або Grid Layout, які вбудовані у CSS.
+> Для позиціювання елементів використовують Flexbox або Grid Layout (більш функціональна технологія, ніж інші), які вбудовані у CSS.
 
 > Задати висоту контейнера рівню висоти екрана: `min-height: 100vh`.
 
@@ -13,21 +13,9 @@
 > <meta name="viewport" content="width=device-width,initial-scale=1.0">
 > ```
 
-***
-
-ARTICLES:
-* [Чи знаєте ви селектори?](https://learn.javascript.ru/css-selectors)
-
-TOOLS:
-* [Specificity Calculator](https://specificity.keegan.st/) - показує пріоритети стилів.
-
-EXAMPLES:
-* [Responsive web design in 37 minutes + layout. You don’t need Bootstrap!](https://www.youtube.com/watch?v=XbnAKjjlgc4)
+> Щоб текст не переносився на нову строку коли є пробіли: `white-space: nowrap;`
 
 ***
-
-## Examples
-* [GitHub - CSS Demystified - Проста структура статті](https://github.com/SergiaS/c_svg_css/tree/5181369fc157b2e900f454de02cbde60b4574249)
 
 
 ## Properties - Властивості
@@ -37,9 +25,9 @@ EXAMPLES:
 > При конфлікті, коли властивість перевизначається в двох класах, буде використовуватися порядок класу у файлі css.
 > Порядок у файлі html тут ролі не грає. Але якщо дописати до першого `!important` - запрацює. 
 
-### box-sizing
+### [box-sizing](https://developer.mozilla.org/ru/docs/Web/CSS/box-sizing)
 Якщо контейнер випирає за межі батьківського елемента, тоді ця властивість може допомогти
-дотримуватися саме розмірів батьківського елемента:
+дотримуватися саме розмірів батьківського елемента включно з `padding`:
 ```css
 body {
   box-sizing: border-box;
@@ -208,6 +196,156 @@ tr:nth-of-type(odd) {background: red;}
   * `baseline` - показує аналогічний результат `flex-start`, тільки вирівнюється відносно строки.
     Більш конкретну різницю можна побачити при більшій висоті контейнера.
 
+## Grid system
+* [GRID GARDEN GAME](https://cssgridgarden.com/)
+* [YouTube - CSS Grid верстка](https://www.youtube.com/playlist?list=PLiZoB8JBsdzk7yebGLJSgZiGXty6YDPBD)
+
+> Елемент Grid system примусово отримує `display: block`.
+
+> Можна вкладувати Grid у Grid, або у Flex.
+
+> Задати фракцію по вертикалі можна тільки тоді, коли у grid-контейнера є властивість `height`.
+
+### Відступи Gap
+
+Рівносильні значення:
+```css
+gap: 10px 20px;
+
+column-gap: 20px;
+row-gap: 10px;
+```
+
+### Фракції Fractions
+Рівносильні значення:
+```css
+grid-template-columns: repeat(3, 300px);
+grid-template-columns: 300px 300px 300px;
+```
+
+Для не фіксованих розмірів (резинові) використовуй фракції (працює як співвідношення, якщо фракцій декілька):
+```css
+/* Приклад резинової середньої колонки: */
+grid-template-columns: 300px 1fr 300px;
+```
+```css
+/* Приклад співвідношення фракцій (66% перша, 33% друга): */
+grid-template-columns: 2fr 1fr;
+```
+
+За розміром вміста:
+```css
+grid-template-rows: repeat(4, auto);
+```
+
+### Область
+Для кожної області задається ім'я, де далі вони використовуються у `grid-template-areas`:
+```css
+.container {
+    display: grid;
+    gap: 10px 20px;
+
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-areas:
+            'myHeader     myHeader      myHeader'
+            'myArticle    myArticle     myAside'
+            'myFooter     myFooter      myFooter';
+}
+
+header {
+    grid-area: myHeader;
+    background-color: darkgreen;
+}
+article {
+    grid-area: myArticle;
+    background-color: black;
+}
+aside {
+    grid-area: myAside;
+    background-color: maroon;
+}
+footer {
+    grid-area: myFooter;
+    background-color: darkblue;
+}
+```
+Щоб отримати пусту область, використовують крапку `.` (або декілька `...`) замість імені:
+```css
+grid-template-areas:
+        'myHeader     myHeader      myHeader'
+        'myArticle    ...           myAside'
+        'myFooter     myFooter      myFooter';
+```
+Подібну структуру сітки можна отримати так:
+```css
+grid-template-columns: 1fr  50px 1fr;
+```
+Спрощений запис задають через `grid-template`:
+```css
+grid-template:
+        'myHeader     myHeader      myHeader'	50px
+        'myArticle    ...           myAside'	auto
+        'myFooter     myFooter      myFooter'	50px / 1fr 50px 1fr;
+```
+```css
+grid-template: auto / 1fr 50px 1fr;
+```
+...де вказано, що висота автоматична, і потім йдуть розміри колонок (1 фракція, 50 пікселів, 1 фракція).
+
+### Вирівнювання
+* `justify-item` - вирівнювання по горизонталі:
+  - `stretch` - значення за замовчуванням, розтягує на усю ширину;
+  - `start`, `center`, `end` - встановлює ширину колонки по контенту в залежності від сторони вирівнювання.
+
+* `align-items` - робить все те саме що і `justify-item` тільки з вирівнювання по вертикалі.
+
+* `place-items` - це спрощена форма запису `justify-item` і `align-items`:
+  ```css
+  justify-item: center;
+  align-items: left;
+  
+  /* спрощений запис */
+  place-items: left center;
+  /* якщо значення однакові */
+  place-items: center;
+  ```
+  ...перший записується `align-items` потім `justify-item`.
+
+
+### Методи
+
+#### minmax
+`minmax(100px, 500px)` - в залежності від умов, може бути або 100px, або 500px.
+
+Приклад, в якому блок буде підлаштовуватися під розміри контенту 100px або автоматично.
+```css
+grid-auto-rows: minmax(100px, auto);
+```
+
+### Приклади
+```css
+.container {
+    /* створює 5 колонок по 1 фракції */
+    grid-template-columns: repeat(5, 1fr);
+}
+
+.item:nth-child(3) {
+    /* встановлює порядок */
+    order:-1;
+    /* займай рівно 3 ячейки */
+    grid-column: 1 / span 3;
+}
+```
+```css
+/* займай рівно 3 ячейки - без вирахування */
+grid-column: 1 / span 3;
+/* те саме тільки - з вирахуванням */
+grid-column: 1 / 4;
+```
+
+
+
+***
 
 ## [Sass/SCSS](https://sass-lang.com/guide)
 * [Керівництво по SASS. Як верстати сайти вдвічі швидше?](https://tokar.ua/read/6672)
@@ -429,8 +567,79 @@ Sass (Syntactically Awesome Stylesheets) — це скриптова метам�
 
 
 
+## Examples
+* [GitHub - CSS Demystified - Проста структура статті](https://github.com/SergiaS/c_svg_css/tree/5181369fc157b2e900f454de02cbde60b4574249)
+
+> <details>
+> <summary>ПРИКЛАД створення темізації, використання змінних</summary>
+> 
+> ```css
+> @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;600;800&display=swap');
+> 
+> /*  for all elements */
+> * {
+>     box-sizing: border-box;
+> }
+> 
+> :root {
+>     /* Typography */
+>     --family: 'Nunito Sans', sans-serif;
+>     --fs-sm: 14px;
+>     --fs-md: 16px;
+>     --fw-light: 300;
+>     --fw-normal: 600;
+>     --fw-bold: 800;
+> 
+>     /* Other */
+>     --radii: 0.5rem;
+> }
+> 
+> body {
+>     margin: 0;
+> }
+> 
+> /* Темізація через data-атрибути */
+> body[data-theme='dark'] {
+>     --colors-text: hsl(0, 0%, 100%);
+>     --colors-bg: hsl(207, 26%, 17%);
+>     --colors-ui-base: hsl(209, 23%, 22%);
+>     --shadow: rgba(245, 245, 245, 0.2) 0 0 8px;
+> }
+> body[data-theme='light'] {
+>     --colors-text: hsl(200, 15%, 8%);
+>     --colors-bg: hsl(0, 0%, 98%);
+>     --colors-ui-base: hsl(0, 0%, 100%);
+>     --shadow: rgba(149, 157, 165, 0.2) 0 8px 24px;
+> }
+> 
+> body {
+>     margin: 0;
+>     font-family: var(--family);
+>     color: var(--colors-text);
+>     font-weight: var(--fw-light);
+>     background-color: var(--colors-bg);
+> }
+> ```
+> 
+> </details>
 
 ## Bootstrap
 * [All Bootstrap CSS classes](https://bootstrapshuffle.com/ru/classes)
 * Классы с `p` задают `padding` + есть комбинации: `py` (по оси Y, т.е. вертикаль),
   `pl`, `pr`, `pt`, `pb` (по сторонам: left, right, top, bottom),
+
+
+
+# Additional info
+
+***
+
+ARTICLES:
+* [Чи знаєте ви селектори?](https://learn.javascript.ru/css-selectors)
+
+TOOLS:
+* [Specificity Calculator](https://specificity.keegan.st/) - показує пріоритети стилів.
+
+EXAMPLES:
+* [Responsive web design in 37 minutes + layout. You don’t need Bootstrap!](https://www.youtube.com/watch?v=XbnAKjjlgc4)
+
