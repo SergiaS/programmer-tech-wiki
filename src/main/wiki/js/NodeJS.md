@@ -1,10 +1,25 @@
 # NodeJS
 Node Package Manager (npm) comes when you install [NodeJS](nodejs.org).
 
+> How to update npm on Windows (not LTS)?
+> Open your powershell in administrator mode and run following command:
+> ```commandline
+> npm install -g npm
+> ```
+
+**Node JS** це не мова програмування, а платформа, що побудована на базі движка V8 і мови C++. 
+Кожен браузер має свій движок, котрий виконує код, наприклад у Google Chrome це був движок V8, у FireFox - Spider Monkey, у IE - Chakra... 
+Сам по собі движок розуміє код (синтаксис JS), котрий виконує і переводить у користувацькі дії.
+
+**Node JS** як раз представляє собою движок, що дістали з браузера, котрий можна інтегрувати куди завгодно і тим самим
+ви отримуєте можливість роботи з **JS** за межами браузера.
+
 
 
 ## `npm` commands
 [Do you know all the popular NPM commands?](https://dev.to/knowankit/do-you-know-all-the-popular-npm-commands-22ac?fbclid=IwAR1OpqQJ4G_A4eX1AdfFI1IXGm1PrITBp5IWv2VwrbAZhegiE6cvy2bP-aA)
+
+* `npm init -y` - ініціалізує проєкт NodeJS та генерує `package.json`.
 
 * `i` or `install` - it will install for the dependencies for your project.
 * `-S` is the same as `--save`.
@@ -19,7 +34,8 @@ Node Package Manager (npm) comes when you install [NodeJS](nodejs.org).
 
 * `cat package.json` - читає у консолі файл зі стеком технологій для поточного проекту.
 
-* `npm init -y` - згенерувати `package.json`.
+
+
 
 ## Errors
 - When you use frontend with backend, and you get an error in your brother like: 

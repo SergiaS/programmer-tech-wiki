@@ -7,14 +7,46 @@
 
 ***
 
-#### Подключение scss:
+#### Підключення scss:
 ```js
 require('styles/main.scss');
 ```
 
 ***
 
-#### Подключение переменных/функций с другого файла
+#### Підключення змінних/функцій з іншого файлу тільки на JS
+* [Fix - Cannot use import statement outside module in JS](https://bobbyhadz.com/blog/javascript-syntaxerror-cannot-use-import-statement-outside-module)
+
+При отриманні помилки типу _<u>SyntaxError: Cannot use import statement outside a module</u>_ необхідно
+додати до імпортованих файлів у html `type="module"`.
+
+> To solve the error, set the type attribute to module when loading the script in your HTML code.
+> 
+> Now you are able to use the ES6 modules syntax in your JavaScript code.
+> 
+> All of the JavaScript files, in which you use the ES6 modules syntax, 
+> have to be loaded with the `type` attribute set to `module`.
+
+```html
+<script defer type="module" src="data.js"></script>
+<script defer type="module" src="script.js"></script>
+```
+А ті дані що читаються (ідуть на експорт) повинні містити ключове слово `export`, 
+і ці дані потрібно імпортувати там де вони будуть використовуватися: 
+```js
+// data.js file
+export const dataLangs = {
+    // some data
+}
+```
+```js
+// script.js file
+import {dataLangs} from "data.js";
+```
+
+***
+
+#### Підключення змінних/функцій з іншого файлу з NodeJS
 > Потрібен NodeJS версії v14.13.0 і вище!
 ```js
 import { log, logTitle } from 'logger';
@@ -45,9 +77,6 @@ console.log(divide(2,2));
 console.log(PI);
 ```
 
-***
-
-Звести у квадрат можна за допомогою двух зірочок `**`: `num ** 2`.
 
 ***
 
@@ -368,6 +397,21 @@ const findMaxConsecutiveOnes = (nums) => {
   
 
 ### Snippets
+
+<details>
+<summary>ПРИКЛАД перенесення знайденого елемента на початок</summary>
+
+Ітеруємося по масиву з об'єктами та шукаємо у ключі `code` значення `UA`,
+Якщо знайшли - переносимо на початок:
+```js
+i18n.unshift(
+	i18n.splice(
+		i18n.findIndex(langObj => langObj.code === 'UA'), 1)[0])
+```
+</details>
+
+***
+
 * Код будет возвращать случайное число от 0 до 3 (включая 0 и 3)
     ```js
     Math.floor(Math.random() * 4);
@@ -565,7 +609,7 @@ const findMaxConsecutiveOnes = (nums) => {
     all([4, 2, 3], x => x > 1); // true
     all([1, 2, 3]); // true
     ```
-* Получени текущей даты и образка до времени:
+* Получение текущей даты и образка до времени:
   ```js
   new Date().toISOString().replace(/T.*/, "")
   ```
@@ -580,7 +624,23 @@ const findMaxConsecutiveOnes = (nums) => {
   // to go back to the default or CSS specified value
   document.getElementById("hide_2").style.display = "";
   ```
+* Звести у квадрат можна за допомогою двух зірочок `**`: `num ** 2`.
 
+* Приклади підрахунку літер у слові:
+  ```js
+  // Варіант 1 - через масив за індексом:
+  const arr = new Array(26).fill(0);
+  for (let i = 0; i < ransomNote.length; i++) {
+      arr[ransomNote.charCodeAt(i) - 97]++;
+  }
+  ```
+  ```js
+  // Варіант 2 - через об'єкт за елементом:
+  let magaLetters = {};
+  for (let element of magazine) {
+      magaLetters[element] = magaLetters[element] ? magaLetters[element] + 1 : 1;
+  }
+  ```
 
 ***
 

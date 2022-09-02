@@ -55,9 +55,7 @@ const countStyle = {
 ```
 </details>
 
-
 ***
-
 
 <details>
 <summary>ПРИКЛАД роботи з fetch - componentDidMount, componentDidUpdate, componentWillUnmount</summary>

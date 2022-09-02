@@ -4,16 +4,32 @@
 >
 > [Створення контенту для редагування](https://developer.mozilla.org/ru/docs/Web/Guide/HTML/Editable_content)
 
-> Для позиціювання елементів використовують Flexbox або Grid Layout (більш функціональна технологія, ніж інші), які вбудовані у CSS.
+> Для позиціювання елементів використовують **Flexbox** або **Grid Layout** (більш функціональна технологія, ніж інші), які вбудовані у CSS.
 
-> Задати висоту контейнера рівню висоти екрана: `min-height: 100vh`.
+> Задати висоту контейнера рівню висоти екрана: 
+> ```css
+> min-height: 100vh;
+> ```
 
 > Для того, щоб працювали `@media` queries потрібно підключити до html `viewport`:
 > ```html
 > <meta name="viewport" content="width=device-width,initial-scale=1.0">
 > ```
 
-> Щоб текст не переносився на нову строку коли є пробіли: `white-space: nowrap;`
+> Щоб текст не переносився на нову строку коли є пробіли: 
+> ```css
+> white-space: nowrap;
+> ```
+
+> Щоб текст був великими літерами як нормальний: 
+> ```css
+> font-variant: small-caps;
+> ```
+
+> Щоб блоки `div` самі вирівнювалися по центру: 
+> ```css
+> margin: 0 auto;
+> ```
 
 ***
 
@@ -57,6 +73,14 @@ body {
 
 
 ## Особливості
+
+***
+
+Тег `option`, який вкладається у `select`, стилізувати неможливо (окрім `background-color` і `color`), оскільки рендерінг виконується
+операційною системою користувача, і не є html елементом. Тому, якщо є потреба прибрати межі (`border`, `outline`) -
+цього зробити не вдасться. Можна спробувати написати код списком (`ul`, `li`...) або через `input`.
+
+[Пояснення](https://stackoverflow.com/a/19217244)
 
 ***
 
@@ -195,19 +219,27 @@ tr:nth-of-type(odd) {background: red;}
   * `center` - центруємо елемент вертикально.
   * `baseline` - показує аналогічний результат `flex-start`, тільки вирівнюється відносно строки.
     Більш конкретну різницю можна побачити при більшій висоті контейнера.
-
+  
 ## Grid system
 * [GRID GARDEN GAME](https://cssgridgarden.com/)
 * [YouTube - CSS Grid верстка](https://www.youtube.com/playlist?list=PLiZoB8JBsdzk7yebGLJSgZiGXty6YDPBD)
 
-> Елемент Grid system примусово отримує `display: block`.
+> Елемент **Grid system** примусово отримує `display: block`.
 
-> Можна вкладувати Grid у Grid, або у Flex.
+> Можна вкладати **Grid** у **Grid**, або у **Flex**.
 
-> Задати фракцію по вертикалі можна тільки тоді, коли у grid-контейнера є властивість `height`.
+> Задати фракцію по вертикалі можна тільки тоді, коли у grid-контейнера є властивість `height`, або є текст всередині блока.
+
+> При встановленні розмірів у відсотках, **grid** не зважає на батьківські налаштування `padding`:
+> ```css
+> /* не бачить padding */
+> grid-template-columns: 50% 50%;
+> 
+> /* краще використовувати фракції */
+> grid-template-columns: 1fr 1fr;
+> ```
 
 ### Відступи Gap
-
 Рівносильні значення:
 ```css
 gap: 10px 20px;
@@ -642,4 +674,5 @@ TOOLS:
 
 EXAMPLES:
 * [Responsive web design in 37 minutes + layout. You don’t need Bootstrap!](https://www.youtube.com/watch?v=XbnAKjjlgc4)
+* [Styled "select" options using CSS3 and Flexbox](https://codepen.io/cssinate/pen/KVdYjz?editors=1100)
 

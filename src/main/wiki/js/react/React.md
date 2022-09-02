@@ -1,4 +1,8 @@
 # React
+* [React за лаштунками - VIDEO](https://coursehunter.net/course/tvorcheskiy-kurs-po-react-i-redux?lesson=9)
+* [Розділення логіки та виду - YouTube](https://www.youtube.com/watch?v=KWT8OKzrMZ4)
+    > Коли компонент розростається, тоді використовують або hocs (хокі), або кастомні hooks (хукі).
+    > Хокі є більш застарілим варіантом, його використовують все меньше і меньше. 
 * [Приклади React дивися в курсі на GitHub](https://github.com/SergiaS/c_react)
 * Современный React с Нуля:
   * 03 - Состояние и Работа с Событиями
@@ -90,18 +94,7 @@
 > треба додатково обертати у фігурні дужки: `{ /* <p>{props.name}</p> */ }`
 
 
-> If you need to hide your API key in **React**:
-> 
-> 1. Create a file called `.env` (maybe `.env.local`) in the root of your project's directory.
-> 2. Всередині вашого файлу `.env` використовуй приставку `REACT_APP_` для свого ключа, наприклад `REACT_APP_API_KEY`.
-> 3. Add the `.env` file to your `.gitignore` file.
-> ```js
-> // читаємо ключ з файлу .env
-> const API_KEY = process.env.REACT_APP_PROJECT_SHOWCASE_API_KEY;
-> ```
-
-
-> Щоб React не підсвічував якість нестиковки, їх можна вимкнути прописавши над цією строкою це:
+> Щоб React не підсвічував якість нестикування, їх можна вимкнути прописавши над цією строкою це:
 > ```js
 > // eslint-disable-next-line
 > ```
@@ -113,6 +106,12 @@
 >
 > Тобто, компонент вищого порядку — це функція, яка приймає компонент та повертає новий компонент.
 
+
+> Для роботи з валідацією у формах можно використовувати пакет [react-hook-form](https://react-hook-form.com/) - подробиці у [відео](https://www.youtube.com/watch?v=Jxfun6Jnt5Q).
+
+> Препроцесор **Babel** дозволяє писати на `.jsx` - суміш `.html` з `.js`.
+
+
 ## Створення проекту React
 Найлегший спосіб створення React-проекту, це використання інструменту
 **[create-react-app](https://github.com/facebook/create-react-app)**.
@@ -120,7 +119,19 @@
 Але спочатку необхідно встановити **NodeJS** (з ним набагато легче працювати - буде виконувати команди в терміналі) - він відноситься не тільки до React-фреймворка,
 це середа для виконання JavaScript, яка дозволяє запускати js-код поза браузером.
 
+### Використання змінних середовища - `env.local`
+* [importing env variable react front end](https://stackoverflow.com/a/59509027)
+* [Adding Temporary Environment Variables In Your Shell](https://create-react-app.dev/docs/adding-custom-environment-variables/)
 
+If you need to hide your API key in **React**:
+1. Create a file called `.env` (maybe `.env.local`) in the root of your project's directory.
+2. Всередині вашого файлу `.env` використовуй приставку `REACT_APP_` для свого ключа, наприклад `REACT_APP_API_KEY`.
+3. Add the `.env` file to your `.gitignore` file.
+4. Restart your IDE program.
+```js
+// читаємо ключ з файлу .env
+const API_KEY = process.env.REACT_APP_PROJECT_SHOWCASE_API_KEY;
+```
 
 ## Завантаження проєкту React
 У завантажених проєктах буде відсутня тека `node_modules` яка зберігає всі залежності від проєкту і важить достобіса.
@@ -133,6 +144,7 @@
 
 ## Збірка проекту
 * [ReactJS + github pages – разворачиваем проект deploy на GitHub](https://it-shpora.pp.ua/reactjs-github-pages-разворачиваем-проект-deploy-на-github/)
+* [package gh-pages](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/js/NodeJS.md#package-gh-pages)
 
 > `npm install gh-pages --save-dev` - це залежність для розробки. 
 > Щоб вона не збиралася до підсумкового проєкту, ми додаємо ключ `--save-dev`
@@ -949,24 +961,23 @@ class MyComponent extends React.Component {
 > import styled from "styled-components";
 > 
 > const Button = styled.button`
->   font: inherit;
->   padding: 0.5rem 1.5rem;
->   color: white;
->   background: #00358b;
->   border-radius: 4px;
->   box-shadow: 0 0 4px rgba(50, 50, 50, 0.25);
->   cursor: pointer;
-> 
-> &:focus {
->   outline: none;
-> }
-> 
-> &:hover,
-> &:active {
->   background: #245fbd;
->   box-shadow: 0 0 8px rgba(50, 50, 50, 0.25);
-> }
-> 
+>     font: inherit;
+>     padding: 0.5rem 1.5rem;
+>     color: white;
+>     background: #00358b;
+>     border-radius: 4px;
+>     box-shadow: 0 0 4px rgba(50, 50, 50, 0.25);
+>     cursor: pointer;
+>   
+>   &:focus {
+>     outline: none;
+>   }
+>   
+>   &:hover,
+>   &:active {
+>     background: #245fbd;
+>     box-shadow: 0 0 8px rgba(50, 50, 50, 0.25);
+>   }
 > `;
 > 
 > export default Button;
@@ -1015,29 +1026,29 @@ class MyComponent extends React.Component {
 > import "./TaskInput.css";
 > 
 > const FormControl = styled.div`
->   margin: 0.5rem 0;
-> 
-> & label {
->   font-weight: bold;
->   display: block;
->   margin-bottom: 0.5rem;
->   color: ${props => props.invalid ? "red" : "black"};
-> }
-> 
-> & input {
->   display: block;
->   width: 100%;
->   border: 1px solid ${props => props.invalid ? "red" : "#ccc"};
->   background: ${props => props.invalid ? "rgb(243, 157, 157)" : "transparent"};
->   font: inherit;
->   line-height: 1.5rem;
->   padding: 0 0.25rem;
-> }
-> 
-> &.input:focus {
->   outline: none;
->   background: #c8e1e4;
->   border-color: #00358b;
+>     margin: 0.5rem 0;
+>   
+>   & label {
+>     font-weight: bold;
+>     display: block;
+>     margin-bottom: 0.5rem;
+>     color: ${props => props.invalid ? "red" : "black"};
+>   }
+>   
+>   & input {
+>     display: block;
+>     width: 100%;
+>     border: 1px solid ${props => props.invalid ? "red" : "#ccc"};
+>     background: ${props => props.invalid ? "rgb(243, 157, 157)" : "transparent"};
+>     font: inherit;
+>     line-height: 1.5rem;
+>     padding: 0 0.25rem;
+>   }
+>   
+>   &.input:focus {
+>     outline: none;
+>     background: #c8e1e4;
+>     border-color: #00358b;
 > `;
 > 
 > 
@@ -1118,9 +1129,9 @@ class MyComponent extends React.Component {
 ***
 
 ### Хук `useState` - стан
-* [Як використовувати один стан замість декількох в одному компоненті](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/js/React.md#як-використовувати-один-стан-замість-декількох-в-одному-компоненті)
-* [Коли потрібно слухати натискання кнопки від форми?](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/js/React.md#коли-потрібно-слухати-натискання-кнопки-від-форми)
-* [Як стирати значення в полях після введення даних у формі?](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/js/React.md#як-стирати-значення-в-полях-після-введення-даних-у-формі)
+* [Як використовувати один стан замість декількох в одному компоненті](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/js/react/React.md#як-використовувати-один-стан-замість-декількох-в-одному-компоненті)
+* [Коли потрібно слухати натискання кнопки від форми?](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/js/react/React.md#коли-потрібно-слухати-натискання-кнопки-від-форми)
+* [Як стирати значення в полях після введення даних у формі?](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/js/react/React.md#як-стирати-значення-в-полях-після-введення-даних-у-формі)
 
 > Без використання концепції стану (useState), користувацький інтерфейс ніколи б не змінювався!
 
@@ -1282,7 +1293,7 @@ import React, { useRef } from "react";
 
 ***
 
-### Хук `useEffect`
+### [Хук useEffect](https://uk.reactjs.org/docs/hooks-effect.html)
 **useEffect** - використовується для переоцінки компонентів, тобто відповідає за роботу життєвого циклу компонента. 
 
 `useEffect`, сам по собі повністю асинхроний, тобто той код який буде всередині нього виконуватися - не буде блокувати спільну роботу додатку.
@@ -1580,10 +1591,54 @@ useEffect(function initPlugin() {
 ***
 
 
+## Запобіжники
+* [DOC - Запобіжники](https://uk.reactjs.org/docs/error-boundaries.html)
+* [react-error-boundary](https://www.npmjs.com/package/react-error-boundary)
+
+> Запобіжники працюють як блок `catch {}` в **JavaScript**, тільки для компонентів.
+
+Запобіжники - це можливість оброблювати помилки для клієнта (те що клієнт буде бачити), - є тільки у класових компонентів.
+
+Запобіжники – це React-компоненти, які відстежують помилки **JavaScript** в усьому дереві своїх дочірніх компонентів, логують їх, а також відображають запасний UI замість дерева компонентів, що зламалось.
+
+
+### react-error-boundary package
+* [Look examples at GitHub](https://github.com/SergiaS/t_react/tree/error-boundary)
+Можна написати свої запобіжники, або використовувати вже готові, наприклад встановити пакет `react-error-boundary`, котрий надає компонент вищого порядку `withErrorBoundary`:
+```jsx
+// імпортуємо хок
+import {withErrorBoundary} from "react-error-boundary";
+
+// обертаємо наш App у хок, функція виконається у разі помилки
+export default withErrorBoundary(App, {
+    fallback: <div>Something went wrong</div>
+});
+```
+
+`withErrorBoundary` має три опції, повертає лише одну з них, пріорітет наступний
+- fallback (проста розмітка):
+```jsx
+fallback: <div>Something went wrong</div>
+```
+- fallbackRender (функція, котра поверне якусь розмітку):
+```jsx
+fallbackRender: () => <div>Something went wrong</div>
+```
+- FallbackComponent (готовий написаний компонент з розміткою):
+```jsx
+FallbackComponent={ErrorFallback} // own component
+```
+
+
+
+
 ## Debugging
 > Для браузера можна встановити Google-розширення 
 > [React Developer Tools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=ua).
 > В панелі інструментів розробника з'являться нові вкладки.
 
 
+## [Статична типізація](https://uk.reactjs.org/docs/static-type-checking.html)
+Для статичної типізації (перевірка на тип) рекомендується використовувати або **Flow**, або **TypeScript**. 
+Якщо працюємо лише з **JS**, тоді можна використовувати бібліотеку **PropTypes**.
 

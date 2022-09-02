@@ -1,6 +1,9 @@
 # TypeScript (TS)
 Це типізований JavaScript (JS) - суміш JavaScript з Java + свої особливості.
 
+## Debug
+* [Debugging TypeScript (Node.js) in IntelliJ IDEA](https://dev.to/yutro/debugging-typescript-node-js-in-intellij-idea-3e6d)
+
 
 ## Налаштування tsconfig
 * [What is a tsconfig.json](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html)
@@ -66,7 +69,7 @@
 
 
 ## Встановлення та запуск
-Щоб автоматично TypeScript компілювався у JavaScript код, треба запустити глобальну команду: 
+Щоб автоматично **TypeScript** компілювався у **JavaScript** код, треба запустити глобальну команду: 
 ```commandline 
 npm install -g typescript
 ```
@@ -156,7 +159,7 @@ const myScore: Score = 7;       // присвоюємо значення
 Типізація масивів:
 - списки:
   
-- кортежи (tuple):
+- кортежі (tuple):
 
 #### Списки
 - зазвичай, усі об'єкти мають однаковий тип;
@@ -184,7 +187,7 @@ const tuple1: [string, boolean, number] = ['', true, 0];
 ```
 Добре підходить для роботи з `.csv` файлами:
 ```ts
-// створення масику кортежів:
+// створення масиву кортежів:
 const example1: [string, string, number][] = [
     ['str1', 'str2', 32],
     ['str3', 'str4', 16],
@@ -193,10 +196,38 @@ const example1: [string, string, number][] = [
 // те саме тільки з псевдонімом:
 type SimpleCsv = [string, string, number];
 const example2: SimpleCsv[] = [
-  ['str1', 'str2', 32],
-  ['str3', 'str4', 16],
+    ['str1', 'str2', 32],
+    ['str3', 'str4', 16],
 ];
 ```
+
+> Компілятор потребує **tuples** коли використовується spread оператор
+>
+> Приклади написаних тестів для **LeetCode** зі spread оператором:
+> ```ts
+> // Двовимірний масив
+> const tests383: [string, string][] = [
+>   ["a","b"],
+>   ["aa","ab"],
+>   ["aa","aab"],
+> ];
+> tests383.forEach(test => console.log(canConstruct(...(test))));
+> ```
+> ```ts
+> // Тривимірний масив
+> const tests729: [number,number][][] = [
+>     [[10,20],[15,25],[20,30]],
+>     [[10,20],[20,25],[20,30]],
+>     [[10,20],[5,10],[20,30]],
+>     [[10,20],[9,20],[8,30]],
+>     [[10,20],[10,25],[9,25],[8,30],[7,12],[12,18],[19,21]],
+> ];
+> tests729.forEach(test => {
+>     let myCalendar: MyCalendar = new MyCalendar();
+>     test.forEach(t => console.log(myCalendar.book(...t)));
+>     console.log("========");
+> });
+> ```
 
 
 ### Об'єкти
@@ -586,3 +617,28 @@ function logTodo(id: number, title: string, completed: boolean) {
 ```
 ...тобто `id` обов'язково повинен бути типу `number`, `title` - `string`, а `completed` - `boolean`.
 
+### Приклад написання класу
+```ts
+class MyCalendar {
+    private cal: [number,number][]
+    constructor() 
+    {
+        this.cal  = []
+    }
+
+    book(start: number, end: number): boolean 
+    {
+        for (let i = 0; i <= this.cal.length -1 ; i++)
+        {
+            const booking: number[] = this.cal[i]
+            if ((start >= booking[0] && start < booking[1]) || (end > booking[0] && start < booking[0]))
+            {
+                return false
+            }
+        }
+        
+        this.cal.push([start, end])
+        return true;
+    }
+}
+```
