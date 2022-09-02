@@ -26,7 +26,7 @@
 ### [GitHub Pages](https://guides.github.com/features/pages/)
 Разрешает размещать простые-сайт/веб-страницы, которые будут читать и отрисовывать браузеры.
 
-Сначало нужно включить опцию GitHub Pages - указываем источник расположения страницы, настраиваем тут: **Settings — Pages**.
+Сначала нужно включить опцию **GitHub Pages** - указываем источник расположения страницы, настраиваем тут: **Settings — Pages**.
 После чего GitHub создаст адрес, например:
 ```
 Your site is published at https://sergias.github.io/resume/
