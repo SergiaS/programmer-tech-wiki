@@ -8,7 +8,8 @@ Here I note - how I can create a telegram bot.
 
 > **username** бота завжди повинен закінчуватися на `Bot`, наприклад `@TelegaJavaTestBot`.
 
-> **Note** 
+> **Note**
+> 
 > За натиск по кнопці відповідає метод `hasCallbackQuery`.
 
 ## Створення свого бота
@@ -138,6 +139,7 @@ https://api.telegram.org/bot5294223061:AAEGqg38dtOogYYAYitmUxN48bgHCMtBm_U/sendM
 
 ## WebHook and Long Pooling
 > **Note**
+> 
 > There are two mutually exclusive ways of receiving updates for your bot - 
 > the getUpdates method on one hand and webhooks on the other.
 > Incoming updates are stored on the server until the bot receives them either way, 

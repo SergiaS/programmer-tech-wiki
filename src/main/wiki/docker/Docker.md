@@ -1,6 +1,7 @@
 # Docker
 
 > **Warning** 
+> 
 > Якщо процес **Vmmem** (це віртуалка **WSL**) жре достобіса пам'яті, тоді необхідно зробити наступне:
 > 1. зупинити WSL командою в терміналі `wsl --shutdown`;
 > 2. знайти файл `.wslconfig`, розташування за адресою `%UserProfile%/.wslconfig`;
@@ -19,6 +20,7 @@
 > [Dockerfile reference - Документация с командами](https://docs.docker.com/engine/reference/builder/)
 
 > **Warning**
+> 
 > ERROR: failed to read dockerfile
 > 
 > нужно создать dockerfile со всеми необходимыми командами
