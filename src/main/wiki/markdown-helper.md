@@ -91,3 +91,21 @@ Use next code:
 |:------- |:-------- |
 |Text 1   | Text 2   |
 ```
+
+# Markdown for GitHub
+> **Note**
+> This is a note
+
+> **Warning**
+> This is a warning
+
+
+# Emoji
+[Коди для емоджі](https://gist.github.com/rxaviers/7360908), приклад
+* ℹ️ :information_source:
+* ☑️ :ballot_box_with_check:
+* ⚠️ :warning:
+* ❌    :x:
+* ❗     :exclamation:
+* ✖️ :heavy_multiplication_x:
+

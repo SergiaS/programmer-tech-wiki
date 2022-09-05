@@ -1,29 +1,24 @@
 # Docker
 
-<details>
-<summary>SHOW MENU</summary>
-
-- [Dockerfile](#dockerfile)
-   - [Java example](#java-example)
-      * [Вариант 1 - простой]()
-      * [Вариант 2 - с использованием Maven]()
-      * [Вариант 3 - Multi-stage]()
-   - [Usage](#usage)
-      * [FROM](#from)
-      * [`Dockerfile` example](#from)
-- [Docker commands](#docker-commands)
-   - [Options](#options)
-   - [Detached vs foreground](#detached-vs-foreground)
-- [Articles](#articles)   
-
-</details>
+> **Warning** 
+> Якщо процес **Vmmem** (це віртуалка **WSL**) жре достобіса пам'яті, тоді необхідно зробити наступне:
+> 1. зупинити WSL командою в терміналі `wsl --shutdown`;
+> 2. знайти файл `.wslconfig`, розташування за адресою `%UserProfile%/.wslconfig`;
+> 3. якщо файлу немає - створити, якщо є - просто додати інфу:
+> ```text
+> [wsl2]
+> memory=2GB
+> ```
+> 4. перезапустити Docker.
+> 
+> [SOURCE](https://www.koskila.net/how-to-solve-vmmem-consuming-ungodly-amounts-of-ram-when-running-docker-on-wsl/)
 
 
 ## Dockerfile
 > [Best practices for writing Dockerfiles](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
-
 > [Dockerfile reference - Документация с командами](https://docs.docker.com/engine/reference/builder/)
 
+> **Warning**
 > ERROR: failed to read dockerfile
 > 
 > нужно создать dockerfile со всеми необходимыми командами
@@ -52,6 +47,11 @@ CMD ["java", "-jar", "/boot-flux-mongo.jar"]
 
 2. Выполнить Maven-команду `mvn clean package`, которая пакует проект в `.jar/.war` файл (тип указывается в `pom.xml`). 
 * `mvn clean package` - Converts your .java source code into a .jar/.war file and puts it into the /target folder.
+
+> Перевірити роботу нашого .jar файлу можемо запустити команду в терміналі:
+> ```commandline
+> java -jar target/pastebox-0.0.1-SNAPSHOT.jar
+> ```
 
 3. Создать образ на основе `Dockerfile` и контекста (*"The build’s context is the set of files at a specified location PATH or URL. The PATH is a directory on your local filesystem. The URL is a Git repository location."*).<br>
    Запускаем команду для сбора нашего проекта.
@@ -149,8 +149,8 @@ The build’s context is the set of files at a specified location PATH or URL.
 The PATH is a directory on your local filesystem.
 The URL is a Git repository location.
 
->⚠️**Warning**<br>
->❌ Do not use your root directory, `/`, as the `PATH` as it causes the build to transfer the entire contents of your hard drive to the Docker daemon.
+> **Warning**
+> Do not use your root directory, `/`, as the `PATH` as it causes the build to transfer the entire contents of your hard drive to the Docker daemon.
 
 To increase the build’s performance, exclude files and directories by adding a `.dockerignore` file to the context directory.
 For information about how to create a `.dockerignore` file see [the documentation on this page](https://docs.docker.com/engine/reference/builder/#dockerignore-file).
@@ -159,7 +159,7 @@ Traditionally, the `Dockerfile` is called `Dockerfile` and located in the root o
 You use the `-f` flag with `docker build` to point to a Dockerfile anywhere in your file system.
 
 #### [FROM](https://docs.docker.com/engine/reference/builder/#from)
-The FROM instruction initializes a new build stage and sets the Base Image for subsequent instructions.
+The `FROM` instruction initializes a new build stage and sets the Base Image for subsequent instructions.
 ```dockerfile
 FROM [--platform=<platform>] <image> [AS <name>]
 
