@@ -154,3 +154,123 @@ User getUserById(@Param("userId")int userId);
 свой `fetchType` (то есть если у атрибута, не указанного в EntityGraph, `fetchType` был `EAGER`, то он и останется `EAGER`)
 
 С помощью `@NamedSubgraph` можно также изменить `fetchType` вложенных объектов Entity.
+
+
+## PagingAndSortingRepository
+* [Міні проєкт роботи PagingAndSortingRepository ](https://github.com/SergiaS/t_springboot/tree/spring-data-jpa-pagination)
+* [Baeldung - Pagination and Sorting using Spring Data JPA](https://www.baeldung.com/spring-data-jpa-pagination-sorting)
+
+### Simple example
+1. Create your repository and implement `PagingAndSortingRepository`:
+```java
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.PagingAndSortingRepository;
+
+public interface PersonRepository extends PagingAndSortingRepository<Person, Integer> {
+
+  Page<Person> findAllByLastNameContains(String lastname, Pageable pageable);
+
+}
+```
+2. Create your controller:
+```java
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/api/people")
+public class PeopleController {
+
+  private final PersonRepository repository;
+
+  public PeopleController(PersonRepository repository) {
+    this.repository = repository;
+  }
+
+  // дефолтний метод
+  @GetMapping("/all")
+  public Page<Person> findAll(@RequestParam int page, @RequestParam int size) {
+    PageRequest pr = PageRequest.of(page, size);
+    return repository.findAll(pr);
+  }
+
+  // кастомний метод
+  @GetMapping("/by")
+  public Page<Person> findAllByLastname(
+      @RequestParam String lastname, @RequestParam int page, @RequestParam int size) {
+    Pageable pr = PageRequest.of(page, size, Sort.by("lastName"));
+    return repository.findAllByLastNameContains(lastname, pr);
+  }
+}
+```
+Інтерфейс `Page` повертає окрім результату, ще й додаткову інформацію, завдяки котрій реалізувати пагінацію на фронтенді буде легше:
+
+<details>
+<summary>EXAMPLE</summary>
+
+```json
+{
+  "content": [
+    {
+      "id": 19,
+      "firstName": "Jerilyn",
+      "lastName": "Bashirian",
+      "phoneNumber": "(347) 904-8583",
+      "email": "roman.stroman@gmail.com",
+      "address": {
+        "id": 20,
+        "address": "8536 Howell Meadow",
+        "city": "New Marylou",
+        "state": "Virginia",
+        "zip": "88005-3158"
+      }
+    },
+    {
+      "id": 55,
+      "firstName": "Penelope",
+      "lastName": "Bahringer",
+      "phoneNumber": "(260) 885-8613",
+      "email": "tyler.murazik@gmail.com",
+      "address": {
+        "id": 56,
+        "address": "944 Timothy Keys",
+        "city": "Kraigfort",
+        "state": "New Hampshire",
+        "zip": "71653-2861"
+      }
+    }
+  ],
+  "pageable": {
+    "sort": {
+      "empty": true,
+      "sorted": false,
+      "unsorted": true
+    },
+    "offset": 0,
+    "pageSize": 2,
+    "pageNumber": 0,
+    "unpaged": false,
+    "paged": true
+  },
+  "last": false,
+  "totalElements": 4,
+  "totalPages": 2,
+  "size": 2,
+  "number": 0,
+  "sort": {
+    "empty": true,
+    "sorted": false,
+    "unsorted": true
+  },
+  "first": true,
+  "numberOfElements": 2,
+  "empty": false
+}
+```
+</details>

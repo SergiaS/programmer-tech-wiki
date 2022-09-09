@@ -1,4 +1,5 @@
 # TomCat
+* [How to Start and Stop Apache Tomcat from the Command Line (Windows)](https://www.webucator.com/article/how-to-start-and-stop-apache-tomcat-from-the-comma/)
 
 > Логи сервера можно включить в конфе **IDEA** (`Edit Configurations...` > `Logs`). Найти файлы можно в папке IDEA
 > ```yaml
@@ -15,6 +16,16 @@
 > могут обновляться `css`, `html`, `jsp` без передеплоя. 
 > При изменении `web.xml`, добавлении методов, классов необходим redeploy.
 
+> **Note**<br>
+> Якщо після різних налаштувань при старті **TomCat** падає, можна спробувати зробити Maven `clean`. 
+
+> **Note**<br>
+> Як додати користувача для керування **TomCat** в браузері? При невдалій спробі з'явиться інструкція:
+> У теці `apache-tomcat-9.0.64\conf` відкрити файл `tomcat-users.xml` і додати між тегом `<tomcat-users>` юзера:
+> ```xml
+> <role rolename="manager-gui"/>
+> <user username="tomcat" password="tomcat" roles="manager-gui"/>
+> ```
 
 
 ## Запуск с консоли

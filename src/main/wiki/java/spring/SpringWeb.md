@@ -9,6 +9,7 @@
 * [Java Interview Series: Spring RESTful Web Services](https://medium.com/@.midi/interview-questions-on-spring-restful-web-services-86d0e5e28a14)
 * [Обработка исключений в контроллерах Spring](https://habr.com/ru/post/528116/)
 * [Spring и JDK 8: использование @Param и name/value в Spring MVC аннотациях не обязательно](https://habr.com/ru/post/440214/)
+  > **Note**<br>
   > Аннотации `@PathVariable` и `@RequestParam` все еще часто нужны, чтобы приложение работало корректно.
   > Но их атрибуты **value/name** уже не обязательны: соответствие ищется по именам переменных.
 
@@ -54,7 +55,10 @@
 > }
 > ```
 
-> Существует несколько различных библиотек шаблонов, которые хорошо интегрируются с Spring MVC, из которых вы можете выбрать: Thymeleaf, Velocity, Freemarker, Mustache и даже JSP (хотя это не библиотека шаблонов).
+> Существует несколько различных библиотек шаблонов, которые хорошо интегрируются с Spring MVC, из которых вы можете выбрать: 
+> Thymeleaf, Velocity, Freemarker, Mustache и даже JSP (хотя это не библиотека шаблонов).
+
+> Патерн **Repository** надає більшу абстракцію аніж патерн **DAO**.
 
 **Spring MVC** – это фреймворк для создания web приложений на Java, в основе которого лежит шаблон проектирования MVC.
 
@@ -83,20 +87,22 @@
     <servlet-name>mvc-dispatcher</servlet-name>
     <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
     <init-param>
-        <!--Spring MVC имеет собственный контекст, контексты объединяются в цепочке. 
-        В итоге у нас будет два контекста - первый - контекст web-приложения, в котором находятся контроллеры
-        и который обрабатывает запросы к приложению, второй - основной контекст приложения, в котором происходит 
-        бизнес-логика. Ниже мы указываем путь к конфигурации web-контекста приложения-->
+        <!-- 
+            Spring MVC имеет собственный контекст, контексты объединяются в цепочке. 
+            В итоге у нас будет два контекста - первый - контекст web-приложения, в котором находятся контроллеры
+            и который обрабатывает запросы к приложению, второй - основной контекст приложения, в котором происходит 
+            бизнес-логика. Ниже мы указываем путь к конфигурации web-контекста приложения
+        -->
         <param-name>contextConfigLocation</param-name>
         <param-value>classpath:spring/spring-mvc.xml</param-value>
     </init-param>
     <load-on-startup>1</load-on-startup>
 </servlet>
 
-<!--Все запросы к приложения будут поступать в "/", этот сервлет-->
+<!-- Все запросы к приложения будут поступать в "/" - DispatcherServlet сервлет -->
 <servlet-mapping>
-<servlet-name>mvc-dispatcher</servlet-name>
-<url-pattern>/</url-pattern>
+    <servlet-name>mvc-dispatcher</servlet-name> <!-- посилання на ім'я сервлета, клас DispatcherServlet -->
+    <url-pattern>/</url-pattern> <!-- за цією адресою, буде працювати сервлет DispatcherServlet -->
 </servlet-mapping>
 ```
 
@@ -281,7 +287,19 @@ public class BrowserCORSFilter implements Filter {
 > If an opaque response serves your needs, set the request's mode to 'no-cors' to fetch the resource with CORS disabled.
 
 
-## DispatcherServlet by Java config
+## Налаштування Spring MVC - DispatcherServlet by Java config
+
+> **Note**<br>
+> Якщо в проєкті імплементується інтерфейс `WebApplicationInitializer`, то такий клас буде працювати як `web.xml`! Одна з його реалізацій - абстрактний клас  `AbstractAnnotationConfigDispatcherServletInitializer`.
+> 
+> Sourse: [DOCUMENTATION](https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#mvc-servlet)
+
+> **Note**<br>
+> Інтерфейс `WebMvcConfigurer` використовується для налаштування **Spring MVC** під себе. 
+> Також, наприклад, щоб замість стандартного шаблонізатора використовувати **Thymeleaf** (треба перевизначити метод `configureViewResolvers`).
+
+***
+
 Сначала создаем веб-конфигурацию, где бин `ViewResolver` будет перенаправлять нас на страницы `.jsp`:
 ```java
 @Configuration
@@ -332,6 +350,80 @@ public class SpringWebAppInitializer implements WebApplicationInitializer {
         customDispatcherServlet.setLoadOnStartup(1);
         customDispatcherServlet.addMapping("/");
     }
+}
+```
+
+### Налаштування для Thymeleaf
+**Warning**<br>
+Для того, щоб **TomCat** робив редеплой при змінах в проєкті на html/jsp сторінках, треба для налаштувань **view** 
+додати `templateResolver.setCacheable(false)` (приклад нижче), а також в конфігурації сервера TomCat у поля **On frame deactivation** 
+виставити **Update resources**. Зміни треба зберігати `CTRL + S`.
+
+
+Щоб змінити стандартний шаблонізатор, треба в своєму конфігу налаштувати пару спрінг-бінів, 
+та задати налаштування в перевизначеному методі `configureViewResolvers`:
+```java
+// файл SpringConfigfile.java
+@Configuration
+@ComponentScan("kru.sk.springdemo")
+@EnableWebMvc
+public class SpringConfig implements WebMvcConfigurer {
+
+  private final ApplicationContext applicationContext;
+
+  @Autowired
+  public SpringConfig(ApplicationContext applicationContext) {
+    this.applicationContext = applicationContext;
+  }
+
+  // налаштування відображень (view)
+  @Bean
+  public SpringResourceTemplateResolver templateResolver() {
+    SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
+    templateResolver.setApplicationContext(applicationContext);
+    templateResolver.setPrefix("/WEB-INF/views/");
+    templateResolver.setSuffix(".html");
+    templateResolver.setCacheable(false);
+    return templateResolver;
+  }
+
+  // також налаштування відображень (view)
+  @Bean
+  public SpringTemplateEngine templateEngine() {
+    SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+    templateEngine.setTemplateResolver(templateResolver());
+    templateEngine.setEnableSpringELCompiler(true);
+    return templateEngine;
+  }
+
+  // вказуємо шаблонізатор Thymeleaf
+  @Override
+  public void configureViewResolvers(ViewResolverRegistry registry) {
+    ThymeleafViewResolver resolver = new ThymeleafViewResolver();
+    resolver.setTemplateEngine(templateEngine());
+    registry.viewResolver(resolver);
+  }
+}
+```
+```java
+// файл MySpringMvcDispatcherServletInitializer.java
+public class MySpringMvcDispatcherServletInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+  @Override
+  protected Class<?>[] getRootConfigClasses() {
+    return null;
+  }
+
+  // вказуємо конфіг клас Spring
+  @Override
+  protected Class<?>[] getServletConfigClasses() {
+    return new Class[]{SpringConfig.class};
+  }
+
+  // перехоплювати запити
+  @Override
+  protected String[] getServletMappings() {
+    return new String[] {"/"};
+  }
 }
 ```
 
@@ -487,8 +579,12 @@ public String exchange(@RequestParam String id) {
     // some code
 }
 ```
-
 `@RequestParam` можно указывать и без имени - `@RequestParam("id")`. В таком случае будет взято имя параметра метода.
+
+Але даний приклад потребує обов'язкового ключа та значення при запиті!
+
+І якщо не обов'язково передавати параметри в запиті, можна зробити так - `@RequestParam(required = false)`.
+
 
 
 ### @PathVariable

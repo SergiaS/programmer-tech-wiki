@@ -1,10 +1,68 @@
 # SpringSecurity
+* [DOC - Spring Security](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#web.security) || [DOC - Architecture](https://docs.spring.io/spring-security/reference/servlet/architecture.html)
+
 * [TopJava - Форма логина / логаут.](https://github.com/JavaWebinar/topjava/blob/doc/doc/lesson09.md#-7--форма-логина--логаут)
 
 * `{noop}` - means _[NoOpPasswordEncoder](https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/crypto/password/NoOpPasswordEncoder.html)_.
 * **Креденшилы в Spring Security**: Пользователь по умолчанию `user`, а пароль - предоставляется при загрузке сервера в консоли IDEA (Using generated security password: faaa6e1b-4f13-44c3-a9cb-4f14392f569f).
 
 * Модуль [Spring Security Taglib](https://docs.spring.io/spring-security/reference/servlet/integrations/jsp-taglibs.html) содержит набор тегов для jsp-страниц (зависимость `spring-security-taglibs`). [Из TopJava](https://github.com/JavaWebinar/topjava/blob/doc/doc/lesson10.md#-4-spring-security-taglib-method-security-expressions)
+
+> **Warning**<br>
+> `WebSecurityConfigurerAdapter` is deprecated from 2.7.x version.
+> Use a `SecurityFilterChain` bean to configure **HttpSecurity** or a `WebSecurityCustomizer` bean to configure `WebSecurity`.
+>
+> [ARTICLE](https://spring.io/blog/2022/02/21/spring-security-without-the-websecurityconfigureradapter)
+> 
+> <details>
+> <summary>CODE EXAMPLE</summary>
+> 
+> ```java
+> // конфігурація з WebSecurityConfigurerAdapter
+> @EnableWebSecurity
+> public class SecurityConfig extends WebSecurityConfigurerAdapter {
+>   @Override
+>   protected void configure(HttpSecurity http) throws Exception {
+>     http
+>         .csrf().disable()
+>         .authorizeRequests()
+>         .antMatchers("/").permitAll()
+>         .antMatchers("/user").hasRole("USER")
+>         .antMatchers("/admin").hasRole("ADMIN")
+>         .anyRequest().authenticated()
+>         .and()
+>         .httpBasic();
+>   }
+> }
+> ```
+> Той самий код тільки в іншій обгортці:
+> ```java
+> // конфігурація без WebSecurityConfigurerAdapter
+> @EnableWebSecurity
+> public class SecurityConfig {
+>   public SecurityFilterChain configure(HttpSecurity http) throws Exception {
+>     return http
+>         .csrf().disable()
+>         .authorizeRequests()
+>         .antMatchers("/").permitAll()
+>         .antMatchers("/user").hasRole("USER")
+>         .antMatchers("/admin").hasRole("ADMIN")
+>         .anyRequest().authenticated()
+>         .and()
+>         .httpBasic();
+>   }
+> }
+> ```
+> </details>
+
+> **Note**
+>
+> **Автентифікація** (Authentication - Who is this user?) – це підтвердження того, ким є користувач <u>на вході</u>. 
+> Це проходження перевірки автентичності.
+> 
+> **Авторизація** (Authorization - Are they allowed to do this?) – це те, що користувачу дозволяється робити <u>після входу</u>. 
+> Це надання і перевірка прав на вчинення будь-яких дій в системі.
+
 
 ## Annotations
 

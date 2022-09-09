@@ -70,3 +70,9 @@ del options\other.xml
 HKEY_CURRENT_USER\Software\JavaSoft\Prefs\jetbrains\idea
 ```
 
+## Change Theme
+There 2 places where you can change colors of program UI.
+Go to IDEA settings:
+1. Change all UI: `Appearance & Behavior` > `Appearance`
+Обери іншу тему **Theme**.
+2. Change only for file type `Editor` > `Color Schema`.
