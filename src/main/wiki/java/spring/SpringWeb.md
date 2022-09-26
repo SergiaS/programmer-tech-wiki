@@ -10,7 +10,7 @@
 * [Обработка исключений в контроллерах Spring](https://habr.com/ru/post/528116/)
 * [Spring и JDK 8: использование @Param и name/value в Spring MVC аннотациях не обязательно](https://habr.com/ru/post/440214/)
   > **Note**<br>
-  > Аннотации `@PathVariable` и `@RequestParam` все еще часто нужны, чтобы приложение работало корректно.
+  > Анотації `@PathVariable` и `@RequestParam` все еще часто нужны, чтобы приложение работало корректно.
   > Но их атрибуты **value/name** уже не обязательны: соответствие ищется по именам переменных.
 
 ***
@@ -22,7 +22,7 @@
 >
 > [Как генерировать HTML представление (view) с помощью Spring Web MVC](https://habr.com/ru/post/490586/#:~:text=Как%20генерировать%20HTML%20представление%20(view)%20с%20помощью%20Spring%20Web%20MVC)
 
-> `Spring Data Binding` - функциональность Spring преобразовывать данные в параметрах или теле запроса в экземпляры класса.
+> `Spring Data Binding` - функціональність Spring преобразовывать данные в параметрах или теле запроса в экземпляры класса.
 > Формат данных может быть как application/x-www-form-urlencoded (из html формы), так и JSON.
 > Spring автоматически извлечет из запроса нужные данные и, используя отражение, сделает из них объект.
 > Для этого объект должен иметь конструктор без параметров и сеттеры.
@@ -58,7 +58,9 @@
 > Существует несколько различных библиотек шаблонов, которые хорошо интегрируются с Spring MVC, из которых вы можете выбрать: 
 > Thymeleaf, Velocity, Freemarker, Mustache и даже JSP (хотя это не библиотека шаблонов).
 
-> Патерн **Repository** надає більшу абстракцію аніж патерн **DAO**.
+> У разі простої валідації використовують анотацію `@Valid` у методів контролера і анотації над полям моделі - `@NotEmpty`, `@Min`, `@Email`...
+>
+> У разу складної валідації, наприклад - звернення до БД з пошуком подібного email - тут потрібно використовувати інтерфейс **Spring** `Validator`.
 
 **Spring MVC** – это фреймворк для создания web приложений на Java, в основе которого лежит шаблон проектирования MVC.
 
@@ -67,6 +69,7 @@
   отображении _View_ использует данные из _Model_.
 * **<u>Front Controller</u>** также известен под именем `DispatcherServlet`. Он является частью __Spring__. Остальные
   компоненты - _Model_ и _View_ - нужно создать самому.
+
 
 ## Конфигурирование на примере TopJava
 Работа Spring MVC основана на паттерне Front Controller (Единая точка входа). Все запросы поступают в единый собственный
@@ -354,6 +357,12 @@ public class SpringWebAppInitializer implements WebApplicationInitializer {
 ```
 
 ### Налаштування для Thymeleaf
+> **Note**<br>
+> Щоб **IntelliJ IDEA** читала **Thymeleaf**, треба додати **namespace** у файл, наприклад для `.html`:
+> ```html
+> <html lang="en" xmlns:th="http://www.thymeleaf.org">
+> ```
+
 **Warning**<br>
 Для того, щоб **TomCat** робив редеплой при змінах в проєкті на html/jsp сторінках, треба для налаштувань **view** 
 додати `templateResolver.setCacheable(false)` (приклад нижче), а також в конфігурації сервера TomCat у поля **On frame deactivation** 
@@ -503,7 +512,10 @@ public class RestFulController {
 ### @ModelAttribute()
 В зависимости от места использования (над методом или перед аргументом метода) данная аннотация выполняет разные функции:
 
+<br>
+
 #### Над методом
+> Це використовується, коли необхідно мати в моделі всіх методів контролера якусь пару ключ:значенням.
 ```java
 @ModelAttribute("headerMessage")
 public String populateHeaderMessage() {
@@ -513,6 +525,7 @@ public String populateHeaderMessage() {
 Означает, что в каждой модели текущего контроллера будет добавлена пара ключ/значение - headerMessage/Welcome to our
 website.
 
+<br>
 
 #### Перед аргументом метода
 Аннотация `@ModelAttribute` поставленная перед аргументом метода, заполняет объект указанной модели в аргументе.
@@ -523,9 +536,8 @@ website.
 * Добавление созданного объекта в модель
 
 Равнозначный результат:
-
-Пример без использования `@ModelAttribute`:
 ```java
+// приклад без використання `@ModelAttribute`:
 @PostMapping()
 public String create(@RequestParam("name") String name,
                      @RequestParam("surname") String surname,
@@ -542,18 +554,20 @@ public String create(@RequestParam("name") String name,
     return"successPage";
 }
 ```
-
-Пример с использованием `@ModelAttribute`:
 ```java
+// приклад з використанням @ModelAttribute:
 @PostMapping
 public String create(@ModelAttribute("person") Person person) {
     // save person to DB
     return"successPage";
 }
 ```
+***
 
 Еще пример. По сколько в `model` не ложем никакого дополнительного аттрибута, тогда здесь можно
-использовать `@ModelAttribute` у аргумента. Равнозначные методы:
+использовать `@ModelAttribute` у аргумента. 
+
+Равнозначный результат:
 ```java
 @GetMapping("/new")
 public String newPerson(Model model) {
@@ -875,7 +889,7 @@ HTML понимает только два типа запрос - `GET` и `POST
 С помощью __Spring__ можно обойти эти ограничения и использовать другие типы запросов.
 
 `PATCH`, `DELETE`, `PUT` запросы передаются с помощью `POST` запроса, но в скрытом поле `_method` указывается желаемый HTTP метод.
-__Spring__ прочитает значение скрытого поля _method, увидит у него значение, например, `PATCH`, и не смотря на то, что
+__Spring__ прочитает значение скрытого поля `_method`, увидит у него значение, например, `PATCH`, и не смотря на то, что
 форма посылается с помощью `POST` запроса, __Spring__ будет считать, что форма посылается с помощью `PATCH` запроса.
 ```html
 <form th:method="post" action="/person/1">
@@ -888,8 +902,25 @@ __Spring__ прочитает значение скрытого поля _method
 ```
 В случае использования `Thymeleaf`, дописывать строку `_method` не нужно, `Thymeleaf` это сделает автоматически.
 
-На стороне __Spring__ приложения, чтения поля `_method` реализуется с помощью фильтра - объект, который перехватывает
-все входящие HTTP-запросы.
+На стороні __Spring__ додаток читає поле `_method` за допомогою фильтру (необхідно створити) - об'ект, которий перехоплює всі вхідні HTTP-запити.
+
+
+
+```java
+// фільтр вже існує, ми просто його підключаємо
+@Override
+public void onStartup(ServletContext servletContext) throws ServletException {
+    super.onStartup(servletContext);
+    registeredHiddenFilter(servletContext);
+}
+
+private void registeredHiddenFilter(ServletContext servletContext) {
+    servletContext.addFilter("hiddenHttpMethodFilter",
+        new HiddenHttpMethodFilter()).addMappingForUrlPatterns(null, true, "/*");
+}
+```
+
+
 
 
 ## Ошибки

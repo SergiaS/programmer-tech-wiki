@@ -2,6 +2,7 @@
 
 > Системный проперти: `-D`, например `-Dconsole.encoding=UTF-8 -Dfile.encoding=UTF-8`
 
+> При збірці **classpath** знаходиться `target/classes`.
 
 
 ## Combinations
@@ -76,3 +77,12 @@ Go to IDEA settings:
 1. Change all UI: `Appearance & Behavior` > `Appearance`
 Обери іншу тему **Theme**.
 2. Change only for file type `Editor` > `Color Schema`.
+
+## Settings
+* [Configuring JavaScript debugger](https://www.jetbrains.com/help/idea/configuring-javascript-debugger.html)
+* [Debugging TypeScript (Node.js) in IntelliJ IDEA](https://dev.to/yutro/debugging-typescript-node-js-in-intellij-idea-3e6d)
+
+> **Note**<br>
+> **Hibernate** щоб писати запити в консолі на HQL/JPA - треба встановити плагін `JpaBuddy` і виставити чекбокс для вікна `Persistence`
+> (**View** > **Tool Windows** > **Persistence**) - з'явиться вкладка/вікно на лівій частині екрана.
+> Далі в цьому вікні на **entityManagerFactory** буде доступне контекстне меню **Console**.

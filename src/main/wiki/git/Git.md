@@ -1,7 +1,7 @@
 # Git
 * [Documentation](https://git-scm.com/doc)
 * [BinaryStudio - Learning git (Level 3)](https://binary-studio-academy.github.io/stage-2/lectures/how-developers-work/)
-* [Интерактивная обучалка](https://learngitbranching.js.org/)
+* [Інтерактивне навчання](https://learngitbranching.js.org/)
     Here you can pass up to rampup4 level - **Just these concepts are enough to leverage 90%**.
 * [GitHowTo - інтерактивний тур](https://githowto.com/uk)
 
@@ -14,13 +14,21 @@
 * [What is GitHub](https://guides.github.com/activities/hello-world/)
 * [Mastering Markdown](https://guides.github.com/features/mastering-markdown/)
 
+> **Warning**<br>
+> ssh для **GitHub**:
+> 
+> При помилці **Clone failed: Unable to create destination directory** необхідно додати SSH ключ до акаунту GitHub, а саме `Settings` > `SSH and GPG keys` і додати згенерований ключ.
+> 
+> Згенерувати ключ можна так: в GitBash пишемо команду ssh-keygen на всі питання тиснемо Enter і зберігаємо файл.
+> В середені файлу `id_rsa.pub` буде ключ SSH.
+
 > To manage access and invite a collaborator go to **Settings — Manage access**.
 
 > To set default branch Go to **Settings — Branches**.
 
 > Різниця між `issue` і `task` - в тому, що **issue** це робота з кодом.
 
-> Для автозакриття **issue** використовуй спец-слово `closes #` і номер **issue**.  
+> Для авто закриття **issue** використовуй спец-слово `closes #` і номер **issue**.  
 
 
 ### [GitHub Pages](https://guides.github.com/features/pages/)

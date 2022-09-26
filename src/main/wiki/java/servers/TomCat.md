@@ -1,7 +1,8 @@
 # TomCat
 * [How to Start and Stop Apache Tomcat from the Command Line (Windows)](https://www.webucator.com/article/how-to-start-and-stop-apache-tomcat-from-the-comma/)
 
-> Логи сервера можно включить в конфе **IDEA** (`Edit Configurations...` > `Logs`). Найти файлы можно в папке IDEA
+> Логи сервера можно включить в конфе **IDEA** (`Edit Configurations...` > `Logs`). 
+> Найти файлы можно в папке **IDEA**:
 > ```yaml
 > C:\Users\SK88\AppData\Local\JetBrains\IntelliJIdea2021.2\tomcat\
 > ```

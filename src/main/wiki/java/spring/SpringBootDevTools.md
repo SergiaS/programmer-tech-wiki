@@ -39,7 +39,7 @@ First you need to add a dependency to your Maven:
 > After that when you change something in app and save new changes (Ctrl+s) the application has to make restart automatically.
 
 > Чтобы Spring DevTools подхватывал изменения нужно предварительно сохраняться `Ctrl+S`.
-
+>
 > Также может понадобиться установить настройки конфигурации запуска файла в IntelliJ IDEA.
 > Для этого заходим в `Edit configuration` выбираем настройки для `On Update action > Update trigger file`, и для `On frame deactivation > Update classes and resources`. 
 

@@ -4,6 +4,13 @@
 
 ***
 
+Підвантажуємо зв'язані ліниві сутності:
+```java
+Hibernate.initialize(person.getItems());
+```
+
+***
+
 __import javax.persistence__
 
 Hibernate – самая популярная реализация спецификации JPA. Таким образом JPA описывает правила, а Hibernate реализует их.
@@ -29,6 +36,31 @@ Hibernate – это framework, который используется для �
 > Переопределять `equals()/hashCode()` необходимо, если:
 > * использовать entity в `Set` (рекомендовано для Many-ассоциаций) либо как ключи в `HashMap`.
 > * использовать reattachment of detached instances (т.е. манипулировать одним Entity в нескольких транзакциях/сессиях).
+
+> **Note**<br> 
+> Клас конфігурації **Hibernate** `Configuration` автоматично підхопить файл `hibernate.properties`, котрий повинен бути в теці `resources`
+
+***
+
+### Коли використовувати метод `load`
+Метод `load` не робить запит до БД. Він поверне пустий об'єкт - де всі поля будуть `null`, окрім `id`.
+
+Метод користний, коли необхідно зв'язати об'єкт:
+```java
+// створюємо новий товар - йому треба назначити власника
+Item item = new Item("Some new item");
+
+// Нам потрібен цей об'єкт тільки для налаштування зв'язку з новим item
+// Значення полів цього Person не потрібні - тому робити зайвий запит до БД не будемо
+Person personProxy = session.load(Person.class, id);
+
+// До колонки FOREIGN_KEY об'єкта item буде покладено id цієї person 
+// Перевірка що Person з таким id існує буде на стороні БД
+item.setOwner(personProxy);
+
+session.save(item);
+```
+
 
 
 ## Конфигурационный файл `hibernate.cfg.xml`
@@ -359,8 +391,8 @@ Hibernate тоже позволяет указывать `CascadeType` для у
 Связанные сущности загрузятся только при первом обращении к ним. Множество (__MANY__) не подгружается по умолчанию - `LAZY`.
 
 В большинстве случаев при большом количестве связанных сущностей целесообразнее использовать __Lazy loading__ по следующим причинам:
-• __Lazy загрузка__ имеет лучший performance по сравнению с __Eager загрузкой__.
-• Иногда при загрузке основной сущности, нам просто не нужны связанные с ней сущности. Поэтому их загрузка – это лишняя работа.
+* __Lazy загрузка__ имеет лучший performance по сравнению с __Eager загрузкой__.
+* Иногда при загрузке основной сущности, нам просто не нужны связанные с ней сущности. Поэтому их загрузка – это лишняя работа.
 
 
 Дефолтный вариант загрузки зависит от типа связи. Типы выборки по умолчанию:
@@ -685,6 +717,12 @@ for (Student o : students) {
 ### HQL
 > Создавать HQL запросы нужно через объект `Query`.
 
+> `%` - будь-яка кількість будь-яких символів:
+> ```java
+> // HQL: дістаємо всіх person у котрих name починається з `C`:
+> List<Person> people = session.createQuery("FROM Person WHERE name LIKE 'C%'").getResultList();
+> ```
+
 Пример использования алиасов - особенно нужно, если юзаешь пару таблиц:
 ```java
 Query q = session.createQuery("select id, name, mark from Student s where s.mark > 50");
@@ -692,6 +730,30 @@ List<Object[]> students = (List<Object[]>) q.list();
 for (Object[] o : students) {
     System.out.println(o[0] + " : " + o[1] + " : " + o[2]);
 }
+```
+```java
+// HQL: дістаємо всіх person з age більшим за 30:
+List<Person> people = session.createQuery("FROM Person WHERE age > 30").getResultList();
+```
+```java
+// HQL: дістаємо всіх person у котрих name починається з `C`:
+List<Person> people = session.createQuery("FROM Person WHERE name LIKE 'C%'").getResultList();
+```
+```java
+// HQL: оновлюємо всіх person у котрих age меньший за 30:
+session.createQuery("update Person set name='Test' where age < 30").executeUpdate();
+```
+```hql
+-- дістати людину по id книги
+SELECT DISTINCT p FROM Book b INNER JOIN Person p ON b.owner.id = p.id WHERE b.id=3
+```
+```hql
+-- отримати всі книжки з власником, у котрих є власник
+SELECT DISTINCT b FROM Book b INNER JOIN Person p ON b.owner.id IS NOT NULL
+```
+```hql
+-- отримати всі книжки з власником, назви книжок яких починаються на: 
+SELECT DISTINCT b FROM Book b INNER JOIN Person p ON b.title LIKE :searchRequest%
 ```
 
 ### Criteria
@@ -722,6 +784,36 @@ em.createNativeQuery("DELETE FROM payouts WHERE product_id=:productId")
         .executeUpdate();
 ```
 
+### Вирішення проблеми N+1 в Hibernate
+Необхідно написати грамотний `JOIN` - в результаті буде зроблений лише один запит, зотрий завантажить усі додаткові сутності.
+```java
+// SQL: A LEFT JOIN B
+List<Person> people = session.createQuery("SELECT p FROM Person p LEFT JOIN FETCH p.items")
+    .getResultList();
+```
+```java
+// отримаємо подібний результат:
+for (Person person : people) {
+    System.out.println("Person " + person.getName() + " has: " + person.getItems());
+}
+
+Person Tom has: [Item{id=1, itemName='Book}, Item{id=2, itemName='AirPods}]
+Person Tom has: [Item{id=1, itemName='Book}, Item{id=2, itemName='AirPods}]
+Person Bob has: [Item{id=3, itemName='iPhone}]
+Person Bob has: [Item{id=4, itemName='Kindle}, Item{id=5, itemName='TV}, Item{id=6, itemName='Playstation}]
+Person Bob has: [Item{id=4, itemName='Kindle}, Item{id=5, itemName='TV}, Item{id=6, itemName='Playstation}]
+Person Bob has: [Item{id=4, itemName='Kindle}, Item{id=5, itemName='TV}, Item{id=6, itemName='Playstation}]
+```
+... але, наступна проблема в тому, що дані дублюються. Тут краще зберігати дані у `Set`:
+```java
+Set<Person> people = new HashSet<Person>(session.createQuery("SELECT p FROM Person p LEFT JOIN FETCH p.items")
+    .getResultList());
+
+Person Bob has: [Item{id=3, itemName='iPhone}]
+Person Tom has: [Item{id=1, itemName='Book}, Item{id=2, itemName='AirPods}]
+Person Bob has: [Item{id=4, itemName='Kindle}, Item{id=5, itemName='TV}, Item{id=6, itemName='Playstation}]
+```
+... і не забуваймо що треба перевизначити методи `equals` та `hashCode` щоб вірно отримувати унікальних Person.
 
 
 ## Connection pool
@@ -782,8 +874,11 @@ Table doesn't exist__
 
 ## Examples
 
-### Пример запуска приложения
+
+### Приклад запуску програми
+
 ```java
+// скорочена версія:
 SessionFactory factory = new Configuration().configure()
         .addAnnotatedClass(Alien.class)
         .buildSessionFactory();          // загружает настройки
@@ -794,6 +889,200 @@ session.getTransaction().commit();       // закрывает транзакц�
 session.close();                         // высвобождаем ресурсы
 factory.close();
 ```
+```java
+// розширена версія:
+import kru.sk.hibernatedemo.model.Person;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+
+import java.util.List;
+
+public class App {
+  public static void main(String[] args) {
+    Configuration configuration = new Configuration().addAnnotatedClass(Person.class);
+
+    // отримуємо SessionFactory - щоб отримати сесію
+    SessionFactory sessionFactory = configuration.buildSessionFactory();
+
+    // отримуємо Session - щоб працювати з Hibernate
+    Session session = sessionFactory.getCurrentSession();
+
+    try {
+      // перед роботою відкриваємо транзакцію
+      session.beginTransaction();
+
+      // тут працюємо з Hibernate - save, update, delete... з entity
+
+      // після роботи закриваємо транзакцію
+      session.getTransaction().commit();
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+    } finally {
+      // закриваємо фабрику
+      sessionFactory.close();
+    }
+  }
+}
+```
+
+***
+
+## Приклад роботи з entity без CASCADE
+> **Note**<br>
+> Не забуваємо про кеш сутності!
+
+
+```java
+// отримуємо всі item конкретної person - Hibernate сам створить запит до БД
+Person person = session.get(Person.class, 3);
+List<Item> items = person.getItems();
+```
+```java
+// отримуємо власника
+Item item = session.get(Item.class, 5);
+System.out.println(item.getOwner());
+
+@Entity
+@Table(name = "person")
+public class Person {
+  @OneToMany(mappedBy = "owner")
+  private List<Item> items;
+}
+
+@Entity
+@Table(name = "item")
+public class Item {
+  @ManyToOne
+  @JoinColumn(name = "person_id", referencedColumnName = "id")
+  private Person owner;
+}
+```
+```java
+// додаємо новий item людині - з двох сторін
+Person person = session.get(Person.class, 2);
+
+Item newItem = new Item("Item for Hibernate", person);
+
+// це є гарною практикою, щоб Hibernate не звертався до кешу зі старими даними
+person.getItems().add(newItem);
+
+session.save(newItem);
+```
+```java
+// створює нову людину і новий предмет для неї
+Person newPerson = new Person("Test newPerson", 33);
+Item newItem = new Item("Item for Hibernate 2", newPerson);
+
+// best practise - щоб Hibernate брав актуальні дані, а ні з кешу
+newPerson.setItems(new ArrayList<>(Collections.singletonList(newItem)));
+
+session.save(newPerson);
+session.save(newItem);
+```
+```java
+// видалити всі товари людини
+Person person = session.get(Person.class, 3);
+
+List<Item> items = person.getItems();
+items.forEach(session::delete);
+
+// best practice - тепер на другій стороні чистимо листа, щоб не з кешу інфа...
+person.getItems().clear();
+```
+```java
+// видалити людину
+Person person = session.get(Person.class, 2);
+
+// Hibernate видалить людину, а БД всім Item для person_id виставить null, тому що ON DELETE SET NULL
+session.remove(person);
+
+// best practice - оновлюємо кеш
+person.getItems().forEach(i -> i.setOwner(null));
+```
+```java
+// змінюємо власника предмета
+Person person = session.get(Person.class, 4);
+Item item = session.get(Item.class, 1);
+
+// видаляємо предмет у теперішнього власника - оновлюємо кеш
+item.getOwner().getItems().remove(item);
+
+// назначаємо нового власника
+item.setOwner(person);
+
+// best practice - оновлюємо кеш
+person.getItems().add(item);
+```
+
+
+***
+
+## Приклад роботи з entity з CASCADE
+> **Note**<br>
+> Каскадування можна робити на рівні Hibernate - його функціоналом, але краще на рівні JPA! 
+> Також каскадування можна робити на рівні БД! 
+
+> Для оновлення кешу можна використовувати метод Hibernate refresh() - оновить дані для сутності в кешу.
+> Також оновлення можна налаштувати для всіх залежних сутностей:
+```java
+// на рівні Hibernate
+import javax.persistence.*;
+import org.hibernate.annotations.Cascade;
+
+@Entity
+@Table(name = "person")
+public class Person {
+	@OneToMany(mappedBy = "owner") // анотація JPA
+	@Cascade(org.hibernate.annotations.CascadeType.REFRESH) // анотація Hibernate
+	private List<Item> items;
+}
+
+// операції з Person...
+session.refresh(person); // зробить новий запит для Person і всії її Item's
+```
+
+
+Налаштування CASCADE для автоматичного збереження Item для Person:
+```java
+// на рівні JPA:
+import javax.persistence.*;
+
+@Entity
+@Table(name = "person")
+public class Person {
+	@OneToMany(mappedBy = "owner", cascade = CascadeType.PERSIST)
+	private List<Item> items;
+}
+
+Person person = new Person("Test cascading", 30);
+Item item = new Item("Test cascading item", person);
+person.setItems(new ArrayList<>(Collections.singletonList(item)));  
+
+// налаштований CASCADE збереже Item автоматично
+session.persist(person); 
+```
+```java
+// на рівні Hibernate
+import javax.persistence.*;
+import org.hibernate.annotations.Cascade;
+
+@Entity
+@Table(name = "person")
+public class Person {
+	@OneToMany(mappedBy = "owner") // анотація JPA
+	@Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE) // анотація Hibernate
+	private List<Item> items;
+}
+
+Person person = new Person("Test cascading", 30);
+Item item = new Item("Test cascading item", person);
+person.setItems(new ArrayList<>(Collections.singletonList(item)));
+
+// налаштований CASCADE збереже Item автоматично
+session.save(person);
+```
+
 
 ## Questions
 

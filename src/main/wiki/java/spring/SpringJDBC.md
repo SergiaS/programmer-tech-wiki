@@ -4,16 +4,47 @@
 ## JdbcTemplate
 * [Java Concepts: JdbcTemplate Querying Spring](https://medium.com/beingcoders/java-concepts-jdbctemplate-querying-spring-3192bed61f44)
 
-`JdbcTemplate` работает через сеттеры. 
+> **Note**<br>
+> Щоб використовувати `JdbcTemplate` потрібно спочатку створити його бін з налаштуваннями БД в своєму конфігу.
+> Надалі його використовують у своїй моделі (DAO).
+> 
+> ```java
+> // приклад створення біна jdbcTemplate
+> @Configuration
+> public class SpringConfig implements WebMvcConfigurer { 
+>     
+>   // налаштування БД
+>   @Bean
+>   public DataSource dataSource() {
+>     DriverManagerDataSource dataSource = new DriverManagerDataSource();
+>     dataSource.setDriverClassName("org.postgresql.Driver");
+>     dataSource.setUrl("jdbc:postgresql://localhost:5432/first_db");
+>     dataSource.setUsername("postgres");
+>     dataSource.setPassword("postgres");
+>     return dataSource;
+>   }
+> 
+>   @Bean
+>   public JdbcTemplate jdbcTemplate() {
+>     return new JdbcTemplate(dataSource());
+>   }
+> }
+> ```
+
+`JdbcTemplate` працює через сеттери. 
+
 Вместе с конструктором по умолчанию их нужно добавить в свою модель.
 
 
-
 ## RowMapper
-`RowMapper<T>` отображает/переводит строки из таблицы в сущности (модели). Используется при выборке с БД методом `jdbcTemplate.query()`.
+Після пдключення `JdbcTemplate` необхідно налаштувати `RowMapper` - це налаштування `ResultSet`.
 
-`RowMapper<T>` это параметризированный интерфейс, перебирает ResultSet за тебя. Для использования, нужно имплементировать в свой класс представления сущности, например - UserRowMapper. 
-А потои засеттить поля - `user.setId(resultSet.getInt("id"))`, `user.setId(resultSet.getString("name"))`...
+`RowMapper<T>` відображає/переводить рядки з таблиці у сутність (моделі). 
+Використовується під час вибірки з БД методом `jdbcTemplate.query()`.
+
+`RowMapper<T>` це параметризований інтерфейс, що перебирає `ResultSet` за тебе.
+Для використання потрібно імплементувати у свій клас представлення сутності, наприклад - `BikeRowMapper`. 
+А потіи засетити поля - `user.setId(resultSet.getInt("id"))`, `user.setId(resultSet.getString("name"))`...
 
 ```java
 private static final class MP3RowMapper implements RowMapper<MP3> {
@@ -38,8 +69,8 @@ public List<MP3> getMP3ListByAuthor(String author) {
 }
 ```
 
-Либо можно использовать одну из дефолтных реализаций, которая сама просеттит все поля в сущности, 
-например `BeanPropertyRowMapper` - он используется для простого использования.
+Або можна використовувати одну з дефолтних реалізацій, яка сама просетить всі поля по ентіті,
+наприклад `BeanPropertyRowMapper` - призначенний для простого використання.
 ```java
 BeanPropertyRowMapper<User> ROW_MAPPER = BeanPropertyRowMapper.newInstance(User.class);
 

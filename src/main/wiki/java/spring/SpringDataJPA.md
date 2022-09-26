@@ -52,20 +52,20 @@ The `@Query` is an annotation that is used to execute both JPQL and native SQL q
 @Query(value = "SELECT * FROM employee WHERE first_name=?1 AND last_name=?2", nativeQuery = true)
 Employee findByFirstNameAndLastName(String firstName, String lastName);
 ```
-где, `?1` первый индекс (параметр) метода = `firstName`, `?2` = `secondName`
+де, `?1` перший індекс (параметр) методу = `firstName`, `?2` = `secondName`
 
 ***
 
 ### @Param
-Используется только с аннотацией `@Query` как указатель параметров.
+Використовується тільки з анотацією `@Query` як вказівник параметрів.
 
-Здесь необходима аннотация `@Param`, (сприг сам скажет):
+Тут необхідна анотація `@Param`, (Spring сам підкаже):
 ```java
 @Query("SELECT m FROM Meal m WHERE m.user.id=:userId")
 List<Meal> getAll(@Param("userId") int userId);
 ```
 
-A здесь, при запросах типа `?1`, не нужна аннотация `@Param`:
+A тут, при запитах типу `?1`, не потрібна анотація `@Param`:
 ```java
 @Query("SELECT m FROM Meal m JOIN FETCH m.user WHERE m.id=?1 and m.user.id=?2")
 Meal getWithUser(int id, int userId);
@@ -74,8 +74,15 @@ Meal getWithUser(int id, int userId);
 ***
 
 ### @Modifying
-`@Modifying` говорит о том, что указанный метод должен быть интерпретирован как модифицирующий запрос.
-Используется только с аннотацией `@Query`. Указывает, что запрос не для запроса типа **SELECT**, а для **INSERT**, **UPDATE**, **DELETE** и **DDL**.
+`@Modifying` вказує на те, що вказаний метод слід інтерпретувати як модифікований запиту.
+Використовується тільки з анотацією `@Query`. 
+Вказує, що запит не призначений для запиту типу **SELECT**, а для **INSERT**, **UPDATE**, **DELETE** і **DDL**.
+```java
+@Modifying
+@Query("DELETE FROM Item i WHERE i.id=:id AND i.order.id=:orderId")
+int delete(@Param("id") int id, @Param("orderId") int orderId);
+```
+
 
 ***
 

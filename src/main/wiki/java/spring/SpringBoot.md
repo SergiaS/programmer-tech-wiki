@@ -14,6 +14,23 @@
 > Чтобы посмотреть какие бины инициализированы (автоконфигурация классов), нужно в `application.properties` добавить
 > `logging.level.org.springframework=debug` и запустить приложение. Смотрим **Positive matches** и **Negative matches**.
 
+
+## Запуск SpringBoot через консоль
+Запустити Spring Boot на віддаленому сервері зазвичай роблять через консоль, оскільки GUI немає:
+
+1. Спочатку знаходимо теку з проєктом;
+
+2. Далі необхідно запустити **Maven**, якщо його немає на сервері - тоді використовуй скрипти мавена які генерує **Spring Initializr**: `./mvnw` - для MacOC і Linux, `mvnw` для Windows; Запускаємо команду мавена:
+    ```commandline
+    mvnw package
+    ```
+3. Після того, як Maven збере на сервері build у один jar-файл, його треба запустити. Цей jar-файл лежить у теці `target` - переходимо в неї `cd target` і запускаємо:
+    ```commandline
+    java -jar SpringBootApp-0.0.1-Snapshot.jar
+    ```
+4. Зупинити сервер можна командою `CTRL + C`.
+
+
 ## MessageSource
 Работа и локалями и интернализацией, обращается к папке `resources` и решает какую локаль брать.
 Пример одной из общих реализаций:
@@ -28,6 +45,7 @@ public MessageSource messageSource() {
     return messageSource;
 }
 ```
+
 
 ##[Spring Boot SSL [https] Example](https://howtodoinjava.com/spring-boot/spring-boot-ssl-https-example/)
 

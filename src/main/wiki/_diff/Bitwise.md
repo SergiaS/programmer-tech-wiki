@@ -4,12 +4,15 @@ __LINKS:__
 * [Побитовые операции - JavaRush](https://javarush.ru/groups/posts/1925-pobitovihe-operacii)
 * [Побитовое отрицание — почему так](https://javarush.ru/groups/posts/3148-pobitovoe-otricanie---pochemu-tak)
 
-Любое число в Java можно сконвертировать в его двоичную форму. 
+Любое число в **Java** можно сконвертировать в его двоичную форму. 
 Для этого нужно использовать классы-обертки:
 ```java
-// Пример конвертации в его двоичную форму
+// конвертація з десятирічної (десяткової) форми у бінарну (двійкову):
 int x = 342;
-System.out.println(Integer.toBinaryString(x));
+System.out.println(Integer.toBinaryString(x));  // 101010110
+
+// конвертація з бінарної форми у десятирічну:
+System.out.println(Integer.parseInt("101010110", 2)); // 342
 ```
 
 ***

@@ -1,8 +1,7 @@
 # Validation
 
-> evict или инвалидация - это сброс, например сброс кеша.
- 
-***
+> **Note**<br>
+> `org.hibernate.validator` це окремий проект від **Hibernate**!
 
 First, add dependence *[org.hibernate.validator](https://mvnrepository.com/artifact/org.hibernate.validator/hibernate-validator)* 
 to your `pom.xml`:
@@ -10,12 +9,18 @@ to your `pom.xml`:
 <dependency>
     <groupId>org.hibernate.validator</groupId>
     <artifactId>hibernate-validator</artifactId>
-    <version>7.0.1.Final</version>
+    <version>6.2.4.Final</version>
 </dependency>
 ```
 
-> Необходимо использовать аннотации с пакета `javax.validation.constraints`, а не от **Hibernate**.
+> Необходимо использовать аннотации с пакета `javax.validation.constraints` (версія залежності до 7, далі буде `jakarta`), а не от **Hibernate**.
 > Это сделано с целью устранения жесткого связывания, например, в случае перехода на другой фреймворк.
+
+> **WARNING**<br>
+> **Hibernate Validator 7** and below doesn't work with Spring 5!
+> You need to use **Hibernate Validator 6.2.4.Final** for work with Spring 5.
+>
+> [stackoverflow](https://stackoverflow.com/a/69076232)
 
 Далее в модели указываем валидацию с аннотаций:
 ```java
