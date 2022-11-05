@@ -1,4 +1,4 @@
-package kru.sk.demo.servlets.Cookies;
+package kru.sk.tech.servlets.Cookies;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

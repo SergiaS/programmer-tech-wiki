@@ -5,4 +5,4 @@ target
 log
 *.patch
 
-/src/main/java/notes
+/src/main/java/kru/sk/tech/notes

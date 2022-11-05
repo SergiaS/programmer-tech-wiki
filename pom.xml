@@ -4,8 +4,8 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.tech</groupId>
-    <artifactId>programmer-tech-wiki</artifactId>
+    <groupId>kru.sk</groupId>
+    <artifactId>tech</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <packaging>war</packaging>
@@ -47,6 +47,17 @@
             <artifactId>javax.servlet-api</artifactId>
             <version>4.0.1</version>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.photos.library</groupId>
+            <artifactId>google-photos-library-client</artifactId>
+            <version>1.7.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.auth</groupId>
+            <artifactId>google-auth-library-oauth2-http</artifactId>
+            <version>1.11.0</version>
         </dependency>
     </dependencies>
 

@@ -6,7 +6,7 @@
     
     <servlet>
         <servlet-name>SetCookiesServlet</servlet-name>
-        <servlet-class>kru.sk.demo.servlets.Cookies.SetCookiesServlet</servlet-class>
+        <servlet-class>kru.sk.tech.servlets.Cookies.SetCookiesServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>SetCookiesServlet</servlet-name>
@@ -14,7 +14,7 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>GetCookiesServlet</servlet-name>
-        <servlet-class>kru.sk.demo.servlets.Cookies.GetCookiesServlet</servlet-class>
+        <servlet-class>kru.sk.tech.servlets.Cookies.GetCookiesServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>GetCookiesServlet</servlet-name>
@@ -22,7 +22,7 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>DeleteCookiesServlet</servlet-name>
-        <servlet-class>kru.sk.demo.servlets.Cookies.DeleteCookiesServlet</servlet-class>
+        <servlet-class>kru.sk.tech.servlets.Cookies.DeleteCookiesServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>DeleteCookiesServlet</servlet-name>
