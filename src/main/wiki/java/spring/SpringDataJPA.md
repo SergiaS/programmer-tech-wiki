@@ -163,6 +163,24 @@ User getUserById(@Param("userId")int userId);
 С помощью `@NamedSubgraph` можно также изменить `fetchType` вложенных объектов Entity.
 
 
+## DomainClassConverter
+> Під капотом працює клас спрінга `DomainClassConverter` - він звертається до репозиторію та одразу повертає результат.
+```java
+// Spring задіє DomainClassConverter
+@GetMapping("/{id}")
+public Post findById(@PathVariable("id") Post post) {
+  return post;
+}
+```
+```java
+// Так пишуть зазвичай
+@GetMapping("/{id}")
+public Post findById(@PathVariable Integer id) {
+  return postRepository.findById(id).get();
+}
+```
+
+
 ## PagingAndSortingRepository
 * [Міні проєкт роботи PagingAndSortingRepository ](https://github.com/SergiaS/t_springboot/tree/spring-data-jpa-pagination)
 * [Baeldung - Pagination and Sorting using Spring Data JPA](https://www.baeldung.com/spring-data-jpa-pagination-sorting)

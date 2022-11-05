@@ -21,7 +21,7 @@ Node Package Manager (npm) comes when you install [NodeJS](nodejs.org).
 
 * `npm init -y` - ініціалізує проєкт NodeJS та генерує `package.json`.
 
-* `i` or `install` - it will install for the dependencies for your project.
+* `i` or `install` - it will install all the dependencies for your project from `package.json` file.
 * `-S` is the same as `--save`.
 
 * `npm run devserver` - a development server that provides live reloading. 
@@ -98,19 +98,19 @@ import co from "co";
 Повинен бути встановлений **NodeJS**.
 
 1. Переходимо у терміналі до теки `src` та набираємо команду `cd src`.
-2. Ініціалізуємо React командою `npx create-react-app frontend` - у src буде створена тека frontend, в якій і буде react.
+2. Ініціалізуємо **React** командою `npx create-react-app frontend` - у `src` буде створена тека `frontend`, в якій і буде **React**.
 
 ### How to start app
-У головному каталозі __frontend__ необхідно виконати команду `npm start`.
+У головному каталозі `frontend` необхідно виконати команду `npm start`.
 
 By default, application will lunch at the address `http://localhost:3000/`.
 
 ### How to stop app
-Use keyword `CTRL+C` to stop NodeJS server.
+Use keyword `CTRL + C` to stop **NodeJS** server.
 
 
 ## Зв'язування серверів FrondEnd з BackEnd
-Щоб відповідь генерувалась на React та поверталась на вказану адресу.
+Щоб відповідь генерувалась на **React** та поверталась на вказану адресу.
 
 **Спосіб зробити це руцями:**
 
@@ -118,7 +118,7 @@ Use keyword `CTRL+C` to stop NodeJS server.
 
 Далі з'явиться тека `build` - її потрібно перенести до своїх ресурсів у теку `static`.
 
-Спосіб, щоб згенеровані файли в React переправлялися автоматично в потрібний каталог - використовуй плагін Maven `frontend-maven-plugin` з налаштуваннями:
+**Спосіб, щоб згенеровані файли в React переправлялися автоматично в потрібний каталог** - використовуй плагін Maven `frontend-maven-plugin` з налаштуваннями:
 ```xml
 <profiles>
   <profile>
@@ -194,7 +194,7 @@ Use keyword `CTRL+C` to stop NodeJS server.
 </profiles>
 ```
 
-Що робить плагін на прикладі консолі пошагово:
+Що робить плагін на прикладі консолі покроково:
 * переходить в потрібну теку `cd src/frontend`;
 * встановить всі необхідні залежності командою `npm install`;
 * збере все до купи `npm run build`;

@@ -76,11 +76,312 @@ body {
 
 ***
 
+### `select` and `option`
+* [StackOverflow - Custom option example 1](https://stackoverflow.com/a/13968900)
+* [StackOverflow - Custom option example 2](https://stackoverflow.com/a/24671889)
+* [CodePen - Custom select and option with CSS and JS](https://codepen.io/webDsign/pen/yLgVJqX)
+
+> **Note**<br>
+> У HTML і CSS немає можливості змінити колір (тексту і фону) при наведенні `option` - завжди буде синій фон і білий текст!
+
+> **Note**<br>
+> У `select` з'являється стрічка прокрутки (scroll bar) у випадаючому списку (dropdown list) 
+> тільки якщо кіл-ть елементів більша за 20! 
+> Змінити кількість елементів у випадаючому списку засобами HTML або CSS неможливо!
+
 Тег `option`, який вкладається у `select`, стилізувати неможливо (окрім `background-color` і `color`), оскільки рендерінг виконується
 операційною системою користувача, і не є html елементом. Тому, якщо є потреба прибрати межі (`border`, `outline`) -
-цього зробити не вдасться. Можна спробувати написати код списком (`ul`, `li`...) або через `input`.
+цього зробити не вдасться. Можна спробувати написати код списком (`ul`, `li`...) або через `input` з `label`. [Пояснення](https://stackoverflow.com/a/19217244)
 
-[Пояснення](https://stackoverflow.com/a/19217244)
+> <details>
+> <summary>Приклад кастомного select'а на основі CSS</summary>
+> 
+> При використанні `input` потрібно додати `label` - дуже важливо щоб `input` йшов першим оскільки це впливає на стилі,
+> і поведінку в цілому:
+> ```html
+> <div class="test select">
+>   <input class="selectopt" name="test" type="radio" id="car1" value="1">
+>   <label for="car1" class="option">Audi A4</label>
+>   <input class="selectopt" name="test" type="radio" id="car2">
+>   <label for="car2" class="option">BMW 3-Series</label>
+> </div>
+> ```
+> ```css
+> body {
+>   font: 14px "Verdana", sans-serif;
+>   margin: 0;
+>   padding: 0;
+>   background-color: #202c37;
+>   color: white;
+>   text-shadow: 1px 1px #000000;
+> }
+> 
+> 
+> .select {
+>   display: flex;
+>   flex-direction: column;
+>   position: relative;
+>   width: 200px;
+>   height: 30px;
+>   background-color: #FDB94C;
+> }
+> 
+> .option {
+>   padding: 0 30px 0 10px;
+>   min-height: 30px;
+>   display: flex;
+>   align-items: center;
+>   background: #3b4d5d;
+>   border-top: #a1becd solid 1px;
+>   position: absolute;
+>   top: 0;
+>   width: 100%;
+>   pointer-events: none;
+>   order: 2;
+>   z-index: 1;
+>   transition: background .1s ease-in-out;
+>   box-sizing: border-box;
+>   overflow: hidden;
+>   white-space: nowrap;
+> }
+> 
+> .option:hover {
+>   background: #73919f;
+> }
+> 
+> .select:focus .option {
+>   position: relative;
+>   pointer-events: all;
+> }
+> 
+> input {
+>   opacity: 0;
+>   position: absolute;
+>   left: -99999px;
+> }
+> 
+> input:checked + label {
+>   order: 1;
+>   z-index: 2;
+>   background: #506d7c;
+>   border-top: none;
+>   position: relative;
+> }
+> 
+> input:checked + label:after {
+>   content: '';
+>   width: 0;
+>   height: 0;
+>   border-left: 5px solid transparent;
+>   border-right: 5px solid transparent;
+>   border-top: 5px solid white;
+>   position: absolute;
+>   right: 10px;
+>   top: calc(50% - 2.5px);
+>   pointer-events: none;
+>   z-index: 3;
+> }
+> 
+> input:checked + label:before {
+>   position: absolute;
+>   right: 0;
+>   height: 40px;
+>   width: 30px;
+>   content: '';
+>   background: #3b4d5d;
+> }
+> ```
+>
+></details>
+
+> <details>
+> <summary>Приклад select'а з задіяними стилями CSS</summary>
+>
+> ```css
+> select {
+>   height: 2em;
+>   border-radius: 0;
+>   background: #3B4D5DFF;
+>   color: #fff;
+> }
+> select:hover {
+>   background-color: #7a9bb2;
+> }
+> select:focus {
+>   border: 1px solid black;
+>   outline: none;
+> }
+> 
+> option {
+>   color: #e5e5e5;
+> }
+> option:checked {
+>   color: #fff;
+>   background-color: #7a9bb2;
+> }
+> option:not(:checked) {
+>   background-color: #3B4D5DFF;
+> }
+> 
+> /* scrollbar width */
+> select::-webkit-scrollbar {
+>   width: 10px;
+> }
+> /* scrollbar track */
+> select::-webkit-scrollbar-track {
+>   background: #202c37;
+> }
+> /* scrollbar handle */
+> select::-webkit-scrollbar-thumb {
+>   background: #e5e5e5;
+> }
+> ```
+> ```html
+> <!-- list taken from mobile.de -->
+> <label for="select-make">Make</label>
+> <select id="select-make" data-selected="7700">
+>   <option value="">Any</option>
+>   <option value="140">Abarth</option>
+>   <option value="203">AC</option>
+>   <option value="375">Acura</option>
+>   <option value="31930">Aiways</option>
+>   <option value="800">Aixam</option>
+>   <option value="900">Alfa Romeo</option>
+>   <option value="1100">ALPINA</option>
+>   <option value="121">Artega</option>
+>   <option value="1750">Asia Motors</option>
+>   <option value="1700">Aston Martin</option>
+>   <option value="1900">Audi</option>
+>   <option value="2000">Austin</option>
+>   <option value="1950">Austin Healey</option>
+>   <option value="31863">BAIC</option>
+>   <option value="3100">Bentley</option>
+>   <option value="3500">BMW</option>
+>   <option value="3850">Borgward</option>
+>   <option value="4025">Brilliance</option>
+>   <option value="4350">Bugatti</option>
+>   <option value="4400">Buick</option>
+>   <option value="4700">Cadillac</option>
+>   <option value="112">Casalini</option>
+>   <option value="5300">Caterham</option>
+>   <option value="83">Chatenet</option>
+>   <option value="5600">Chevrolet</option>
+>   <option value="5700">Chrysler</option>
+>   <option value="5900">Citroën</option>
+>   <option value="6200">Cobra</option>
+>   <option value="6325">Corvette</option>
+>   <option value="3">Cupra</option>
+>   <option value="6600">Dacia</option>
+>   <option value="6800">Daewoo</option>
+>   <option value="7000">Daihatsu</option>
+>   <option value="7400">DeTomaso</option>
+>   <option value="31864">DFSK</option>
+>   <option value="7700">Dodge</option>
+>   <option value="255">Donkervoort</option>
+>   <option value="235">DS Automobiles</option>
+>   <option value="31931">e.GO</option>
+>   <option value="31932">Elaris</option>
+>   <option value="8600">Ferrari</option>
+>   <option value="8800">Fiat</option>
+>   <option value="172">Fisker</option>
+>   <option value="9000">Ford</option>
+>   <option value="205">GAC Gonow</option>
+>   <option value="204">Gemballa</option>
+>   <option value="270">Genesis</option>
+>   <option value="9900">GMC</option>
+>   <option value="122">Grecav</option>
+>   <option value="186">Hamann</option>
+>   <option value="10850">Holden</option>
+>   <option value="11000">Honda</option>
+>   <option value="11050">Hummer</option>
+>   <option value="11600">Hyundai</option>
+>   <option value="11650">Infiniti</option>
+>   <option value="11900">Isuzu</option>
+>   <option value="12100">Iveco</option>
+>   <option value="12400">Jaguar</option>
+>   <option value="12600">Jeep</option>
+>   <option value="13200">Kia</option>
+>   <option value="13450">Koenigsegg</option>
+>   <option value="13900">KTM</option>
+>   <option value="14400">Lada</option>
+>   <option value="14600">Lamborghini</option>
+>   <option value="14700">Lancia</option>
+>   <option value="14800">Land Rover</option>
+>   <option value="14845">Landwind</option>
+>   <option value="31933">LEVC</option>
+>   <option value="15200">Lexus</option>
+>   <option value="15400">Ligier</option>
+>   <option value="15500">Lincoln</option>
+>   <option value="15900">Lotus</option>
+>   <option value="31934">Lynk&amp;Co</option>
+>   <option value="16200">Mahindra</option>
+>   <option value="16600">Maserati</option>
+>   <option value="16700">Maybach</option>
+>   <option value="16800">Mazda</option>
+>   <option value="137">McLaren</option>
+>   <option value="17200">Mercedes-Benz</option>
+>   <option value="17300">MG</option>
+>   <option value="30011">Microcar</option>
+>   <option value="17500">MINI</option>
+>   <option value="17700">Mitsubishi</option>
+>   <option value="17900">Morgan</option>
+>   <option value="18700">Nissan</option>
+>   <option value="18875">NSU</option>
+>   <option value="18975">Oldsmobile</option>
+>   <option value="19000">Opel</option>
+>   <option value="149">Pagani</option>
+>   <option value="19300">Peugeot</option>
+>   <option value="19600">Piaggio</option>
+>   <option value="19800">Plymouth</option>
+>   <option value="4">Polestar</option>
+>   <option value="20000">Pontiac</option>
+>   <option value="20100">Porsche</option>
+>   <option value="20200">Proton</option>
+>   <option value="20700">Renault</option>
+>   <option value="21600">Rolls-Royce</option>
+>   <option value="21700">Rover</option>
+>   <option value="125">Ruf</option>
+>   <option value="21800">Saab</option>
+>   <option value="22000">Santana</option>
+>   <option value="22500">Seat</option>
+>   <option value="22900">Skoda</option>
+>   <option value="23000">Smart</option>
+>   <option value="188">speedART</option>
+>   <option value="100">Spyker</option>
+>   <option value="23100">Ssangyong</option>
+>   <option value="23500">Subaru</option>
+>   <option value="23600">Suzuki</option>
+>   <option value="23800">Talbot</option>
+>   <option value="23825">Tata</option>
+>   <option value="189">TECHART</option>
+>   <option value="135">Tesla</option>
+>   <option value="24100">Toyota</option>
+>   <option value="24200">Trabant</option>
+>   <option value="24400">Triumph</option>
+>   <option value="24500">TVR</option>
+>   <option value="25200">Volkswagen</option>
+>   <option value="25100">Volvo</option>
+>   <option value="25300">Wartburg</option>
+>   <option value="113">Westfield</option>
+>   <option value="25650">Wiesmann</option>
+>   <option value="1400">Other</option>
+> </select>
+> ```
+>
+></details>
+
+
+***
+
+Щоб прибрати закруглення у `select` треба примусово додати `border-radius: 0`, а щоб прибрати виділення після вибіру опції (також закруглене) треба додати до псевдо-класу `:focus` команду `outline: none`:
+```css
+select {
+  border-radius: 0;
+}
+select:focus {
+  outline: none;
+}
+```
 
 ***
 

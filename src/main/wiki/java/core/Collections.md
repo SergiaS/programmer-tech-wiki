@@ -209,6 +209,40 @@ class Solution {
     }
 }
 ```
+***
+[692. Top K Frequent Words](https://leetcode.com/problems/sort-characters-by-frequency/discuss/1534282/Simple-Solution-using-Heap):
+```java
+public class Note1 {
+  public static void main(String[] args) throws IOException {
+    Note1 n = new Note1();
+    System.out.println(n.topKFrequent(new String[]{"i","love","leetcode","i","love","coding"}, 2));
+    System.out.println(n.topKFrequent(new String[]{"c","b","c","a","b","c","a","a","c"}, 2));
+  }
+
+  public List<String> topKFrequent(String[] words, int k) {
+    Map<String, Integer> map = new HashMap<>();
+    for (String word : words) {
+      map.put(word, map.getOrDefault(word, 0) + 1);
+    }
+
+    PriorityQueue<Map.Entry<String, Integer>> pq = new PriorityQueue<>(
+        (a, b) -> a.getValue() == b.getValue() ? b.getKey().compareTo(a.getKey()) : a.getValue() - b.getValue()
+    );
+
+    for (Map.Entry<String, Integer> entry : map.entrySet()) {
+      pq.offer(entry);
+      if (pq.size() > k)
+        pq.poll();
+    }
+
+    List<String> result = new LinkedList<>();
+    while (!pq.isEmpty())
+      result.add(0, pq.poll().getKey());
+
+    return result;
+  }
+}
+```
 
 ### Принцип работы ArrayDeque
 Представляет собой реализацию с использованием массивов, подобно `ArrayList`, но не позволяет обращаться к элементам по индексу и хранение `null`.
@@ -375,6 +409,33 @@ Map<String, Integer> sortedByValue=ItemToPrice.entrySet().stream()
                        Map.Entry::getValue,(e1,e2)->e1,LinkedHashMap::new));
 ```
 This is the right way to sort a `Map` by values in Java 8 because now the ordering will not be lost as `Collector` is using `LinkedHashMap` to store entries.
+
+
+#### Top K Frequent Words
+```java
+public List<String> topKFrequent(String[] words, int k) {
+  Map<String, Integer> map = new HashMap<>();
+  for (String word : words) {
+    map.put(word, map.getOrDefault(word, 0) + 1);
+  }
+
+  Map<String, Integer> sortedMap = map.entrySet()
+      .stream()
+      .sorted(Map.Entry.<String, Integer>comparingByValue()
+          .reversed().thenComparing(Map.Entry.comparingByKey()))
+      .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+          (e1, e2) -> e1, LinkedHashMap::new));
+
+  List<String> result = new ArrayList<>();
+  for (String s : sortedMap.keySet()) {
+    result.add(s);
+    if (--k == 0) break;
+  }
+
+  return result;
+}
+```
+
 
 
 ### Принцип работы LinkedHashMap

@@ -160,6 +160,8 @@ Mapped Superclass это класс от которого наследуются
 ***
 
 ### @Embeddable, @Embedded
+> [Look an example](https://www.baeldung.com/jpa-embedded-embeddable)
+
 Основная цель - композиции полей.
 
 Для чего применять:

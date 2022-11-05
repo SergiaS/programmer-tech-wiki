@@ -131,7 +131,7 @@ Map<LocalDate, Integer> caloriesSumByDate = meals.stream()
 ```
 ***
 
-### [LeetCode - 451. Sort Characters By Frequency](https://leetcode.com/problems/sort-characters-by-frequency/discuss/646152/Slow-and-funny-Steam-only-Java-solution):
+### Example 4: [LeetCode - 451. Sort Characters By Frequency](https://leetcode.com/problems/sort-characters-by-frequency/discuss/646152/Slow-and-funny-Steam-only-Java-solution):
 Не продуктивный, но очень наглядный метод работы стримов!
 ```java
 public String frequencySort(String s) {
@@ -146,6 +146,14 @@ public String frequencySort(String s) {
 }
 ```
 ***
+
+### Example 5:
+Приклад ефективної конкатенації через `StringBuilder`:
+```java
+String s1 = Arrays.stream(word1)
+    .map(StringBuilder::new)
+    .collect(Collectors.joining(""));
+```
 
 
 

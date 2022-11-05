@@ -1,4 +1,11 @@
 # [React Router 6](https://reactrouter.com/docs/en/v6/getting-started/installation)
+
+> **Note**<br>
+> Для роботи **React Router** необхідно встановити пакет `react-router-dom`:
+> ```npm
+> npm install react-router-dom
+> ```
+
 * [YouTube відеокурс React Router v6](https://www.youtube.com/playlist?list=PLiZoB8JBsdznY1XwBcBhHL9L7S_shPGVE)
 
 > У версії 6 є суттєві зміни від милої версії.
@@ -6,7 +13,8 @@
 * Розробка SPA-додатків (Single Page Application).
 Технологія не перезавантажує сторінку, а підвантажує потрібні дані.
 
-* Були проекти **React Router** та **Reach Router** - вони злілися, і актуальним є **React Router**.
+* Були проекти **React Router** та **Reach Router** - вони злилися, і актуальним є **React Router**.
+
 
 ## [Routes](https://reactrouter.com/docs/en/v6/components/routes) і [Route](https://reactrouter.com/docs/en/v6/components/route)
 * [YouTube - Вложенный роутинг](https://www.youtube.com/watch?v=U7c7k-NBtQg&list=PLiZoB8JBsdznY1XwBcBhHL9L7S_shPGVE&index=7) >> [Приклад з відео на GitHub](https://github.com/SergiaS/c_react/commit/c2a95d02809b104f7f2506c26fbedb9d600226e2)

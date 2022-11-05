@@ -80,5 +80,39 @@ function onClick(e: React.MouseEvent<HTMLLabelElement>, lang: any) {
 
 ***
 
+<details>
+<summary>Типізація при ітерації, fetch, useState, useEffect</summary>
+
+```tsx
+function App() {
+    const [cars, setCars] = useState<Car[]>([]);
+
+    useEffect(() => {
+        getByUrl("cars")
+            .then(data => setCars(data))
+    }, []);
+
+    const getByUrl = (url: string) => {
+        return fetch(url)
+            .then(response => response.json())
+        // .then(data => console.log(data))
+    }
+
+    return (
+        <>
+            <p>List of Cars</p>
+            <ul>
+                {cars && cars.map((item: Car) => <li key={item.id}>{item.modification}</li>)}
+            </ul>
+        </>
+    );
+}
+
+export default App;
+```
+</details>
+
+***
+
 
 

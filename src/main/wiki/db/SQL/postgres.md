@@ -51,7 +51,7 @@
 
 ## JOIN
 Пример добавления столбца с ролями (`user_roles`) после данных с таблицы `users`, без объединения (`GROUP BY`):
-```postgresql
+```sql
 SELECT *
 FROM users u
          RIGHT JOIN user_roles ur ON u.id = ur.user_id
@@ -72,7 +72,7 @@ FROM actor
 
 
 ## Examples 
-```postgresql
+```sql
 -- часто використовую для тестів
 -- спочатку якщо є таблиця або сіквенс - дропнить їх 
 -- створить таблицю з автоінкрементом + заповнить даними
@@ -90,19 +90,22 @@ CREATE TABLE Person(
 
 INSERT INTO Person(name, age) VALUES ('Test person', 20);
 ```
-```postgresql
+```sql
 -- почати номер SEQUENCE з:
 ALTER SEQUENCE student_seq RESTART WITH 1001;
 ```
-```postgresql
+```sql
 -- очистити таблицю:
 TRUNCATE TABLE person;
+
+TRUNCATE TABLE Measurement;
+TRUNCATE TABLE Sensor CASCADE;
 ```
-```postgresql
+```sql
 -- змінити таблицю - додати стовбчик
 ALTER TABLE person ADD COLUMN address varchar NOT NULL;
 ```
-```postgresql
+```sql
 -- додати дані
 INSERT INTO person(name, age, email, address)
 VALUES ('Bobcat', 23, 'bobcat@gmail.com', 'USA, Chicago, 08973'),
@@ -111,16 +114,29 @@ VALUES ('Bobcat', 23, 'bobcat@gmail.com', 'USA, Chicago, 08973'),
        ('Marta Richards', 46, 'martarichards@yahoo.com', 'USA, Texas, 78945')
 ;
 ```
-```postgresql
+```sql
 -- JOIN таблиць Book і Person - отримати людину, котра має книгу з вказаним id
 SELECT Person.*
 FROM Book
          JOIN Person ON Book.person_id = Person.id
 WHERE Book.id = ?
 ```
-```postgresql
+```sql
 -- змінити таблицю - додати стовпці
 ALTER TABLE Person ADD COLUMN date_of_birth DATE;
 
 ALTER TABLE Person ADD COLUMN created_at TIMESTAMP;
+```
+```sql
+-- створюємо автоінкремент:
+
+-- або одразу при створені поля
+id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY
+
+-- або через сіквенс:
+CREATE SEQUENCE sensor_id_seq START WITH 1;
+
+CREATE TABLE Sensor (
+    id   int PRIMARY KEY DEFAULT nextval('sensor_id_seq')
+);
 ```

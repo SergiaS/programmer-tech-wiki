@@ -14,7 +14,7 @@ require('styles/main.scss');
 
 ***
 
-#### Підключення змінних/функцій з іншого файлу тільки на JS
+#### Підключення змінних/функцій з іншого файлу тільки на JS / Експорт та імпорт даних
 * [Fix - Cannot use import statement outside module in JS](https://bobbyhadz.com/blog/javascript-syntaxerror-cannot-use-import-statement-outside-module)
 
 При отриманні помилки типу _<u>SyntaxError: Cannot use import statement outside a module</u>_ необхідно
@@ -292,14 +292,12 @@ for (let i = 1; i <= 9; i++) {
 }
 ```
 
-***
-***
-
-
 
 
 
 ## Examples
+
+***
 
 ### [LeetCode - 485. Max Consecutive Ones](https://leetcode.com/problems/max-consecutive-ones/)
 
@@ -315,6 +313,30 @@ const findMaxConsecutiveOnes = (nums) => {
     return max;
 }
 ```
+
+***
+
+### [LeetCode - 49. Group Anagrams](https://leetcode.com/problems/group-anagrams/)
+Чудовий приклад роботи з мапою і сортуванням:
+```js
+/**
+ * @param {string[]} strs
+ * @return {string[][]}
+ */
+var groupAnagrams = function(strs) {
+  const map = new Map();
+  for (let str of strs) {
+    let curr = [...str].sort().join('');
+    if (!map.has(curr)) map.set(curr, []);
+    map.get(curr).push(str);
+  }
+  return Array.from(map.values());
+};
+// Input: strs = ["eat","tea","tan","ate","nat","bat"]
+// Output: [["bat"],["nat","tan"],["ate","eat","tea"]]
+```
+
+***
 
 ### Как программист Java учил JavaScript...
 

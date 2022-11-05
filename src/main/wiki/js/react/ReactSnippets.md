@@ -1,4 +1,6 @@
 # React Code Snippets, Examples
+* [How to Initialize, Add, Remove and Iterate in Set, Object and Array](https://stackoverflow.com/a/70234746)
+
 
 <details>
 <summary>ПРИКЛАД клікера-лічильника</summary>
@@ -885,6 +887,63 @@ export {Shop};
 
 </details>
 
+
+***
+
+<details>
+<summary>ПРИКЛАД fetch у useEffect та збереженням в Map + ітерація по значеннях</summary>
+
+```jsx
+const [cars, setCars] = useState(new Map());
+
+useEffect(() => {
+    // console.log(cars.size === 0);
+    if (cars.size === 0) {
+      getByUrl("/home/" + brand)
+        .then(data => {
+          for (let i = 0; i < data.length; i++) {
+            let key = data[i]["generation"] + ", " + data[i]["bodyType"];
+
+            let tmpArr;
+            if (!cars.has(key)) {
+              tmpArr = [];
+            } else {
+              tmpArr = cars.get(key);
+            }
+            tmpArr.push(data[i]);
+            setCars(new Map(cars.set(key, tmpArr)));
+
+          // показати всі поля
+            // console.log(
+            //   "id: " + data[i]["id"] +
+            //   "; brand: " + data[i]["brand"] +
+            //   "; model: " + data[i]["model"] +
+            //   "; bodyType: " + data[i]["bodyType"] +
+            //   "; generation: " + data[i]["generation"] +
+            //   "; trimLevel: " + data[i]["trimLevel"] +
+            //   "; engineType: " + data[i]["engineType"] +
+            //   "; modification: " + data[i]["modification"]
+            // );
+          }
+        });
+    }
+  }, []);
+
+return <>
+  <h1>{brand} Cars</h1>
+
+  {/* звертаємося до кожного значення кожного ключа */}
+  {cars.forEach(function (values, key) {
+    console.log(key);
+    for (const [index, value] of values.entries()) {
+      console.log(`   ${key}[${index}]: ${value.engineType}, ${value.modification}`);
+    }})
+  }
+}
+```
+
+</details>
+
 ***
 
 
@@ -959,4 +1018,7 @@ export {Shop};
 > ```
 > </details>
 
+
 ***
+
+

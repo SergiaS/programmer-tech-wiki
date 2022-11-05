@@ -62,6 +62,7 @@
 > 
 > **Авторизація** (Authorization - Are they allowed to do this?) – це те, що користувачу дозволяється робити <u>після входу</u>. 
 > Це надання і перевірка прав на вчинення будь-яких дій в системі.
+> Авторизація може бути двох видів - roles (набір дій - USER, ADMIN) або authorities (певні дії - SHOW_ACCOUNT, WITHDRAW, SEND_MONEY)
 
 
 ## Annotations
@@ -111,9 +112,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 }
 ```
 
-
 В самих аннотациях всё прописано, например `@PreAuthorize` в контроллерах над методами:
-
 ```java
 @RestController
 @RequestMapping("/api/v1/developers")
@@ -127,6 +126,25 @@ public class DeveloperRestControllerV1 {
                 .findFirst()
                 .orElse(null);
     }
+}
+```
+
+
+### @PreAuthorize
+Авторизація на рівні методів. 
+Спочатку треба налаштувати свій конфіг - поставити над класом анотацію з параметром `@EnableGlobalMethodSecurity(prePostEnabled = true)`.
+Тепер можна використовувати анотацію `@PreAuthorize` над методами - вона буде перевіряти ролі юзерів.
+
+> **Note**<br>
+> Зазвичай цю анотацію не використовують в контролерах, наприклад в сервісі:
+```java
+@Service
+public class AdminService {
+
+  @PreAuthorize("hasRole('ROLE_ADMIN') and hasRole('ROLE_SOME_OTHER')")
+  public void doAdminStuff() {
+    System.out.println("Only admin here");
+  }
 }
 ```
 
@@ -146,6 +164,70 @@ The roles while creating users have no significance while performing authenticat
 
 
 ## Examples
+
+### Create custom form page
+
+> Зі SpringSecurity непотрібно реалізовувати ще один метод для обробки даних з форми
+
+> Назви полів формі повинні бути саме username і password!
+
+```java
+// простий контролер
+@Controller
+@RequestMapping("/auth")
+public class AuthController {
+
+  @GetMapping("/login")
+  public String loginPage() {
+    return "auth/login";
+  }
+}
+```
+```java
+// конфіг SpringSecurity - відповідає за сторінки входу, помилок...
+// конфіг авторизації
+@Override
+protected void configure(HttpSecurity http) throws Exception {
+  http
+      .csrf().disable() // вимикаємо захист від міжсайтової підробки запитів
+      // налаштування авторизації
+      .authorizeRequests() // усі запити авторизувати...
+      .antMatchers("/auth/login", "/error") // ...через ці сторінки...
+        .permitAll() // ...доступні усім
+      .anyRequest() // усі інші запити...
+        .authenticated() // ...повинні пройти аутентифікацію
+      .and()
+      // налаштування своєї сторінки з логіном
+      .formLogin().loginPage("/auth/login")
+      .loginProcessingUrl("/process_login") // куди відправляти дані з форми
+      .defaultSuccessUrl("/hello", true) // перенаправлення у разі вірних креденшелів
+      .failureUrl("/auth/login?error"); // перенаправить у разі помилки
+}
+```
+```thymeleafexpressions
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Login page</title>
+</head>
+<body>
+  <form name="f" method="post" action="/process_login">
+    <label for="username">Enter username:</label>
+    <input type="text" name="username" id="username">
+    <br/>
+    <label for="password">Enter password:</label>
+    <input type="password" name="password" id="password">
+    <br/>
+    <input type="submit" th:value="login">
+
+    <div th:if="${param.error}" style="color: red">
+      Wrong username or password!
+    </div>
+  </form>
+</body>
+</html>
+```
 
 
 ### [Configure Spring Security for In-Memory authentication and authorization](https://medium.com/@ritesh.panigrahi/spring-security-in-memory-authentication-and-authorization-dcb9cc8baf19)
@@ -198,6 +280,31 @@ protected void configure(HttpSecurity http) throws Exception {
 
 ## CSRF
 * [Using Spring Security CSRF Protection](https://docs.spring.io/spring-security/reference/servlet/exploits/csrf.html#servlet-csrf-using)
+
+> **Note**<br>
+> За замовчуванням у **Spring Security** увімкнутий захист **CSRF** (він вимагає передавати у кожному запиті **CSRF** токен - 
+> захист від між сайтової підробки запитів) - тому, при переходах по сторінках можуть викидатися помилки `403`, 
+> хоча наче все повинно працювати. 
+> Для тестів можна вимкнути цей захист, додавши у свій конфіг з методом `configure(HttpSecurity http)` - команду `.csrf().disable()`.
+
+> **Note**<br>
+> Захистом буде наявність у кожної формі прихованого поля `CSRF_TOKEN`.
+> Кожний токен генерується сервером тільки 1 раз - перед наданням форми, йде генерація цього токену - надається форма з токеном - 
+> і на сервері очікується форма зі згенерований токеном. 
+> Якщо співпали токени - все ок.
+
+> На усіх сторінках окрім сторінки з логіном приховане поле з `_csrf` вставляється автоматично thymeleaf'ом.
+> ```thymeleafexpressions
+> <input type="hidden" name="_csrf" value="f4259851-4e97-4cc1-9fda-27545596fb97">
+> ```
+
+> При увімкнутому **CSRF**, сторінка `/logout` буде працювати тільки через POST-запит.
+> ```thymeleafexpressions
+> <form th:action="@{/logout}" th:method="POST">
+>     <input type="submit" value="Logout"/>
+> </form>
+> ```
+
 
 ### [TopJava - Межсайтовая подделка запроса (CSRF)](https://github.com/JavaWebinar/topjava/blob/doc/doc/lesson10.md#-9-межсайтовая-подделка-запроса-csrf)
 В конфигурации `spring-security.xml` ранее мы принудительно отключили защиту от CSRF.

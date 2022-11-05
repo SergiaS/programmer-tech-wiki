@@ -14,8 +14,6 @@
 
 
 ## Сериалищация и Десеарилизация полей
-
-
 ```java
 // Пример только записи
 @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -26,4 +24,41 @@ private String password;
 // Пример только чтения
 @JsonProperty(access = JsonProperty.Access.READ_ONLY)
 private Date registered = new Date();
+```
+
+## Створюємо запити
+В прикладі використовуються об'єкти зі Spring Web - потрібні такі залежності
+```xml
+<dependency>
+  <groupId>com.fasterxml.jackson.core</groupId>
+  <artifactId>jackson-databind</artifactId>
+  <version>2.13.4</version>
+</dependency>
+<dependency>
+  <groupId>org.springframework</groupId>
+  <artifactId>spring-web</artifactId>
+  <version>5.3.23</version>
+</dependency>
+```
+
+```java
+// GET
+RestTemplate restTemplate = new RestTemplate();
+
+String url = "https://reqres.in/api/users/2";
+System.out.println(restTemplate.getForObject(url, String.class));
+```
+```java
+// POST
+RestTemplate restTemplate = new RestTemplate();
+
+// створюємо JSON який покладемо у запит
+Map<String, String> jsonToSend = new HashMap<>();
+jsonToSend.put("name", "Test name");
+jsonToSend.put("job", "Test job");
+
+HttpEntity<Map<String, String>> request = new HttpEntity<>(jsonToSend);
+
+String url = "https://reqres.in/api/users/";
+System.out.println(restTemplate.postForObject(url, request, String.class));
 ```

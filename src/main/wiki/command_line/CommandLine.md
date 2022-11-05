@@ -1,6 +1,7 @@
 # Command line
 * [Написание HTTP-запросов с помощью Curl](http://rus-linux.net/lib.php?name=/MyLDP/internet/curlrus.html)
-* 
+* [How to set JAVA_HOME on Windows 10?](https://mkyong.com/java/how-to-set-java_home-on-windows-10/)
+* [How to install Maven on Windows](https://mkyong.com/maven/how-to-install-maven-in-windows/)
 
 > В bash слешы указываются в другую сторону - /<br>
 > В cmd - \
