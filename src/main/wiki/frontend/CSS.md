@@ -97,13 +97,16 @@ body {
 > <summary>Приклад кастомного select'а на основі CSS</summary>
 > 
 > При використанні `input` потрібно додати `label` - дуже важливо щоб `input` йшов першим оскільки це впливає на стилі,
-> і поведінку в цілому:
+> і поведінку в цілому.
+> Також щоб все працювало повинен бути встановленний атрибут `tabindex`!
 > ```html
-> <div class="test select">
->   <input class="selectopt" name="test" type="radio" id="car1" value="1">
->   <label for="car1" class="option">Audi A4</label>
->   <input class="selectopt" name="test" type="radio" id="car2">
->   <label for="car2" class="option">BMW 3-Series</label>
+> <div class="select" tabindex="1">
+>   <input name="test" type="radio" id="opt1" checked>
+>   <label for="opt1" class="option">208</label>
+>   <input name="test" type="radio" id="opt2">
+>   <label for="opt2" class="option">246</label>
+>   <input name="test" type="radio" id="opt3">
+>   <label for="opt3" class="option">250</label>
 > </div>
 > ```
 > ```css

@@ -1,5 +1,13 @@
 # [Об'єкти](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)
-Об'єкт – це колекція згрупованих змінних. В об'єкті ними виступають властивість/ключ зі значенням.
+* Як використовувати filter для об'єктів:
+  * [How to filter object array based on attributes?](https://stackoverflow.com/a/63914642)
+  * [filter() for Objects](https://stackoverflow.com/a/37616104)
+  * [How to Filter an Object by Key](https://masteringjs.io/tutorials/fundamentals/filter-key) 
+
+***
+
+Об'єкт – це колекція згрупованих змінних.
+В об'єкті ними виступають властивість/ключ зі значенням.
 
 > Об'єкт використовує фігурні дужки `{}`.
 

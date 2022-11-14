@@ -1711,3 +1711,7 @@ FallbackComponent={ErrorFallback} // own component
 Для статичної типізації (перевірка на тип) рекомендується використовувати або **Flow**, або **TypeScript**. 
 Якщо працюємо лише з **JS**, тоді можна використовувати бібліотеку **PropTypes**.
 
+
+
+## Security
+* [Modify React to handle CSRF and be identity-aware](https://developer.okta.com/blog/2022/06/17/simple-crud-react-and-spring-boot#modify-react-to-handle-csrf-and-be-identity-aware)

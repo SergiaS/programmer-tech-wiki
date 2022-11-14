@@ -1,25 +1,43 @@
 # [React Router 6](https://reactrouter.com/docs/en/v6/getting-started/installation)
 
+* [My project example - GitHub](https://github.com/SergiaS/e_react-spa-app)
+
+***
+
+* [YouTube відеокурс React Router v6](https://www.youtube.com/playlist?list=PLiZoB8JBsdznY1XwBcBhHL9L7S_shPGVE)
+* [Migration guide - Updating from v5](https://reactrouter.com/en/v6.3.0/upgrading/v5)
+* [What's new in React Router v6](https://reacttraining.com/blog/react-router-v6-pre/)
+
+***
+
+> У версії 6 є суттєві зміни від милої версії.
+
 > **Note**<br>
 > Для роботи **React Router** необхідно встановити пакет `react-router-dom`:
 > ```npm
 > npm install react-router-dom
 > ```
 
-* [YouTube відеокурс React Router v6](https://www.youtube.com/playlist?list=PLiZoB8JBsdznY1XwBcBhHL9L7S_shPGVE)
 
-> У версії 6 є суттєві зміни від милої версії.
+> Розробка SPA-додатків (Single Page Application).
+> Технологія не перезавантажує сторінку, а підвантажує потрібні дані.
 
-* Розробка SPA-додатків (Single Page Application).
-Технологія не перезавантажує сторінку, а підвантажує потрібні дані.
+> Були проекти **React Router** та **Reach Router** - вони злилися, і актуальним є **React Router**.
 
-* Були проекти **React Router** та **Reach Router** - вони злилися, і актуальним є **React Router**.
+> **Note**<br>
+> _Link_ component is very similar to the _NavLink_ component.
+> The only difference is that _NavLink_ knows when it is active while _Link_ does not.
 
 
-## [Routes](https://reactrouter.com/docs/en/v6/components/routes) і [Route](https://reactrouter.com/docs/en/v6/components/route)
+## Routes і Route
 * [YouTube - Вложенный роутинг](https://www.youtube.com/watch?v=U7c7k-NBtQg&list=PLiZoB8JBsdznY1XwBcBhHL9L7S_shPGVE&index=7) >> [Приклад з відео на GitHub](https://github.com/SergiaS/c_react/commit/c2a95d02809b104f7f2506c26fbedb9d600226e2)
 
 > Вкладенні роути домальовують додаткові дані.
+
+> [react-router v6 doesn't support exact anymore](https://stackoverflow.com/a/69866593)
+> This is because all paths match exactly by default.
+> * old - v5 `<Route exact path="/" component={Home} />`
+> * new - v6 `<Route path="/" element={<Home />} />`
 
 Та частина, котра буде постійно змінюватися, повинна бути обернута у `<Routes />`.
 Далі у `<Routes />` є дочірні структури `<Route />`.
@@ -37,30 +55,46 @@ import { Contact } from "./pages/Contact";
 import { NotFound } from "./pages/NotFound";
 
 export default function App() {
-    return (
-        <>
+  return (
+          <>
             <Header/>
-                <main className="container content">
-                    <BrowserRouter>
-                        <Routes>
-                            <Route path='/' element={<Home />} />
-                            <Route path='about' element={<About />} />
-                            <Route path='contacts' element={<Contact />} />
-                            <Route path='/*' element={<NotFound />} />
-                        </Routes>
-                    </BrowserRouter>
-                </main>
+            <main className="container content">
+              <BrowserRouter>
+                <Routes>
+                  <Route path='/' element={<Home/>}/>
+                  <Route path='about' element={<About/>}/>
+                  <Route path='contacts' element={<Contact/>}/>
+                  <Route path='/*' element={<NotFound/>}/>
+                </Routes>
+              </BrowserRouter>
+            </main>
             <Footer/>
-        </>
-    );
+          </>
+  );
 }
 ```
 
-## [Link](https://reactrouter.com/docs/en/v6/components/link) component
-Компонент `Link` надає можливість використання можливостей SPA.
 
-## [NavLink](https://reactrouter.com/docs/en/v6/components/nav-link) component
-Компонент `NavLink` виділяється тим що, та адреса, яка у даний момент є активною,
+## Link component
+> Компонент `Link` надає можливість використання можливостей SPA.
+
+> * [When should I use Link over NavLink?](https://stackoverflow.com/a/66185155)
+> 
+> The main difference between these two's is a class attribute. When we use the NavLink as a tag, it automatically inherit an active class when clicked.
+> On the other hand, the Link tag does now have an active class when clicked.
+> 
+> **When should I use the NavLink?**
+> Just as the name implies 'NavLink', we use it mostly on navigation bars. 
+> This is because the active class permits us to define our custom styling in the App.css stylesheet.
+> As such, we can use it to style our active buttons which in notify the use on which page he/she is currently on.
+> 
+> **When should I use the Link?**<br>
+> The Link tag can be used where we want to do just some routing with no special effect. For instance; 
+> we can use the Link tag for scroll-to-top button, add to card buttons, submit button and more.
+
+
+## NavLink component
+Компонент `NavLink` виділяється тим що, та адреса, яка наразі є активною,
 автоматично до компонента додається за замовчуванням клас `active`.
 
 Можна задати бажане ім'я класу, але коду буде більше - перевірка `isActive` - треба писати для кожного `NavLink`:
@@ -136,7 +170,7 @@ const setActive = ({isActive}) => isActive ? 'active-link' : '';
 ***
 
 
-## Хук [useParams](https://reactrouter.com/docs/en/v6/hooks/use-params) - параметри у посиланнях
+## Хук useParams - параметри у посиланнях
 * Параметри дістаються за допомогою хука `useParams`.
 * Параметр додається до адреси через `:`, наприклад:
     ```jsx
@@ -257,10 +291,14 @@ const setActive = ({isActive}) => isActive ? 'active-link' : '';
 </details>
 
 
-## Хук [useNavigate](https://reactrouter.com/docs/en/v6/hooks/use-navigate) - керування історією браузера
-* Прийшов на заміну хуку useHistory.
-* Повертає функцію.
-  Працює з двома параметрами - перший вказує куди переадресувати, другий - опції.
+## Хук useNavigate - керування історією браузера
+* [using history with react-router-dom v6](https://stackoverflow.com/questions/63471931/using-history-with-react-router-dom-v6)
+
+> **Note**<br> 
+> У версії 6 використовуйть `useNavigate` замість хуку `useHistory`.
+
+> Повертає функцію.
+> Працює з двома параметрами - перший вказує куди переадресувати, другий - опції.
 
 > <details>
 > <summary>ПРИКЛАД СТВОРЕННЯ КНОПКИ Go Back</summary>
@@ -299,10 +337,45 @@ const setActive = ({isActive}) => isActive ? 'active-link' : '';
 
 
 
-## Хук [useLocation](https://reactrouter.com/docs/en/v6/hooks/use-location)
+## Хук useLocation
 * [YouTube - приклад простої авторизації](https://youtu.be/jv0ckzkKYzU?t=1535) >> [Приклад з відео на GitHub](https://github.com/SergiaS/c_react/commit/c0d3841fbe765da5fd9edc2e4c45ddb53aec87f5)
 
-**Location** допомагає з роботою приватних роутів (компонент вищого порядку (HOC)).
+> `HashRouter` не підтримує хук `useLocation`!
+
+**Location** - передача даних/параметрів через React Router.
+Допомагає з роботою приватних роутів (компонент вищого порядку (HOC)).
+
+Не варто додавати занадто багато URL-параметрів, щобільше, за допомогою параметра передаються тільки рядки, а вам, 
+швидше за все, знадобиться передавати більш різноманітні дані.
+
+На щастя, все можливе завдяки `state`, змінна стану в посиланнях: кожне посилання може мати свій параметр `to` для отримання даних, 
+що передаються через змінну стану за допомогою хука `useLocation`.
+
+В об'єкті `to` обов'язково повинні встановлюватися змінна стан `state` і змінна `pathname` - це кінцева точка URL.
+```json
+{
+"pathname": "url",
+"state": {
+    "yourstatevar": "value"
+  }
+}
+```
+***
+
+* [How to get the state from React Router Link component using useLocation](https://stackoverflow.com/a/70217984)
+* [Як передавати параметри в React Router v6](https://stackoverflow.com/a/70306547)
+
+```jsx
+// Component where the <Link /> is
+<Link to={'/page1'} state={{ state: 'mystate' }} >Page 1</Link>
+```
+```jsx
+// Component where you want to get the state
+import { useLocation } from 'react-router-dom';
+
+const { state } = useLocation()
+```
+
 
 *** 
 ```jsx
@@ -312,7 +385,7 @@ location.state?.from?.pathname || '/';
 
 
 
-## Хук [useSearchParams](https://reactrouter.com/docs/en/v6/hooks/use-search-params) - робота з параметрами запиту
+## Хук useSearchParams - робота з параметрами запиту
 * [YouTube - приклад створення пошуку](https://www.youtube.com/watch?v=C-AFpwNrPRU&list=PLiZoB8JBsdznY1XwBcBhHL9L7S_shPGVE&index=6) >> [Приклад з відео на GitHub](https://github.com/SergiaS/c_react/commit/2f108c1dbd3a2669ec05daab24ca2f61fe95e901)
 
 

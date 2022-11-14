@@ -326,6 +326,24 @@ protected void configure(HttpSecurity http) throws Exception {
 невозможно сделать из браузера POST запрос с типом "application/json" на сайт с другим доменным именем без специального разрешения.
 
 
+## Auth0
+Дана технологія дає можливість зайти на сайт під акаунтом Google, Facebook, GiHub, Okta...
+
+### Приклад з сервісом **auth0.com**
+Гарний приклад з сервісом **auth0.com** дивись на [github](https://github.com/oktadev/okta-spring-boot-react-crud-example/tree/auth0).
+
+Треба замінити дані в файлі `application.properties`:
+```commandline
+spring.security.oauth2.client.provider.auth0.issuer-uri=https://dev-auth0-sk.eu.auth0.com/
+spring.security.oauth2.client.registration.auth0.client-id=Rn6Jq8CouXqUmlxj1PZlUGHAbKrpMmAW
+spring.security.oauth2.client.registration.auth0.client-secret=y5gqTBGBTA4Xi1SIYoNjserrsPGfV2bn8Y2SUK_f_ngW5wa4HNRaP7NPSKcAI5Nx
+```
+В акаунті на сервісі `https://manage.auth0.com/` додай Application:
+provide a memorable name, and select Regular Web Application. Specify http://localhost:8080/login/oauth2/code/auth0 for the Callback URLs and http://localhost:3000,http://localhost:8080 for the Allowed Logout URLs.
+
+запускай спрінг та реакт, і пробуй login/logout...
+
+
 ## Questions
 
 ***
