@@ -10,7 +10,7 @@
 
 ***
 
-> У версії 6 є суттєві зміни від милої версії.
+> У версії 6 є суттєві зміни від минулої версії.
 
 > **Note**<br>
 > Для роботи **React Router** необхідно встановити пакет `react-router-dom`:
@@ -18,6 +18,10 @@
 > npm install react-router-dom
 > ```
 
+> [Here are some questions that people commonly have about React Router v6](https://reactrouter.com/en/v6.3.0/faq) <br>
+> * React class components don't support hooks! You need to wrap it! (look for useParams example).
+> * `<Route>` has an `element` prop instead of `render` or `component`.
+> * You need to use `<Routes>` (v6) instead `<Switch>` (v5).
 
 > Розробка SPA-додатків (Single Page Application).
 > Технологія не перезавантажує сторінку, а підвантажує потрібні дані.
@@ -28,6 +32,15 @@
 > _Link_ component is very similar to the _NavLink_ component.
 > The only difference is that _NavLink_ knows when it is active while _Link_ does not.
 
+
+***
+
+## Маршрутизація
+* [useRoutes](https://reactrouter.com/en/main/hooks/use-routes)
+* [Routes](https://reactrouter.com/en/main/components/routes)
+* [Route](https://reactrouter.com/en/6.4.1/route/route)
+* [Outlet](https://reactrouter.com/en/main/components/outlet)
+* [Link](https://reactrouter.com/en/main/components/link)
 
 ## Routes і Route
 * [YouTube - Вложенный роутинг](https://www.youtube.com/watch?v=U7c7k-NBtQg&list=PLiZoB8JBsdznY1XwBcBhHL9L7S_shPGVE&index=7) >> [Приклад з відео на GitHub](https://github.com/SergiaS/c_react/commit/c2a95d02809b104f7f2506c26fbedb9d600226e2)
@@ -172,6 +185,9 @@ const setActive = ({isActive}) => isActive ? 'active-link' : '';
 
 ## Хук useParams - параметри у посиланнях
 * Параметри дістаються за допомогою хука `useParams`.
+* Для використання `useParams` у класовому компоненті, його необхідно обернути на вищому рівні:
+  * [useParams example for class component](https://stackblitz.com/edit/react-p4a5h2?embed=1&file=src/App.js)
+  * [How to Access URL Parameters Using React Router 6](https://chrisvhur.medium.com/how-to-access-url-parameters-using-react-router-6-a4cf6bdad4dd) 
 * Параметр додається до адреси через `:`, наприклад:
     ```jsx
     <Route path="posts/:id" element={<SinglePage/>}/>
@@ -181,7 +197,7 @@ const setActive = ({isActive}) => isActive ? 'active-link' : '';
 * У React Router версії 6 порядок параметрів не важливий.
 
 > <details>
-> <summary>ПРИКЛАД ДИНАМІЧНИХ ПАРАМЕТРІВ У ПОСИЛАННЯХ</summary>
+> <summary>ПРИКЛАД useParams З ФУНКЦІОНАЛЬНИМИ КОМПОНЕНТАМИ</summary>
 >
 > Простий приклад логіки роботи динамічних роутів.
 >
@@ -203,7 +219,7 @@ const setActive = ({isActive}) => isActive ? 'active-link' : '';
 >     return (
 >         <>
 >             <Routes>
->                 <Route path="/" element={<Layout />}>
+>                 <Route path="/" element={<Layout/>}>
 >                     <Route index element={<Home/>}/>
 >                     <Route path="about" element={<About/>}/>
 >                     <Route path="posts" element={<Blog/>}/>
@@ -342,7 +358,7 @@ const setActive = ({isActive}) => isActive ? 'active-link' : '';
 
 > `HashRouter` не підтримує хук `useLocation`!
 
-**Location** - передача даних/параметрів через React Router.
+**Location** - передача даних/параметрів через **React Router**.
 Допомагає з роботою приватних роутів (компонент вищого порядку (HOC)).
 
 Не варто додавати занадто багато URL-параметрів, щобільше, за допомогою параметра передаються тільки рядки, а вам, 

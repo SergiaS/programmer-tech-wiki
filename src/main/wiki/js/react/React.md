@@ -1715,3 +1715,20 @@ FallbackComponent={ErrorFallback} // own component
 
 ## Security
 * [Modify React to handle CSRF and be identity-aware](https://developer.okta.com/blog/2022/06/17/simple-crud-react-and-spring-boot#modify-react-to-handle-csrf-and-be-identity-aware)
+* [React JWT Authentication (without Redux) example](https://www.bezkoder.com/react-jwt-auth/#Role-based_Pages) || [GitHub](https://github.com/bezkoder/react-jwt-auth)
+
+> **CORS**. Контекс наступний: React у ролі фронтенду відмальовує REST API бекенду Spring.
+> Щоб усе працювало між серверами багато не потрібно.
+> 
+> На стороні бекенду Spring (:8080) треба вліпити над своїм REST-контролером анотацію `@CrossOrigin` без будь-яких налаштувань.
+> За дефолтом дозволяє усе.
+> 
+> Наразі React спроможний читати дані, але не записувати (змінювати/додавати).
+> 
+> Тепер налаштовуємо фронтенд React (:3000).
+> 
+> Не потрібно додавати будь-які **headers**, через axios так точно, а Spring зрозуміє `.json`.
+> 
+> Необхідно створити проксі - додавши до `package.json` строку `"proxy": "http://localhost:8080"`.
+> 
+> Все.

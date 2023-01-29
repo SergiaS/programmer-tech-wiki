@@ -52,7 +52,7 @@ spring.devtools.restart.poll-interval=2s
 spring.devtools.restart.quiet-period=1s
 ```
 
-<hr>
+***
 
 
 

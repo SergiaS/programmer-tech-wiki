@@ -7,8 +7,9 @@ Node Package Manager (npm) comes when you install [NodeJS](nodejs.org).
 > npm install -g npm
 > ```
 
-> 2-in-1 commands
-> ```commandlinenpm i && npm start```
+> 2-in-1 commands `commandlinenpm i && npm start`
+
+> Встановити пакет у теперішню теку` npx create-react-app ./`
 
 **Node JS** це не мова програмування, а платформа, що побудована на базі движка V8 і мови C++. 
 Кожен браузер має свій движок, котрий виконує код, наприклад у Google Chrome це був движок V8, у FireFox - Spider Monkey, у IE - Chakra... 

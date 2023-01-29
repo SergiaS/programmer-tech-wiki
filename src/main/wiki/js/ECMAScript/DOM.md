@@ -67,7 +67,7 @@ let heading2 = document.getElementById("heading");
 console.log(heading2); // <h1 id="heading">Hi there</h1>
 ```
 
-<hr>
+***
 
 ## `textContent`
 С `getElementById` можно получить только один текст без тегов:
@@ -81,20 +81,20 @@ console.log(list.textContent);
 list.textContent = "Hi there";
 ```
 
-<hr>
+***
 
 ## `innerHTML`
 Позволяет получать текст с HTML элемента.
 Также может динамически задавать своё значение.
 
-<hr>
+***
 
 ## Разница между `innerText` и `textContent`
 [StackOverflow](https://stackoverflow.com/a/35213639).
 `innerText` вернет видимый текст содержащийся в ноде, а `textContent` - весь.
 Здесь используется стиль `style="display: none;"`.
 
-<hr>
+***
 
 ## `querySelector`
 Достает только на первый попавшийся селектор.
@@ -105,7 +105,7 @@ let list = document.querySelector("ul");
 console.log(list);
 ```
 
-<hr>
+***
 
 ## `querySelectorAll`
 Возвращает NodeList - массив элементов с указанным селектором:
@@ -113,7 +113,7 @@ console.log(list);
 let lis = document.querySelectorAll("li");
 ```
 
-<hr>
+***
 
 ## `style`
 Изменить стиль можно очень просто - есть пара вариантов:
@@ -152,7 +152,7 @@ let lis = document.querySelectorAll("li");
     // <h1 id="heading" class="changeBG changeFT">Hi there</h1>
     ```
 
-<hr>
+***
 
 ## `classList`
 Свойство [classList](https://developer.mozilla.org/ru/docs/Web/API/Element/classList) возвращает псевдомассив `DOMTokenList`, содержащий все классы элемента.
@@ -162,7 +162,7 @@ let lis = document.querySelectorAll("li");
 var elementClasses = elem.classList;
 ```
 
-<hr>
+***
 
 ## Events (події)
 
@@ -294,7 +294,7 @@ overlay.addEventListener('click', deleteElement, {once: true});
     ```js
     console.log(paragraph.hasAttribute("style"))
     ```
-<hr>
+***
 
 ## DOM navigation
 Навигация имеется ввиду вызов родителя (parent), наследника (child), брата или сестры (sibling).
@@ -365,8 +365,7 @@ overlay.addEventListener('click', deleteElement, {once: true});
     console.log(list);
     ```
 
-<hr>
-<hr>
+***
 
 
 ### Snippets

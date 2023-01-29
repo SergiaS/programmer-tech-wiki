@@ -331,6 +331,7 @@ logName("antonio").then(res => {
 
 
 ## Fetch API
+* [Axios vs. fetch(): Which is best for making HTTP requests?](https://blog.logrocket.com/axios-vs-fetch-best-http-requests/)
 * [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch)
 * [Отличия fetch() от jQuery](https://developer.mozilla.org/ru/docs/Web/API/Fetch_API#отличия_от_jquery)
 * [Fetch для відправки POST запиту](https://developer.mozilla.org/en-US/docs/Web/API/fetch)

@@ -318,27 +318,27 @@ public static void quickSort(int[] arr, int leftBorder, int rightBorder) {
 // The time complexity of this solution is O(n) and space complexity is O(1)
 public class TwoPointer {
 
-    public static void main(String[] args) {
-        System.out.println(twoSums(new int[]{1, 1, 2, 3, 4, 6, 8, 9}, 11));
+  public static void main(String[] args) {
+    System.out.println(twoSums(new int[]{1, 1, 2, 3, 4, 6, 8, 9}, 11));
+  }
+
+  public static boolean twoSums(int[] array, int target) {
+    int pointerOne = 0;
+    int pointerTwo = array.length - 1;
+
+    while (pointerOne < pointerTwo) {
+      int sum = array[pointerOne] + array[pointerTwo];
+
+      if (sum == target) {
+        return true;
+      } else if (sum < target) {
+        pointerOne++;
+      } else {
+        pointerTwo--;
+      }
     }
-
-    public static boolean twoSums(int[] array, int target) {
-        int pointerOne = 0;
-        int pointerTwo = array.length-1;
-
-        while (pointerOne < pointerTwo) {
-            int sum = array[pointerOne] + array[pointerTwo];
-
-            if (sum == target) {
-                return true;
-            } else if (sum < target) {
-                pointerOne++;
-            } else {
-                pointerTwo--;
-            }
-        }
-        return false;
-    }
+    return false;
+  }
 }
 ```
 
@@ -514,3 +514,16 @@ public int deepestLeavesSum(TreeNode root) {
 > СИНОНІМИ: модуль, ділення по модулю
 > 
 > ВИКОРИСТОВУЮТЬ ЗНАЧЕННЯ: `1e7`, `10000000007`, `%`, 10<sup>9</sup> + 7, `10^9 + 7`
+
+
+
+# Цікаві рішення, які можуть знадобитися при розробці
+
+***
+
+[491. Non-decreasing Subsequences](https://leetcode.com/problems/non-decreasing-subsequences/)
+
+Знайти лише унікальні неспадні підмасиви з кількістю елементів понад 2. 
+[SOLUTION](https://leetcode.com/problems/non-decreasing-subsequences/solutions/3075034/easy-solution-fully-explained-c-python3-java/)
+
+***

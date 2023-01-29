@@ -13,21 +13,21 @@
 Пример показа/логирования времени работы каждого тестового метода:
 ```java
 public class LogRule implements TestRule {
-    private final Logger log = LoggerFactory.getLogger(LogRule.class);
-    private final Clock clock = Clock.systemDefaultZone();
-    private long currentTime = 0L;
+  private final Logger log = LoggerFactory.getLogger(LogRule.class);
+  private final Clock clock = Clock.systemDefaultZone();
+  private long currentTime = 0L;
 
-    @Override
-    public Statement apply(Statement base, Description description) {
-        return new Statement() {
-            @Override
-            public void evaluate() throws Throwable {
-                currentTime = clock.millis();
-                base.evaluate();
-                log.info("{} time work: {} sec", description.getMethodName(), (clock.millis() - currentTime) / 1000.0);
-            }
-        };
-    }
+  @Override
+  public Statement apply(Statement base, Description description) {
+    return new Statement() {
+      @Override
+      public void evaluate() throws Throwable {
+        currentTime = clock.millis();
+        base.evaluate();
+        log.info("{} time work: {} sec", description.getMethodName(), (clock.millis() - currentTime) / 1000.0);
+      }
+    };
+  }
 }
 ```
 
@@ -35,18 +35,18 @@ public class LogRule implements TestRule {
 ```java
 public class MealServiceTest {
 
-    @Rule
-    public LogRule logRule = new LogRule();
+  @Rule
+  public LogRule logRule = new LogRule();
 
-    @Autowired
-    private MealService service;
+  @Autowired
+  private MealService service;
 
-    @Test
-    public void delete() {
-        service.delete(MEAL1_ID, USER_ID);
-        assertThrows(NotFoundException.class, () -> service.get(MEAL1_ID, USER_ID));
-    }
-    // other code
+  @Test
+  public void delete() {
+    service.delete(MEAL1_ID, USER_ID);
+    assertThrows(NotFoundException.class, () -> service.get(MEAL1_ID, USER_ID));
+  }
+  // other code
 }
 ```
 

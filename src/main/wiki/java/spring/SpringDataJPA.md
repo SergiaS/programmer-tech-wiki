@@ -118,7 +118,7 @@ public class Post {
 ***
 
 ### @EntityGraph
-> Служит решением проблемы **N+1**. 
+> Слугує вирішенням проблеми **N+1**. 
 > Основной целью **JPA Entity Graph** является повышение производительности среды выполнения при загрузке связанных ассоциаций сущности и основных полей.
 > `@EntityGraph` сокращает количество лишних запросов.
 
@@ -134,12 +134,12 @@ public class Post {
 ```
 
 ## [Entity Graph в Spring Data JPA](https://sysout.ru/entity-graph-v-spring-data-jpa/)
-С помощью Entity Graph можно задать для каждого запроса свою стратегию загрузки данных: **LAZY** либо **EAGER**.
+За допомогою **Entity Graph** можна задати для кожного запиту свою стратегію завантаження даних: **LAZY** чи **EAGER**.
 
-> For queries with named parameters you need to use provide names for method parameters. Use @Param for query method parameters
+> For queries with named parameters you need to use provide names for method parameters.
+> Use `@Param` for query method parameters.
 
-Тип стратегии графа LOAD позволяет достать все значения сущности.
-
+Тип стратегії графа `LOAD` дозволяє дістати усі значення сутності.
 ```java
 @Query("SELECT u FROM User u WHERE u.id=:userId")
 @EntityGraph(value = "Meal.user", type = EntityGraph.EntityGraphType.LOAD)
@@ -161,6 +161,10 @@ User getUserById(@Param("userId")int userId);
 свой `fetchType` (то есть если у атрибута, не указанного в EntityGraph, `fetchType` был `EAGER`, то он и останется `EAGER`)
 
 С помощью `@NamedSubgraph` можно также изменить `fetchType` вложенных объектов Entity.
+
+***
+
+Приклад 
 
 
 ## DomainClassConverter

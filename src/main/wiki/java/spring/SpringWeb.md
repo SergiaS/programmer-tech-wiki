@@ -441,6 +441,7 @@ public class MySpringMvcDispatcherServletInitializer extends AbstractAnnotationC
 
 
 ## ResponseEntity
+* [Spring ResponseEntity - How to customize the response in Spring Boot](https://youtu.be/B5Zrn1Tzyqw)
 `ResponseEntity<T>` - это обертка http-response. При создании ресурса принято отдавать URL на имя этого ресурса. Поэтому
 вместо сущности нужно возвращать `ResponseEntity` параметризованной сущностью.
 ```java
@@ -454,7 +455,33 @@ public ResponseEntity<User> createWithLocation(@RequestBody User user) {
 }
 ```
 
-## MySpringMvcDispatcherSerlvetIntitializer
+***
+
+* [HTTP Interfaces from Spring 6.0](https://youtu.be/TR254zh-f3c?t=1427)
+
+```java
+// How to get a list of posts
+@Service
+public class PostService {
+  private final RestTemplate restTemplate;
+
+  public PostService(RestTemplate restTemplate) {
+    this.restTemplate = restTemplate;
+  }
+
+  public List<Post> loadPosts() {
+    ResponseEntity<List<Post>> exchange = restTemplate.exchange("https://jsonplaceholder.typicode.com/posts",
+        HttpMethod.GET,
+        null,
+        new ParameterizedTypeReference<List<Post>>() {
+        });
+    return exchange.getBody();
+  }
+}
+```
+
+
+## MySpringMvcDispatcherServletInitializer
 Класс создается вместо `web.xml`.
 
 
@@ -940,7 +967,7 @@ public String update(@ModelAttribute("person") Person person, @PathVariable("id"
 контроллера, т.е. `POST` запрос нужно направить на `PATCH` метод выше - для этого нужно создать фильтр.
 
 У **Spring** уже есть фильтр, который читает значения с поля `_method` - `HiddenHttpMethodFilter`. Реализация
-в `MySpringMvcDispatcherSerlvetIntitializer` будет такой:
+в `MySpringMvcDispatcherServletInitializer` будет такой:
 
 ```java
 @Override

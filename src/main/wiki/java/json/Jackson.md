@@ -13,21 +13,29 @@
 `ObjectMapper` предназначен для сериализации и десериализации объекта.
 
 
-## Сериалищация и Десеарилизация полей
+## Серіалізація та Десерілізація полей
+
+### @JsonProperty
 ```java
-// Пример только записи
+// Приклад тільки запису даних
 @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 private String password;
 ```
 
 ```java
-// Пример только чтения
+// Приклад тільки читання даних
 @JsonProperty(access = JsonProperty.Access.READ_ONLY)
 private Date registered = new Date();
 ```
 
+### @JsonView
+* [My Example](https://github.com/SergiaS/example_spring/tree/5b1d69fa1030416a95c0f6e097b0da57858f430e)
+* [Jackson @JsonView examples - mkyong](https://mkyong.com/java/jackson-jsonview-examples/)
+
+
+
 ## Створюємо запити
-В прикладі використовуються об'єкти зі Spring Web - потрібні такі залежності
+В прикладі використовуються об'єкти зі **Spring Web** - потрібні такі залежності
 ```xml
 <dependency>
   <groupId>com.fasterxml.jackson.core</groupId>
@@ -40,7 +48,6 @@ private Date registered = new Date();
   <version>5.3.23</version>
 </dependency>
 ```
-
 ```java
 // GET
 RestTemplate restTemplate = new RestTemplate();

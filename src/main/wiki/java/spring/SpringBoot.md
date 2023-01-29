@@ -14,6 +14,16 @@
 > Чтобы посмотреть какие бины инициализированы (автоконфигурация классов), нужно в `application.properties` добавить
 > `logging.level.org.springframework=debug` и запустить приложение. Смотрим **Positive matches** и **Negative matches**.
 
+> Якщо при запиті сталася помилка, більш детальну інфу цієї помилки можна повертати у відповіді додавши команди у `application.properties`:
+> ```properties
+> server.error.include-message=always
+> server.error.include-binding-errors=always
+> server.error.include-stacktrace=always
+> ```
+> Щоб дивитися **stacktrace** лише за запитом, тоді робимо запит з `?trace=true` виставляємо варіант `on_trace_param`
+> ```properties
+> server.error.include-stacktrace=on_trace_param
+> ```
 
 ## Запуск SpringBoot через консоль
 Запустити Spring Boot на віддаленому сервері зазвичай роблять через консоль, оскільки GUI немає:
@@ -121,3 +131,223 @@ public class ServingWebContentApplication {
 The `main()` method uses Spring Boot’s `SpringApplication.run()` method to launch an application. 
 Did you notice that there was not a single line of XML? **There is no `web.xml` file, either**. 
 This web application is 100% pure Java and you did not have to deal with configuring any plumbing or infrastructure.
+
+
+### @ConfigurationProperties
+Щоб запрацювала анотація, необхідно підключити додаткову залежність:
+```xml
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-configuration-processor</artifactId>
+  <optional>true</optional>
+</dependency>
+```
+
+> <details>
+> <summary>ПОКАЗАТИ ПРИКЛАД</summary>
+> 
+> Маємо такі дані в файлі `application.properties`:
+> ```properties
+> info.app.name=Spring Boot Master Class Course
+> info.app.description=Master Spring Boot
+> info.app.version=1.0.0
+> ```
+> і такий клас, котрий підхватить все сам - тільки вкажи префікс
+> ```java
+> @Configuration
+> @ConfigurationProperties(prefix = "info.app")
+> public class InfoApp {
+>   private String name;
+>   private String description;
+>   private String version;
+> 
+>   public String getName() {
+>     return name;
+>   }
+> 
+>   public void setName(String name) {
+>     this.name = name;
+>   }
+> 
+>   public String getDescription() {
+>     return description;
+>   }
+> 
+>   public void setDescription(String description) {
+>     this.description = description;
+>   }
+> 
+>   public String getVersion() {
+>     return version;
+>   }
+> 
+>   public void setVersion(String version) {
+>     this.version = version;
+>   }
+> 
+>   @Override
+>   public String toString() {
+>     return "InfoApp{" +
+>         "name='" + name + '\'' +
+>         ", description='" + description + '\'' +
+>         ", version='" + version + '\'' +
+>         '}';
+>   }
+> }
+> ```
+> Подивитися результат можна додавши бін з `CommandLineRunner`:
+> ```java
+> @Bean
+> CommandLineRunner commandLineRunner(InfoApp infoApp) {
+>   return args -> {
+>     System.out.println("Command line runner hooray");
+>     System.out.println(infoApp);
+>   };
+> }
+> ```
+> 
+> </details>
+
+
+## Application .properties / .yaml settings files
+
+### Profiles
+Додаток може мати декілька `application.properties` з різними налаштуваннями.
+
+Spring дозволяє використовувати різні профілі, для того, щоб запустити програму з різними налаштуваннями.
+
+Наприклад, у нас є 2 файла з різними налаштуваннями (1 - `application.properties`, 2 - `application-dev.properties`), один файл для розробки, а інший - для продакшна.
+Ми можемо в стартових налаштуваннях IDEA (**Program arguments**) задати необхідний файл для запуску вказавши `--spring.profiles.active=dev`.
+
+
+
+## Spring Tests
+> With Integration tests you should only using MockMvc
+
+### @SpringBootTest
+Встановлюється над класом в тестах.
+При тестуванні буде запускатися
+
+### Tests Examples
+
+
+> <details>
+> <summary>Integration Testing</summary>
+> Тестуємо контролер з ендпоінтами
+> 
+> ```java
+> // простий репозиторій
+> public interface PaymentRepository extends CrudRepository<Payment, Long> {
+> }
+> ```
+> ```java
+> // контролер для тестування
+> @RestController
+> @RequestMapping("/api/v1/payment")
+> public class PaymentController {
+> 
+>   private final PaymentService paymentService;
+> 
+>   @Autowired
+>   public PaymentController(PaymentService paymentService) {
+>     this.paymentService = paymentService;
+>   }
+> 
+>   @RequestMapping
+>   public void makePayment(@RequestBody PaymentRequest paymentRequest) {
+>     paymentService.chargeCard(paymentRequest.getPayment().getCustomerId(), paymentRequest);
+>   }
+> }
+> ```
+> ```java
+> // тестування контролеру
+> import com.amigoscode.testing.customer.Customer;
+> import com.amigoscode.testing.customer.CustomerRegistrationRequest;
+> import com.fasterxml.jackson.core.JsonProcessingException;
+> import com.fasterxml.jackson.databind.ObjectMapper;
+> import org.junit.jupiter.api.Test;
+> import org.springframework.beans.factory.annotation.Autowired;
+> import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+> import org.springframework.boot.test.context.SpringBootTest;
+> import org.springframework.http.MediaType;
+> import org.springframework.test.web.servlet.MockMvc;
+> import org.springframework.test.web.servlet.ResultActions;
+> 
+> import java.math.BigDecimal;
+> import java.util.Objects;
+> import java.util.UUID;
+> 
+> import static org.assertj.core.api.Assertions.assertThat;
+> import static org.junit.jupiter.api.Assertions.fail;
+> import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+> import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+> import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+> 
+> @SpringBootTest
+> @AutoConfigureMockMvc
+> public class PaymentIntegrationTest {
+> 
+>   @Autowired
+>   private PaymentRepository paymentRepository;
+> 
+>   @Autowired
+>   private MockMvc mockMvc;
+> 
+>   @Test
+>   void itShouldCreatePaymentSuccessfully() throws Exception {
+>     // Given a customer
+>     UUID customerId = UUID.randomUUID();
+>     Customer customer = new Customer(customerId, "James", "0000000");
+> 
+>     CustomerRegistrationRequest customerRegistrationRequest = new CustomerRegistrationRequest(customer);
+> 
+>     // Register
+>     ResultActions customerRegResultActions = mockMvc.perform(put("/api/v1/customer-registration")
+>         .contentType(MediaType.APPLICATION_JSON)
+>         .content(Objects.requireNonNull(objectToJson(customerRegistrationRequest))));
+> 
+>     // ... Payment
+>     long paymentId = 1L;
+> 
+>     Payment payment = new Payment(
+>         paymentId,
+>         customerId,
+>         new BigDecimal("100.00"),
+>         Currency.GBP,
+>         "x0x0x0x0",
+>         "Zakat"
+>     );
+> 
+>     // ... Payment request
+>     PaymentRequest paymentRequest = new PaymentRequest(payment);
+> 
+>     // ... When payment is sent
+>     ResultActions paymentResultActions = mockMvc.perform(post("/api/v1/payment")
+>         .contentType(MediaType.APPLICATION_JSON)
+>         .content(Objects.requireNonNull(objectToJson(paymentRequest))));
+> 
+>     // Then both customer registration and payment requests are 200 status code
+>     customerRegResultActions.andExpect(status().isOk());
+>     paymentResultActions.andExpect(status().isOk());
+> 
+>     // Payment is stored in db
+>     // TODO: Do not use paymentRepository instead create an endpoint to retrieve payments for customers
+>     assertThat(paymentRepository.findById(paymentId))
+>         .isPresent()
+>         .hasValueSatisfying(p -> assertThat(p).isEqualToComparingFieldByField(payment));
+> 
+>     // TODO: Ensure sms is delivered
+>   }
+> 
+>   private String objectToJson(Object object) {
+>     try {
+>       return new ObjectMapper().writeValueAsString(object);
+>     } catch (JsonProcessingException e) {
+>       fail("Failed to convert object to json");
+>       return null;
+>     }
+>   }
+> }
+> ```
+> 
+> </details>

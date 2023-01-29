@@ -1,4 +1,5 @@
 # React Code Snippets, Examples
+* [Композиція і наслідування - приклади функціонального і класового компонентів](https://reactjs.org/docs/composition-vs-inheritance.html)
 * [How to Initialize, Add, Remove and Iterate in Set, Object and Array](https://stackoverflow.com/a/70234746)
 
 

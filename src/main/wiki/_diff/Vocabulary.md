@@ -29,7 +29,7 @@
   В команде может быть около семи человек.
 
 
-### Литература
+### Література
 
 #### JAVA
 * `Java. Эффективное программирование`, Джошуа Блох.
@@ -42,15 +42,16 @@
 
 # English
 
-### Литература
+### Література
 [Учебник английского языка от программиста](https://urvanov.ru/2018/05/13/учебник-английского-языка/)
 
-### Сокращения
-* `BTW` - by the way
-* `ASAP` - as soon as possible
+### Скорочення
+* `BTW` - by the way.
+* `ASAP` - as soon as possible.
+* `AKA` - **also known as**, скор. від «також відомий як…» , псевдонім.
 
 
-### Чтение формул, математика:
+### Читання формул, математика:
 * [Source - Baeldung: An Introduction to the Theory of Big-O Notation](https://www.baeldung.com/cs/big-o-notation)
   
   f(x) = O(g(x)), we say **f of x is big-O g of x**.
@@ -65,7 +66,7 @@
 
 ***
 
-* `2 * 3 = 6` читается как **two times three is six**;
+* `2 * 3 = 6` читається як **two times three is six**;
 * `O(n2)` - **big O n square**;
 * `120` - **one twenty**;
 

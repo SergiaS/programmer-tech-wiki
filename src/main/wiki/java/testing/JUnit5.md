@@ -1,6 +1,8 @@
 # JUnit 5
-* [Туториал по JUnit 5  - Введение](https://habr.com/ru/post/590607/)
+* [JUnit 5 User Guide](https://junit.org/junit5/docs/current/user-guide/)
+* [Туториал по JUnit 5 - Введение](https://habr.com/ru/post/590607/)
 
+> JUnit 5 = JUnit Platform + JUnit Jupiter + JUnit Vintage
 
 ## Миграция с JUnit4 на JUnit5 в TopJava
 
@@ -40,4 +42,46 @@
 * Аннотация `@Before` сменилась на `@BeforeEach`.
 * Аннотации `@BeforeClass` и `@AfterClass` сменились на `@BeforeAll` и `@AfterAll` соответственно.
 * Класс `Assert` заменен на `Assertions`.
-* 
+
+
+## Examples
+
+> <details>
+> <summary>Приклад параметризованого тесту - @ParameterizedTest</summary>
+> Зменшує кількість коду та спрощує тестування
+> 
+> ```java
+> import org.junit.jupiter.api.BeforeEach;
+> import org.junit.jupiter.params.ParameterizedTest;
+> import org.junit.jupiter.params.provider.CsvSource;
+> 
+> import static org.assertj.core.api.Assertions.assertThat;
+> 
+> class PhoneNumberValidatorTest {
+>   
+>   private PhoneNumberValidator underTest;
+> 
+>   @BeforeEach
+>   void setUp() {
+>     underTest = new PhoneNumberValidator();
+>   }
+> 
+>   @ParameterizedTest
+>   @CsvSource({
+>       "+447000000000, true",
+>       "+4470000000001, false",
+>       "447000000000, false"
+>   })
+>   void itShouldValidatePhoneNumber(String phoneNumber, boolean expected) {
+>     // When
+>     boolean isValid = underTest.test(phoneNumber);
+> 
+>     // Then
+>     assertThat(isValid).isEqualTo(expected);
+>   }
+> }
+> ```
+> 
+> </details>
+
+

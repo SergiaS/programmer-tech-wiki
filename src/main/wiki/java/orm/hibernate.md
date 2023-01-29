@@ -11,6 +11,16 @@ Hibernate.initialize(person.getItems());
 
 ***
 
+Налаштування для **Spring Boot** - щоб сесія зі старту була відкрита до її закриття.
+Допомагає вирішити проблему `LazyInitializationException`. 
+**<u>Але це є ПОГАНОЮ ПРАКТИКОЮ, оскільки це обходить усі шари працюючи напряму - НЕ РЕКОМЕНДУЄТЬСЯ!</u>** 
+```properties
+spring.jpa.open-in-view=true
+```
+
+
+***
+
 __import javax.persistence__
 
 Hibernate – самая популярная реализация спецификации JPA. Таким образом JPA описывает правила, а Hibernate реализует их.
@@ -605,8 +615,8 @@ return new Configuration().configure().buildSessionFactory();
 
 Flush происходит в трех ситуациях:
 > Когда вы делаете commit транзакции Hibernate;
-> До того как выполняется запрос в БД (`entityManager` делает `flush()` до выполнения запроса. Это происходит не для каждого запроса! 
-Важно учесть, что цель сессии Hibernate минимизировать количество операций записи в БД, поэтому она не делает `flush()`, когда не считает это необходимым);
+> До того как выполняется запрос в БД (`entityManager` делает `flush()` до выполнения запроса. Это происходит не для каждого запроса!
+> Важно учесть, что цель сессии Hibernate минимизировать количество операций записи в БД, поэтому она не делает `flush()`, когда не считает это необходимым);
 > Когда вы вызываете `entityManager.flush()`.
 
 
@@ -787,7 +797,7 @@ em.createNativeQuery("DELETE FROM payouts WHERE product_id=:productId")
 ```
 
 ### Вирішення проблеми N+1 в Hibernate
-Необхідно написати грамотний `JOIN` - в результаті буде зроблений лише один запит, зотрий завантажить усі додаткові сутності.
+Необхідно написати грамотний `JOIN` - в результаті буде зроблений лише один запит, котрий завантажить усі додаткові сутності.
 ```java
 // SQL: A LEFT JOIN B
 List<Person> people = session.createQuery("SELECT p FROM Person p LEFT JOIN FETCH p.items")
@@ -818,10 +828,12 @@ Person Bob has: [Item{id=4, itemName='Kindle}, Item{id=5, itemName='TV}, Item{id
 ... і не забуваймо що треба перевизначити методи `equals` та `hashCode` щоб вірно отримувати унікальних Person.
 
 
+
 ## Connection pool
 Чтобы получить соединение с БД, __Hibernate__ использует JDBC-подключение, а это времязатратная операция. 
 Поэтому, рекомендуется использовать __connection pool__, например - `c3p0` (подключить зависимость). 
 Этот пул хранит соединения открытыми некоторое время, и закрывает их, когда они уже становятся не нужными. 
+
 `c3p0` - __connection pool__, который позволяет экономить время на подключение к БД.
 ```xml
 <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
@@ -835,11 +847,12 @@ Person Bob has: [Item{id=4, itemName='Kindle}, Item{id=5, itemName='TV}, Item{id
 
 
 ## Debug
-> Проверять запросы **Hibernate** нужно через `run`. Если делаете debug и брекпойнт, то могут делаться лишние запросы к базе (дебаггер дергает `toString`)!
+> Проверять запросы **Hibernate** нужно через `run`. 
+> Если делаете **debug + брекпойнт**, то могут делаться лишние запросы к базе (дебаггер дергает `toString`)!
 
 
 ## Errors
-__Error executing DDL "alter table student_roles add constraint FK5wsgmwcdh1mu2aakbatae9ouh foreign key (student_id) references student (id)" via JDBC Statement__
+> Error executing DDL "alter table student_roles add constraint FK5wsgmwcdh1mu2aakbatae9ouh foreign key (student_id) references student (id)" via JDBC Statement
 
 При данной ошибке нужно установить необходимый диалект для используемой БД.
 Например: `MySQL8Dialect`, `MySQLInnoDBDialect`, `MySQLMyISAMDialect`, `MySQL5Dialect`.
@@ -848,8 +861,8 @@ hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
 ```
 ***
 
-__SQL Error: 1046, SQLState: 3D000<br>
-No database selected__
+> SQL Error: 1046, SQLState: 3D000<br>
+> No database selected
 
 Нужно в конфиге, у настройки:
 ```xml
@@ -862,8 +875,8 @@ No database selected__
 
 ***
 
-__SQL Error: 1146, SQLState: 42S02<br>
-Table doesn't exist__
+> SQL Error: 1146, SQLState: 42S02<br>
+> Table doesn't exist
 
 Необходимо в настройках выбрать другую версию диалекта, например с:
 ```xml
@@ -873,6 +886,99 @@ Table doesn't exist__
 ```xml
 <property name="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</property>
 ```
+
+***
+
+> MultipleBagFetchException: cannot simultaneously fetch multiple bags
+
+Виникає коли сутність намагається дістати одразу дві та більше колекцій.
+Треба використовувати `Set` замість `List`.
+Також щоб усе працювало через REST потрібно використовувати анотації `@JsonManagedReference` та `@JsonBackReference`.
+```java
+@Entity
+@Table(name = "orders", schema = "public")
+public class Order {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
+  protected Integer id;
+  @Column(name = "shop_name")
+  private String shopName;
+
+  @OneToMany(mappedBy = "order")
+  @JsonManagedReference
+  private Set<Item> items;
+
+  @OneToMany(mappedBy = "order")
+  @JsonManagedReference
+  private Set<Finance> finances;
+
+  // constructors, getters, setters
+
+  @Override
+  public String toString() {
+    return "Item{" +
+        "id=" + id +
+        ", title='" + title +
+        ", price=" + price +
+        ", quantity=" + quantity +
+        '}';
+  }
+}
+```
+```java
+@Entity
+@Table(name = "items", schema = "public")
+public class Item {
+
+  //  other fields
+
+  @ManyToOne
+  @JoinColumn(name = "order_id", referencedColumnName = "id")
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  @JsonBackReference
+  private Order order;
+
+  //  constructors, getters, setters
+
+  @Override
+  public String toString() {
+    return "Item{" +
+        "id=" + id +
+        ", title='" + title +
+        ", price=" + price +
+        ", quantity=" + quantity +
+        '}';
+  }
+}
+```
+```java
+@Entity
+@Table(name = "finances", schema = "public")
+public class Finance {
+
+  //  other fields
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "order_id", nullable = false)
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  @JsonBackReference
+  private Order order;
+
+  //  constructors, getters, setters
+
+  @Override
+  public String toString() {
+    return "Finance{" +
+        "id=" + id +
+        ", amount=" + amount +
+        ", exchangeRateToUAH=" + exchangeRateToUAH +
+        ", description='" + description +
+        '}';
+  }
+}
+```
+
 
 ## Examples
 
@@ -1035,9 +1141,9 @@ import org.hibernate.annotations.Cascade;
 @Entity
 @Table(name = "person")
 public class Person {
-	@OneToMany(mappedBy = "owner") // анотація JPA
-	@Cascade(org.hibernate.annotations.CascadeType.REFRESH) // анотація Hibernate
-	private List<Item> items;
+  @OneToMany(mappedBy = "owner") // анотація JPA
+  @Cascade(org.hibernate.annotations.CascadeType.REFRESH) // анотація Hibernate
+  private List<Item> items;
 }
 
 // операції з Person...
@@ -1045,7 +1151,7 @@ session.refresh(person); // зробить новий запит для Person �
 ```
 
 
-Налаштування CASCADE для автоматичного збереження Item для Person:
+Налаштування **CASCADE** для автоматичного збереження `Item` для `Person`:
 ```java
 // на рівні JPA:
 import javax.persistence.*;
@@ -1053,8 +1159,8 @@ import javax.persistence.*;
 @Entity
 @Table(name = "person")
 public class Person {
-	@OneToMany(mappedBy = "owner", cascade = CascadeType.PERSIST)
-	private List<Item> items;
+  @OneToMany(mappedBy = "owner", cascade = CascadeType.PERSIST)
+  private List<Item> items;
 }
 
 Person person = new Person("Test cascading", 30);
@@ -1084,6 +1190,8 @@ person.setItems(new ArrayList<>(Collections.singletonList(item)));
 // налаштований CASCADE збереже Item автоматично
 session.save(person);
 ```
+
+
 
 
 ## Questions

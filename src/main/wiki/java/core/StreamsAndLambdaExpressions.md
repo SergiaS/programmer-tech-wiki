@@ -18,6 +18,16 @@ String[] details = e.getBindingResult().getFieldErrors().stream()
 # Stream
 > Исполнение стрима запускается только после выполнения терминальной операции!
 
+Однакові способи створення стримів:
+```java
+List<String> names = List.of("Amigoscode", "Alex", "Zara");
+Stream<String> stream = names.stream();
+```
+```java
+Stream<String> namesStream = Stream.of("Amigoscode", "Alex", "Zara");
+```
+
+
 ## Операторы стрима
 > Терминальный оператор в цепочке может быть только один, а промежуточных - много.
 
