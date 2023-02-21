@@ -23,6 +23,8 @@
 
 
 ## DTO (Data-Transfer-Object)
+* [Гарний приклад + код](https://youtu.be/OAheRYUC6mc)
+
 > Синоніми: DTO, TO
 
 > Это представление вида - то что будет возвращаться на веб слой (frontend).

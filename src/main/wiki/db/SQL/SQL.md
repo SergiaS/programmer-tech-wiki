@@ -2,6 +2,17 @@
 * [YouTube - Базы данных, Наиль Алишев](https://www.youtube.com/playlist?list=PLcBbiWbF2bIzfWAcWvu5M56hk25vJrRFK)
 * [Сервіс DrawIO - намалювати/створити UML структуру таблиці](https://app.diagrams.net/)
 
+## ERD Cardinality
+* [Діаграма побудови БД, ERD - amigoscode](https://app.diagrams.net/#G1ZGzLpXIemZ0bVwk4DsZS4NcAYDwK5fDt)
+
+> ERD = Entity Relationship Diagram
+
+![img](https://raw.githubusercontent.com/SergiaS/programmer-tech-wiki/master/src/main/resources/img/ERD_CardinalityGuide.png)
+
+One-to-Many
+- One and only one user_profile can have zero or one account: `One` - `Zero or one`  
+
+
 
 ## Нормальные формы
 

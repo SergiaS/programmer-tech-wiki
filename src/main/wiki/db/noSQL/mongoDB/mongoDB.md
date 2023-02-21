@@ -1,58 +1,11 @@
 # MongoDB
+> [Mongo Express](https://github.com/mongo-express/mongo-express) - Web-based MongoDB admin interface written with Node.js, Express and Bootstrap3.
 
-<details>
-<summary>"Click to expand"</summary>
+> Mongo stores documents (rows) in collections (table).
+A Document (row) is some json object, and a collection is a batch of json objects (table which holds all rows).
 
-- [Comparing Mongo technologies](#comparing-mongo-technologies)
-- [Dependency](#dependency)
-- [Источник: Гоша Дударь](#источник-гоша-дударь)
-  * [Вступление](#вступление)
-    * [Сначала выбираем конкретную таблицу](#сначала-выбираем-конкретную-таблицу)
-    * [После создания БД нужно создать коллекцию](#после-создания-бд-нужно-создать-коллекцию)
-    * [Удалить коллекцию](#удалить-коллекцию) 
-    * [Команда для добавления одной конкретной записи](#команда-для-добавления-одной-конкретной-записи) 
-    * [Команда для добавления нескольких записей](#команда-для-добавления-нескольких-записей)
-  * [Выборка](#выборка)
-    * [Выборка всех данных из нужной коллекции](#выборка-всех-данных-из-нужной-коллекции)
-    * [Выборка первых нескольких записей из нужной коллекции](#выборка-первых-нескольких-записей-из-нужной-коллекции)
-    * [Выборка первых нескольких записей](#выборка-первых-нескольких-записей)
-    * [Выборка с сортировкой](#выборка-с-сортировкой)
-    * [Выборка ИЛИ - по любому из указанных значений](#выборка-или---по-любому-из-указанных-значений)
-    * [Выбока на значение больше чем ($gt) и меньше чем ($lt)](#выбока-на-значение-больше-чем-gt-и-меньше-чем-lt)
-    * [Выборка одно из значений в ($in) одном элементе (столбце)](#выборка-одно-из-значений-в-in-одном-элементе-столбце)
-    * [Выборка любого из значений кроме ($nin - not in) одном элементе (столбце)](#выборка-любого-из-значений-кроме-nin---not-in-одном-элементе-столбце)
-    * [Выборка всех объектов с конкретным полем - child: {$exists: true}](#выборка-всех-объектов-с-конкретным-полем---child-exists-true)
-    * [Выборка с объектами содержащие внутренний массив favColor с рамером 2](#выборка-с-объектами-содержащие-внутренний-массив-favcolor-с-рамером-2)
-    * [Выбираем все элементы, у которых есть поле favColor с индексом](#выбираем-все-элементы-у-которых-есть-поле-favcolor-и-в-этом-поле-первый-элемент-по-индексу-будет-равен-конкретному-значению)
-    * [Выбираем все элементы, у которых есть поле favColor и в этом поле элементы меньше/больше/равно значению](#выбираем-все-элементы-у-которых-есть-поле-favcolor-и-в-этом-поле-элементы-меньшебольшеравно-значению)
-  * [Обновление](#обновление)
-    * [updateOne - обновит только первый объект](#updateone---обновит-только-первый-объект)
-    * [updateMany - обновит все объекты с указаным фильтром](#updatemany---обновит-все-объекты-с-указаным-фильтром)
-    * [Обновление нескольких значений при найденном фильтре](#обновление-нескольких-значений-при-найденном-фильтре)
-    * [Функция замены объекта - replaceOne](#помимо-обновления-полей-существует-функция-замены-объекта---replaceone)
-  * [Удаление](#удаление)
-    * [Удалить все записи у которых age >= 22 && age < 38](#удалить-все-записи-у-которых-age--22--age--38)
-  * [Объединенные запросы](#объединенные-запросы)
-    * [Функция `bulkWrite()`](#функция-bulkwrite)
-  * [Поиск в тексте на частичное совпадение](#поиск-в-тексте-на-частичное-совпадение)
-  * [Моментальная обработка данных](#моментальная-обработка-данных)
-    * [Функция `count()`](#функция-count)
-    * [Функция `distinct()`](#функция-distinct)
-    * [Агрегация](#агрегация)
-- [Articles and interesting quotes](#articles-and-interesting-quotes)
-  * Install MongoDB Community Edition on Windows
-    * [Run MongoDB Community Edition from the Command Interpreter](#run-mongodb-community-edition-from-the-command-interpreter)
-    * [Start your MongoDB database](#start-your-mongodb-database)
-    * [Connect to MongoDB](#connect-to-mongodb)
-  * [A Guide to MongoDB with Java](#source-github-and-article---a-guide-to-mongodb-with-java)
-  * [Java и MongoDB: базовые операции](#java-и-mongodb-базовые-операции)
-    * [Подключение к MongoDB](#подключение-к-mongodb)
-    * [Работа с базами данных](#работа-с-базами-данных)
-    * [Работа с коллекциями](#работа-с-коллекциями)
-    * [Работа с индексами](#работа-с-индексами)
-    * [Работа с документами](#работа-с-документами)
-
-</details>
+> MongoDB stores data records as BSON documents.
+BSON is a representation of JSON documents.
 
 ## Comparing Mongo technologies
 Comparing MongoClient vs MongoTemplate vs MongoRepository technologies.
@@ -103,20 +56,20 @@ Comparing MongoClient vs MongoTemplate vs MongoRepository technologies.
 
 #### Сначала выбираем конкретную таблицу:
 ```javascript
-// запрос
+// request
 use itproger
 
-// ответ
+// response
 switched to db itproger
 ```
 
 #### После создания БД нужно создать коллекцию
 Чтобы создать коллекцию, можно использовать функцию createCollection() или поместить данные в определенную коллекцию и она автоматически будет создана, если такой ещё такой коллекции не существует.
 ```javascript
-// запрос
+// request
 db.createCollection("users")
 
-// ответ
+// response
 { 
     "ok": 1 
 }
@@ -124,17 +77,17 @@ db.createCollection("users")
 
 #### Удалить коллекцию
 ```javascript
-// запрос
+// request
 db.articles.drop()
 
-// ответ
+// response
 true
 ```
 > Если удалить последнюю коллекцию, то вместе с ней удалится и сама БД.
 
 #### Команда для добавления одной конкретной записи
 ```javascript
-// запрос
+// request
 db.users.insertOne(
     {
         "name": "George",
@@ -145,7 +98,7 @@ db.users.insertOne(
     }
 )
 
-// ответ
+// response
 {
     "acknowledged" : true,
     "insertedId" : ObjectId("605c8c25063c2d39c089ea9e")
@@ -155,7 +108,7 @@ db.users.insertOne(
 #### Команда для добавления нескольких записей.
 *Квадратные скобки обязательны!*
 ```javascript
-// запрос
+// request
 db.users.insertMany([
     {
         "name": "Bob",
@@ -173,7 +126,7 @@ db.users.insertMany([
     }
 ])
 
-// ответ
+// response
 {
     "acknowledged" : true,
     "insertedIds" : [
@@ -186,10 +139,10 @@ db.users.insertMany([
 ## Выборка
 #### Выборка всех данных из нужной коллекции
 ```javascript
-// запрос
+// request
 db.users.find()
 
-// ответ
+// response
 { "_id" : ObjectId("605c8c25063c2d39c089ea9e"), "name" : "George", "email" : "george@goo.com", "age" : 22, "hasCar" : false, "birthday" : ISODate("1996-11-27T00:00:00Z") }
 { "_id" : ObjectId("605c8de2063c2d39c089ea9f"), "name" : "Bob", "email" : "bob@goo.com", "age" : 37, "hasCar" : false, "birthday" : ISODate("1996-11-27T00:00:00Z") }
 { "_id" : ObjectId("605c8bd4063c2d39c089ea9d"), "name" : "Jack", "email" : "jack@goo.com", "age" : 47, "hasCar" : false, "favColor" : [ "Red", "White" ], "password" : "asdad234" }
@@ -197,10 +150,10 @@ db.users.find()
 
 #### Выборка первых нескольких записей из нужной коллекции
 ```javascript
-// запрос
+// request
 db.users.find().limit(2)
 
-// ответ
+// response
 { "_id" : ObjectId("605c8c25063c2d39c089ea9e"), "name" : "George", "email" : "george@goo.com", "age" : 22, "hasCar" : false, "birthday" : ISODate("1996-11-27T00:00:00Z") }
 { "_id" : ObjectId("605c8de2063c2d39c089ea9f"), "name" : "Bob", "email" : "bob@goo.com", "age" : 37, "hasCar" : false, "birthday" : ISODate("1996-11-27T00:00:00Z") }
 ```
@@ -208,29 +161,29 @@ db.users.find().limit(2)
 #### Выборка первых нескольких записей 
 Выборка первых нескольких записей из нужной коллекции с исключением поля id (указывается во вторых скобках)
 ```javascript
-// запрос
+// request
 db.users.find({}, {_id: 0}).limit(2)
 
-// ответ
+// response
 { /* some_response */ }
 ```
 
 #### Выборка с сортировкой
 Внутри функции указываем по какому полю сортируем, значение 1 указывает сортировку по возростанию, -1 - по убыванию. Можно указывать несколько сортировок через запятую.
 ```javascript
-// запрос
+// request
 db.users.find({}, {_id: 0}).sort({age: 1})
 
-// ответ
+// response
 { /* some_response */ }
 ```
 
 #### Выборка ИЛИ - по любому из указанных значений
 ```javascript
-// запрос
+// request
 db.users.find({$or: [{age: 22}, {email: "jack@goo.com"}]}, {_id: 0})
 
-// ответ
+// response
 { /* some_response */ }
 ```
 
@@ -241,64 +194,64 @@ db.users.find({$or: [{age: 22}, {email: "jack@goo.com"}]}, {_id: 0})
 - **\$gte** - больше или равно;
 - **\$eq** - равно
 ```javascript
-// запрос
+// request
 db.users.find({$or: [{age: 22}, {email: "jack@goo.com"}]}, {_id: 0})
 
-// ответ
+// response
 { /* some_response */ }
 ```
 
 #### Выборка одно из значений в (\$in) одном элементе (столбце)
 ```javascript
-// запрос
+// request
 db.users.find({name: {$in: ["Jack","John","Bob"]}}, {_id: 0})
 
-// ответ
+// response
 { /* some_response */ }
 ```
 
 #### Выборка любого из значений кроме ($nin - not in) одном элементе (столбце)
 ```javascript
-// запрос
+// request
 db.users.find({name: {$nin: ["Jack","John","Bob"]}}, {_id: 0})
 
-// ответ
+// response
 { /* some_response */ }
 ```
 
 #### Выборка всех объектов с конкретным полем - child: {$exists: true}
 ```javascript
-// запрос
+// request
 db.users.find({child: {$exists: true}}, {_id: 0})
 
-// ответ
+// response
 { /* some_response */ }
 ```
 
-#### Выборка с объектами содержащие внутренний массив favColor с рамером 2
+#### Вибірка з об'єктами що містять внутрішній масив favColor з розміром 2
 ```javascript
-// запрос
+// request
 db.users.find({favColor: {$size: 2}}, {_id: 0})
 
-// ответ
+// response
 { /* some_response */ }
 ```
 
 #### Выбираем все элементы, у которых есть поле favColor и в этом поле первый элемент по индексу будет равен конкретному значению
 ```javascript
-// запрос
+// request
 db.users.find({"favColor.1": "Red"}, {_id: 0})
 
-// ответ
+// response
 { /* some_response */ }
 ```
 
 #### Выбираем все элементы, у которых есть поле favColor и в этом поле элементы меньше/больше/равно значению
 ```javascript
-// запрос
+// request
 db.users.find({favColor: {$elemMatch: {$lte: 3}} }, {_id: 0})
 
-// ответ
+// response
 { /* some_response */ }
 ```
 
@@ -306,10 +259,10 @@ db.users.find({favColor: {$elemMatch: {$lte: 3}} }, {_id: 0})
 #### Прежде чем обновить данные, необходимо создать фильтр - какие конкретные поля выбираем, например, объект с age = 22
 #### updateOne - обновит только первый объект
 ```javascript
-// запрос
+// request
 db.users.updateOne({age: 22}, {$set: {age: 25}})
 
-// ответ
+// response
 { 
     "acknowledged" : true, 
     "matchedCount" : 1, 
@@ -319,10 +272,10 @@ db.users.updateOne({age: 22}, {$set: {age: 25}})
 
 #### updateMany - обновит все объекты с указаным фильтром
 ```javascript
-// запрос
+// request
 db.users.updateMany({age: 25}, {$set: {age: 30}})
 
-// ответ
+// response
 { 
     "acknowledged" : true, 
     "matchedCount" : 2, 
@@ -333,16 +286,16 @@ db.users.updateMany({age: 25}, {$set: {age: 30}})
 #### Обновление нескольких значений при найденном фильтре.
 Т.е. необязательно менять теже самые данные, которые были указаны в фильтре
 ```javascript
-// запрос
+// request
 db.users.updateMany({age: 30}, {$set: {name: "User", email: "test@com.go"}})
 
-// ответ
+// response
 { /* some_response */ }
 ```
 
 #### Помимо обновления полей, существует функция замены объекта - replaceOne
 ```javascript
-// запрос
+// request
 db.users.replaceOne(
     {
         age: 22
@@ -354,14 +307,14 @@ db.users.replaceOne(
     }
 )
 
-// ответ
+// response
 { /* some_response */ }
 ```
 
 ## Удаление
 #### Удалить все записи у которых age >= 22 && age < 38
 ```javascript
-// запрос
+// request
 db.users.deleteMany({
     age: {
         $gte: 22
@@ -371,7 +324,7 @@ db.users.deleteMany({
     }
 })
 
-// ответ
+// response
 { /* some_response */ }
 ```
 
@@ -384,7 +337,7 @@ db.users.deleteMany({
 - пустой `filter { ... }` удалит все объекты в БД
 
 ```javascript
-// запрос
+// request
 db.users.bulkWrite([
     {
         insertOne: {
@@ -430,7 +383,7 @@ db.users.bulkWrite([
 ```
 
 ```json
-// ответ
+// request
 {
     "acknowledged": true,
     "deletedCount": 1,
@@ -753,3 +706,61 @@ try (var mongoClient = MongoClients.create()) {
 }
 ```
 <p style="color:blueviolet; text-align: center; font-weight: bold">+ + + NEXT + + +</p>
+
+## Mongo Shell
+Interactive JavaScript interface to MongoDB. 
+Used to run commands against the database. For example:
+```commandline
+mongo mongodb://localhost:27017 -u rootuser -p rootpass
+```
+
+### Як увійти в Docker у контейнер Mongo з терміналу
+Для входу нам потрібен ID контейнеру - дивимося які образи у нас працюють командою `docker ps`:
+```commandline
+$ docker ps
+CONTAINER ID   IMAGE                  COMMAND                  CREATED          STATUS              PORTS                      NAMES
+c444a5dda48d   mongo                  "docker-entrypoint.s…"   18 minutes ago   Up About a minute   0.0.0.0:27017->27017/tcp   mongodb
+74110d31697c   mongo-express:0.54.0   "tini -- /docker-ent…"   18 minutes ago   Up About a minute   0.0.0.0:8081->8081/tcp     mongo-express
+```
+Беремо потрібний ID і заходимо у контейнер:
+```commandline
+docker exec -it c444a5dda48d bash
+```
+P.S. ... якщо використовується bash термінал - додай префікс
+```commandline
+winpty docker exec -it c444a5dda48d bash
+```
+
+Подивитися вміст можна командою 
+```commandline
+ls
+```
+
+Потім звертаємося до mongodb:
+```commandline
+mongo mongodb://localhost:27017 -u rootuser -p rootpass
+```
+> ВАЖЛИВО! Starting from Mongodb version 6.0 mongo was replaced by mongosh
+> Тоді тут буде така команда
+> ```commandline
+> mongosh mongodb://localhost:27017 -u rootuser -p rootpass
+> ```
+
+Ось тепер, ми можемо побачити наші БД задіяв команду `show dbs`.
+
+Створити БД можна за допомогою команди:
+```commandline
+use amigoscode
+```
+
+Після створення БД, якщо виконати команду `show dbs`, створена БД не відобразиться оскільки вона не має жодної колекції.
+
+Всередині БД можна використовувати різні команди, які можна побачити - `db.help()`.
+
+Подивитися ім'я БД - `db.getName()`.
+
+Для створення колекції є команда `db.createCollection("hello")`.
+Тепер після створення колекції, наша БД з'явиться у списку  `show dbs`.
+
+Видалення теперишньої БД - `db.dropDatabase()` - response: `{ ok: 1, dropped: 'amigoscode' }`.
+

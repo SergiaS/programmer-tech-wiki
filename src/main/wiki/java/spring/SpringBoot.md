@@ -7,7 +7,7 @@
 * [Database Initialization](https://docs.spring.io/spring-boot/docs/2.6.2/reference/html/howto.html#howto.data-initialization)
   > By default, SQL database initialization is only performed when using an embedded in-memory database.
 * [SpringBoot Common Application Properties - JSON Properties](https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html#application-properties.json)
-
+* [Spring DOC - Default Schema - Налаштування БД](https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/jdbc.html#servlet-authentication-jdbc-schema)
 
 > Spring Boot включает в себя интерфейс командной строки.
 
@@ -103,6 +103,7 @@ class LoadDatabase {
 }
 ```
 
+
 ## Annotations
 
 ### @SpringBootApplication
@@ -134,7 +135,9 @@ This web application is 100% pure Java and you did not have to deal with configu
 
 
 ### @ConfigurationProperties
-Щоб запрацювала анотація, необхідно підключити додаткову залежність:
+Завдяки цій анотації Spring буде розуміти наші властивості з файлу `application.properties`.
+
+Спочатку треба встановити додаткову залежність, щоб запрацювала анотація:
 ```xml
 <dependency>
   <groupId>org.springframework.boot</groupId>
@@ -209,19 +212,95 @@ This web application is 100% pure Java and you did not have to deal with configu
 > </details>
 
 
-## Application .properties / .yaml settings files
+> <details>
+> <summary>ПРИКЛАД ВІД DAN VEGA</summary>
+>
+> 
+> ```java
+> // клас/рекорд з властивостями
+> @ConfigurationProperties(value = "cc")
+> public record ContentCalendarProperties(String welcomeMessage, String about) {
+> }
+> ```
+> ```properties
+> ## application.properties
+> cc.welcome-message=Hello from Dan's Calendar
+> cc.about=This is awesome!
+> ```
+> ```java
+> // головний файл
+> @SpringBootApplication
+> @EnableConfigurationProperties(ContentCalendarProperties.class)
+> public class Application {
+>   public static void main(String[] args) {
+>     SpringApplication.run(Application.class, args);
+>   }
+> }
+> ```
+> 
+> </details>
 
-### Profiles
+
+
+## Application .properties / .yaml settings files
+> **What is the difference between .yaml and .yml extension?**<br> 
+> You can hold YAML content in files with any extension: `.yml`, `.yaml` or indeed anything else.
+
+### Profile specific configuration
 Додаток може мати декілька `application.properties` з різними налаштуваннями.
 
 Spring дозволяє використовувати різні профілі, для того, щоб запустити програму з різними налаштуваннями.
 
-Наприклад, у нас є 2 файла з різними налаштуваннями (1 - `application.properties`, 2 - `application-dev.properties`), один файл для розробки, а інший - для продакшна.
-Ми можемо в стартових налаштуваннях IDEA (**Program arguments**) задати необхідний файл для запуску вказавши `--spring.profiles.active=dev`.
+Наприклад, у нас є 2 файли з різними налаштуваннями (1 - `application.properties`, 2 - `application-dev.properties`), 
+один файл для розробки, а інший - для продакшна.
+Ми можемо в стартових налаштуваннях IDEA (**Program arguments**) задати необхідний файл для запуску вказавши `--spring.profiles.active=dev`,
+або у полі **Environment variable** `SPRING.PROFILES.ACTIVE=dev`.
+
+### Як безпечно використовувати секретні дані
+* [Look full example at GitHub](https://github.com/spring-projects/spring-security-samples/tree/main/servlet/spring-boot/java/jwt/login)
+
+Наприклад, в нас є 2 ключі для JWT токену.
+Вони окремо зберігаються в теці `resources` з іменами `app.key` та `app.pub`.
+Ми їх виключаємо з будь-яких комітів, щоб вони ні де не "сіяли".
+
+В налаштуваннях `application.yml` додаємо ці файли (всі ці файли в одній теці):
+```yaml
+jwt:
+  private.key: classpath:app.key
+  public.key: classpath:app.pub
+```
+А потім вже використовуємо ці налаштування в коді:
+```java
+@Configuration
+public class RestConfig {
+
+  @Value("${jwt.public.key}")
+  RSAPublicKey key;
+
+  @Value("${jwt.private.key}")
+  RSAPrivateKey priv;
+
+  @Bean
+  JwtDecoder jwtDecoder() {
+    return NimbusJwtDecoder.withPublicKey(this.key).build();
+  }
+
+  @Bean
+  JwtEncoder jwtEncoder() {
+    JWK jwk = new RSAKey.Builder(this.key).privateKey(this.priv).build();
+    JWKSource<SecurityContext> jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
+    return new NimbusJwtEncoder(jwks);
+  }
+  
+  // ...
+}
+```
 
 
 
 ## Spring Tests
+* [Приклад тестів](https://github.com/spring-projects/spring-security-samples/blob/b7c13cb600/servlet/spring-boot/java/jwt/login/src/test/java/example/web/HelloControllerTests.java)
+
 > With Integration tests you should only using MockMvc
 
 ### @SpringBootTest
@@ -350,4 +429,131 @@ Spring дозволяє використовувати різні профілі
 > }
 > ```
 > 
+> </details>
+
+
+## Ініціалізація БД
+Spring Boot дозволяє заповнити БД своїми даними з файлу.
+
+Для цього необхідно увімкнути опцію у файлі `application.properties`:
+```properties
+# For population non-embedded db - turn on data.sql
+spring.sql.init.mode=always
+```
+Потім створити файл `data.sql` і додати свої інсерти. 
+
+
+
+## Actuator
+* [Spring Boot - Actuator: Production-ready Features](https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html)
+Це фічі з моніторингу та керуванням своїм додатком через HTTP-ендпоінти.
+
+Спочатку треба додати залежність:
+```properties
+<dependencies>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+</dependencies>
+```
+
+Потім налаштування у `application.properties`:
+```properties
+management.endpoints.web.exposure.include=*
+management.endpoint.health.show-details=always
+```
+
+Запускаємо додаток, і переходимо на ендпоінт `/actuator` - побачимо багато посилань типу:
+
+
+> <details>
+> <summary>ПРИКЛАД ЕНДПОІНТІВ АКТУАТОРУ</summary>
+> 
+> ```json
+> {
+>   "_links": {
+>     "self": {
+>       "href": "http://localhost:8080/actuator",
+>       "templated": false
+>     },
+>     "beans": {
+>       "href": "http://localhost:8080/actuator/beans",
+>       "templated": false
+>     },
+>     "caches-cache": {
+>       "href": "http://localhost:8080/actuator/caches/{cache}",
+>       "templated": true
+>     },
+>     "caches": {
+>       "href": "http://localhost:8080/actuator/caches",
+>       "templated": false
+>     },
+>     "health": {
+>       "href": "http://localhost:8080/actuator/health",
+>       "templated": false
+>     },
+>     "health-path": {
+>       "href": "http://localhost:8080/actuator/health/{*path}",
+>       "templated": true
+>     },
+>     "info": {
+>       "href": "http://localhost:8080/actuator/info",
+>       "templated": false
+>     },
+>     "conditions": {
+>       "href": "http://localhost:8080/actuator/conditions",
+>       "templated": false
+>     },
+>     "configprops": {
+>       "href": "http://localhost:8080/actuator/configprops",
+>       "templated": false
+>     },
+>     "configprops-prefix": {
+>       "href": "http://localhost:8080/actuator/configprops/{prefix}",
+>       "templated": true
+>     },
+>     "env": {
+>       "href": "http://localhost:8080/actuator/env",
+>       "templated": false
+>     },
+>     "env-toMatch": {
+>       "href": "http://localhost:8080/actuator/env/{toMatch}",
+>       "templated": true
+>     },
+>     "loggers": {
+>       "href": "http://localhost:8080/actuator/loggers",
+>       "templated": false
+>     },
+>     "loggers-name": {
+>       "href": "http://localhost:8080/actuator/loggers/{name}",
+>       "templated": true
+>     },
+>     "heapdump": {
+>       "href": "http://localhost:8080/actuator/heapdump",
+>       "templated": false
+>     },
+>     "threaddump": {
+>       "href": "http://localhost:8080/actuator/threaddump",
+>       "templated": false
+>     },
+>     "metrics-requiredMetricName": {
+>       "href": "http://localhost:8080/actuator/metrics/{requiredMetricName}",
+>       "templated": true
+>     },
+>     "metrics": {
+>       "href": "http://localhost:8080/actuator/metrics",
+>       "templated": false
+>     },
+>     "scheduledtasks": {
+>       "href": "http://localhost:8080/actuator/scheduledtasks",
+>       "templated": false
+>     },
+>     "mappings": {
+>       "href": "http://localhost:8080/actuator/mappings",
+>       "templated": false
+>     }
+>   }
+> }
+> ```
 > </details>

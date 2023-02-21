@@ -1062,6 +1062,9 @@ public class RootControllerTest extends AbstractControllerTest {
 * [TopJava - добавление смены локали](https://github.com/JavaWebinar/topjava/blob/doc/doc/lesson11.md#-2-hw10-optional-change-locale)
 * [Spring MVC internationalization example](https://mkyong.com/spring-mvc/spring-mvc-internationalization-example/)
 
+## Error Handling
+* [Spring Boot 3.0 (DOC) - Spring Error Handling](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#web.servlet.spring-mvc.error-handling)
+
 
 ## Questions
 

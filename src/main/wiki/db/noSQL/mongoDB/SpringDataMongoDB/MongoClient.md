@@ -1,5 +1,5 @@
 # MongoClient (Spring Data MongoDB)
-***This information enought for creating Dynamic APIs.***
+***This information enough for creating Dynamic APIs.***
 
 You can look all code at **[GitHub](https://github.com/SergiaS/testMongo/tree/MongoClient_with_Aggregation%2C_Projection%2C_and_Dynamic_APIs/src/main/java/com/mongo/testmongo)**.  
 

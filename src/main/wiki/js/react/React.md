@@ -188,7 +188,7 @@ test2
 Але спочатку необхідно встановити **NodeJS** (з ним набагато легче працювати - буде виконувати команди в терміналі) - він відноситься не тільки до React-фреймворка,
 це середа для виконання JavaScript, яка дозволяє запускати js-код поза браузером.
 
-### Використання змінних середовища - `env.local`
+### Використання змінних середовища - `.env.local`
 * [importing env variable react front end](https://stackoverflow.com/a/59509027)
 * [Adding Temporary Environment Variables In Your Shell](https://create-react-app.dev/docs/adding-custom-environment-variables/)
 

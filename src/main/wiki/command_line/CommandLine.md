@@ -31,6 +31,7 @@
 * `dir` - return the list of non-hidden files and folders in your current directory. If you want to view hidden files use `dir /A`.
 * `C:\users\student> help cd` - command can take any command as a parameter and return all the available options.
 * `mkdir -p src/main/java/hello` - создаст иерархию папок, очень полезно использовать в терминале IntelliJ IDEA.
+* `more` - дозволяє показувати контент файлу, `more docker-compose.yaml`.
 
 ### Сокращения
 * `-d` for `--data`.

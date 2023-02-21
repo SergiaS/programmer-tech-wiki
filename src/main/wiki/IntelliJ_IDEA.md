@@ -1,11 +1,11 @@
 # IntelliJ IDEA
 
-> Системный проперти: `-D`, например `-Dconsole.encoding=UTF-8 -Dfile.encoding=UTF-8`
+> Системний проперті: `-D`, наприклад `-Dconsole.encoding=UTF-8 -Dfile.encoding=UTF-8`
 
 > При збірці **classpath** знаходиться `target/classes`.
 
 
-## Combinations
+## HotKeys
 
 * Натискаємо двічі `Shift` - пошук класів, методів в файлах Java та бібліотеках.
 * `Ctrl + Alt + L` - code formatting.
@@ -51,7 +51,8 @@
 * `Alt + F8` - В режиме отладки вы можете вычислить любое выражение, с помощью очень мощного инструмента вызываемого нажатием.
 
 
-# Reset IntelliJ IDEA trial
+## Reset IntelliJ IDEA trial
+**Works for up to 2021.2.2 version!**
 1. cd:
 ```text
 C:%HOMEPATH%\.IntelliJIdea*\config
@@ -71,12 +72,14 @@ del options\other.xml
 HKEY_CURRENT_USER\Software\JavaSoft\Prefs\jetbrains\idea
 ```
 
+
 ## Change Theme
 There 2 places where you can change colors of program UI.
 Go to IDEA settings:
 1. Change all UI: `Appearance & Behavior` > `Appearance`
 Обери іншу тему **Theme**.
 2. Change only for file type `Editor` > `Color Schema`.
+
 
 ## Settings
 * [Configuring JavaScript debugger](https://www.jetbrains.com/help/idea/configuring-javascript-debugger.html)
@@ -86,3 +89,77 @@ Go to IDEA settings:
 > **Hibernate** щоб писати запити в консолі на HQL/JPA - треба встановити плагін `JpaBuddy` і виставити чекбокс для вікна `Persistence`
 > (**View** > **Tool Windows** > **Persistence**) - з'явиться вкладка/вікно на лівій частині екрана.
 > Далі в цьому вікні на **entityManagerFactory** буде доступне контекстне меню **Console**.
+
+
+## Live Templates
+Це скорочення, котрі дозволяють писати частину шаблонного коду.
+
+Для створення шаблону, потрібно перейти у налаштування: `File` > `Settings` > `Editor` > `Live Template`.
+
+Краще створювати нові шаблони в своїй групі (тиснемо `+`).
+
+* **Abbreviation**: за цим скороченням буде викликатися наш шаблон.
+* **Description**: опис, щоб не заплутатися. 
+* **Template text**: сам шаблон, наприклад, `private static final Logger logger = LoggerFactory.getLogger($CLASS$.class); $END$`.
+
+Також треба натиснути знизу **Change** та обрати Java, або мову для которої створюється шаблон.
+
+
+## HttpClient
+
+Example:
+```http request
+### Find All Content
+GET http://localhost:8080/api/content
+
+### Get Content by ID
+GET http://localhost:8080/api/content/1
+
+### Create new Content
+POST http://localhost:8080/api/content
+Content-Type: application/json
+
+{
+  "id": 2,
+  "title": "My Second Blog Post",
+  "desc": "My Second blog post",
+  "status": "IDEA",
+  "contentType": "ARTICLE",
+  "dateCreated": "2023-02-13T10:25:02.838496",
+  "dateUpdated": null,
+  "url": ""
+}
+
+### Update existing Content
+PUT http://localhost:8080/api/content/1
+Content-Type: application/json
+
+{
+  "id": 1,
+  "title": "MY FIRST POST!!!",
+  "desc": "MY FIRST POST!!!",
+  "status": "IDEA",
+  "contentType": "ARTICLE",
+  "dateCreated": "2023-02-13T10:25:02.838496",
+  "dateUpdated": "2023-02-13T10:25:02.838496",
+  "url": "http://localhost:8080/my-first-blog-post"
+}
+
+### Update existing Content with invalid id
+PUT http://localhost:8080/api/content/99
+Content-Type: application/json
+
+{
+  "id": 1,
+  "title": "MY FIRST POST!!!",
+  "desc": "MY FIRST POST!!!",
+  "status": "IDEA",
+  "contentType": "ARTICLE",
+  "dateCreated": "2023-02-13T10:25:02.838496",
+  "dateUpdated": "2023-02-13T10:25:02.838496",
+  "url": "http://localhost:8080/my-first-blog-post"
+}
+
+### Delete by id
+DELETE http://localhost:8080/api/content/2
+```

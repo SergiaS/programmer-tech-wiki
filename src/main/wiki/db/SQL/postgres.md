@@ -73,6 +73,12 @@ FROM actor
 
 ## Examples 
 ```sql
+-- подивитися дані таблиці
+SELECT table_name, column_name, data_type
+FROM information_schema.columns
+WHERE table_name = 'user_roles';
+```
+```sql
 -- часто використовую для тестів
 -- спочатку якщо є таблиця або сіквенс - дропнить їх 
 -- створить таблицю з автоінкрементом + заповнить даними

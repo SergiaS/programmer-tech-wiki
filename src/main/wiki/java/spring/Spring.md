@@ -591,6 +591,27 @@ public class AnnotationDrivenEventListener {
 * [Baeldung - Spring Profiles](https://www.baeldung.com/spring-profiles)
 * [Spring Profiles Java and XML Configuration](https://memorynotfound.com/spring-profiles-java-xml-configuration/)
 
+Для роботи з профілями Spring потрібно вказати активний профіль.
+* Для Spring Boot - вказати в файлі `application.properties`:
+  ```properties
+  ## один профіль
+  spring.profiles.active=dev
+  ```
+  ```properties
+  ## декілька профілів
+  spring.profiles.active=dev,local
+  ```
+  Далі над класом вказати профіль який буде використовуватися - `@Profile("dev")` 
+  або який не буде використовуватися - `@Profile("!dev")`.
+  
+  При старті програми в логах будуть вказані активні профілі
+
+
+
+***
+
+З TopJava:
+
 > Общие для нескольких профилей свойства можно выносить в общий блок, перечислив в декларации профилей их наименования через запятую. 
 > Следует обратить особое внимание на то, что тег <beans> в котором объявляются профили и их конфигурация, может располагаться только в 
 > самом конце файла конфигурации после всех остальных настроек. 

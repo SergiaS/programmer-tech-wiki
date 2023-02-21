@@ -3,6 +3,16 @@
 * [How to Initialize, Add, Remove and Iterate in Set, Object and Array](https://stackoverflow.com/a/70234746)
 
 
+
+## Приклади проєктів Spring + React
+
+* [Приклад movies-api](https://github.com/SergiaS/movies-api)
+
+
+
+
+## Examples
+
 <details>
 <summary>ПРИКЛАД клікера-лічильника</summary>
 

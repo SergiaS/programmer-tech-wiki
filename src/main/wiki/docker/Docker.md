@@ -372,5 +372,59 @@ In foreground mode (the default when `-d` is not specified), `docker run` can st
 If you do not specify `-a` then Docker will attach to both stdout and stderr .
 
 
+
+## Docker-compose
+
+### docker-compose.yaml
+
+Це файл на основі якого буде створений контейнер з усіма образами (images).
+
+Якщо вказаний просто ім'я певного образу (`image: mongo-express`), тоді буде завантажиться остання версія - latest.
+Якщо потрібна інша версія - `image: mongo-express:0.54.0`
+
+```yaml
+version: "3.8"
+services:
+    mongodb:  # налаштування контейнера для mongodb
+        image: mongo    # вказуємо конкретний image - завантажить останню версію
+        container_name: mongodb   # ім'я нашого контейнера
+        ports: 
+            - 27017:27017   # вказуємо порти [host:container] - дефолтні порти MongoDB 27017
+        volumes: 
+            - data:/data    # '/data' може бути розписана нижче у розділі volumes 
+        environment:    # в нашому середовищі будуть такі змінні зі значеннями
+            - MONGO_INITDB_ROOT_USERNAME=rootuser
+            - MONGO_INITDB_ROOT_PASSWORD=rootpass
+    mongo-express:  # налаштування контейнера для mongo-express
+        image: mongo-express
+        container_name: mongo-express
+        restart: always
+        ports:
+            - 8081:8081
+        environment:
+            - ME_CONFIG_MONGODB_ADMINUSERNAME=rootuser
+            - ME_CONFIG_MONGODB_ADMINPASSWORD=rootpass
+            - ME_CONFIG_MONGODB_SERVER=mongodb
+volumes: 
+    data: {} 
+    
+networks:
+    default: 
+        name: mongodb_network
+```
+
+Запустити виконання файлу:
+```commandline
+docker-compose -f docker-compose.yaml up
+```
+Інші команди:
+```commandline
+docker compose down
+docker compose up -d
+docker compose stop
+docker compose start
+```
+
 ## Articles
 > [Полное практическое руководство по Docker: с нуля до кластера на AWS](https://habr.com/ru/post/310460/)
+
