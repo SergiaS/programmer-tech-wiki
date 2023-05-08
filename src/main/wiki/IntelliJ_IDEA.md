@@ -92,6 +92,8 @@ Go to IDEA settings:
 
 
 ## Live Templates
+* [IntelliJ Live Templates Shortcuts in your Spring Boot Applications](https://youtu.be/38VYJjjKqh0?t=200)
+
 Це скорочення, котрі дозволяють писати частину шаблонного коду.
 
 Для створення шаблону, потрібно перейти у налаштування: `File` > `Settings` > `Editor` > `Live Template`.

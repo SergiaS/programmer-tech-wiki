@@ -1,4 +1,12 @@
 # Docker
+> The key difference between the Dockerfile and docker-compose is that the Dockerfile describes how to build Docker images, 
+> while docker-compose is used to run Docker containers.
+>
+> The contents of a Dockerfile describe how to create and build a Docker image, while docker-compose is a command that runs 
+> Docker containers based on settings described in a docker-compose.yaml file.
+> 
+> SOURCE - [www.theserverside.com - Difference between docker-compose and Dockerfile](https://www.theserverside.com/blog/Coffee-Talk-Java-News-Stories-and-Opinions/Dockerfile-vs-docker-compose-Whats-the-difference)
+
 
 > **Note**<br>
 > Команди для роботи з терміналом cmd:
@@ -133,21 +141,21 @@ Docker can build images automatically by reading the instructions from a `Docker
 A `Dockerfile` is a text document that contains all the commands a user could call on the command line to assemble an image.
 
 ### Java example
-Для использования **Docker** с **Java**, необходимо сначала написать инструкции Docker'у в `Dockerfile`.
-Потом необходимо выполнить инструкции в командной строке системы.
+Для використання **Docker** з **Java**, потрібно спочатку написати інструкції Docker'у у файл `Dockerfile` без розширення..
+
+Потім виконати інструкції в терміналі системи для збірки у **jar-файл** і **image**.
 
 #### Вариант 1 - простой
 1. Создать `Dockefile` в корне проекта, по шаблону:
-
 
 ```dockerfile
 FROM openjdk:11
 
 # copy the packaged jar file into our docker image
 # т.е. копирует с локальной среды jar-файл в docker и дает ему имя "boot-flux-mongo" 
-COPY target/*.jar boot-flux-mongo.jar
+COPY target/*.jar       boot-flux-mongo.jar
 
-# set the startup command tp execute the jar
+# set the startup command to execute the jar
 CMD ["java", "-jar", "/boot-flux-mongo.jar"]
 ```
 
@@ -159,7 +167,8 @@ CMD ["java", "-jar", "/boot-flux-mongo.jar"]
 > java -jar target/pastebox-0.0.1-SNAPSHOT.jar
 > ```
 
-3. Создать образ на основе `Dockerfile` и контекста (*"The build’s context is the set of files at a specified location PATH or URL. The PATH is a directory on your local filesystem. The URL is a Git repository location."*).<br>
+3. Создать образ на основе `Dockerfile` и контекста (*"The build’s context is the set of files at a specified location PATH or URL. 
+   The PATH is a directory on your local filesystem. The URL is a Git repository location."*).<br>
    Запускаем команду для сбора нашего проекта.
 ```dockerfile
 docker build -t boot-flux-mongo:0.0.1-SNAPSHOT .
@@ -192,6 +201,7 @@ docker container rm -f f899aec5eac0
 ```
 
 7. После изменений в проекте необходимо проделать все шаги заново.
+
 
 #### Вариант 2 - с использованием Maven
 Самый большой образ. Инструкции в `Dockerfile`:
@@ -236,7 +246,8 @@ COPY --from=MAVEN_BUILD /target/boot-flux-mongo-0.0.1-SNAPSHOT.jar /demo.jar
 CMD ["java", "-jar", "/demo.jar"]
 ```
 
-* `FROM maven:3.6.3-jdk-11 AS MAVEN_BUILD` - первый stage, в котором мы говорим, что он содержит __Maven__ и __JDK__, и называем этот stage __MAVEN_BUILD__.
+* `FROM maven:3.6.3-jdk-11 AS MAVEN_BUILD` - первый stage, в котором мы говорим, что он содержит __Maven__ и __JDK__, 
+* и называем этот stage __MAVEN_BUILD__.
 
 Собираем образ:
 ```shell
@@ -247,6 +258,78 @@ docker build -t boot-flux-mongo:0.0.1-SNAPSHOT .
 ```shell
 docker run --rm -d -p 8080:8080 boot-flux-mongo:0.0.1-SNAPSHOT
 ```
+
+
+#### Варіант 4 - з використанням Gradle
+1. Спочатку збираємо **Gradle**'ом `-jar`-файл командою:
+```shell
+./gradlew clean build
+```
+
+2. Далі, щоб зібрати images потрібно мати налаштування у Dockerfile, наприклад:
+```dockerfile
+# RECORDER-APP-1
+
+# we will use openjdk
+FROM openjdk:17
+
+WORKDIR "/home/tesk-task"
+
+# copy the packaged jar file into our docker image
+COPY build/libs/*.jar   my-recorder.jar
+
+WORKDIR "/home/app1"
+
+# set the startup command to execute the jar
+CMD ["java", "-jar", "../test-task/my-recorder.jar"]
+```
+```dockerfile
+# READER-APP-2
+
+# we will use openjdk
+FROM openjdk:17
+
+WORKDIR "/home/tesk-task"
+
+# copy the packaged jar file into our docker image
+COPY build/libs/*.jar   my-reader.jar
+
+WORKDIR "/home/app2"
+
+# set the startup command to execute the jar
+CMD ["java", "-jar", "../test-task/my-reader.jar"]
+```
+
+3. Далі збираємо image'и:
+```shell
+docker build -t my-recorder:latest .
+docker build -t my-reader:latest .
+```
+
+4. Потім запускаємо потрібний **image**.
+   - Якщо потрібно окремо перевірити роботу кожного images:
+     ```dockerfile
+     docker run --rm -d --name rec1 my-recorder
+     docker run --rm -d -p 8081:8000 --name read1 my-reader
+     ```
+     Але так контейнер **read1** не зможе прочитати файл контейнера **rec1**
+   - Якщо потрібно зв'язати **container1** з **container2**, щоб **container2** бачив файли **container1**, це можна зробити за допомогою `volume`:
+     ```dockerfile
+     # варіант через свій хост
+     docker run --rm -d -v C:/Users/Serhiy/Desktop/done:/home/app1 --name srec my-recorder
+     docker run --rm -d -p 8081:8000 -v C:/Users/Serhiy/Desktop/done:/home/app2 --name sread my-reader
+     ```
+     ```dockerfile
+     # варіант через створення volume
+     
+     # спочатку створюємо volume:
+     docker volume create sharedVolume
+     
+     docker run --rm -d -v sharedVolume:/home/app1 --name srec my-recorder
+     docker run --rm -d -p 8081:8000 -v sharedVolume:/home/app2 --name sread my-reader
+     ```
+   Для змін в контейнері, якщо використовувався detach mode (`-d`), треба виконати команду `docker exec -ti srec bash`.
+
 
 
 ### [Usage](https://docs.docker.com/engine/reference/builder/#usage)
@@ -276,13 +359,15 @@ FROM [--platform=<platform>] <image>[@<digest>] [AS <name>]
 * `ARG` is the only instruction that may precede `FROM` in the Dockerfile.
 * `FROM` can appear multiple times within a single `Dockerfile` to create multiple images or use one build stage as a dependency for another.
 * Optionally a name can be given to a new build stage by adding `AS name` to the `FROM` instruction.
-* The `tag` or `digest` values are optional. If you omit either of them, the builder assumes a `latest` tag by default. The builder returns an error if it cannot find the `tag` value.
+* The `tag` or `digest` values are optional. If you omit either of them, the builder assumes a `latest` tag by default. 
+  The builder returns an error if it cannot find the `tag` value.
 
 
 
 ### `Dockerfile` example
 
-A Docker image consists of read-only layers each of which represents a Dockerfile instruction. The layers are stacked and each one is a delta of the changes from the previous layer.
+A Docker image consists of read-only layers each of which represents a Dockerfile instruction. 
+The layers are stacked and each one is a delta of the changes from the previous layer.
 Consider this `Dockerfile`:
 ```dockerfile
 FROM ubuntu:18.04
@@ -361,7 +446,8 @@ __Detached (`-d`)__
 To start a container in detached mode, you use `-d=true` or just `-d` option.
 
 __Foreground__
-In foreground mode (the default when `-d` is not specified), `docker run` can start the process in the container and attach the console to the process’s standard input, output, and standard error.
+In foreground mode (the default when `-d` is not specified), `docker run` can start the process in the container and 
+attach the console to the process’s standard input, output, and standard error.
 
 ```dockerfile
 -a=[]           : Attach to `STDIN`, `STDOUT` and/or `STDERR`
@@ -375,11 +461,23 @@ If you do not specify `-a` then Docker will attach to both stdout and stderr .
 
 ## Docker-compose
 
+> Певна версія Compose формату (3.8, 3.9) сумісна з певної версією Docker Engine.
+> ```yaml
+> # docker-compose.yaml
+> version: "3.9"
+> ```
+> [SOURCE](https://docs.docker.com/compose/compose-file/compose-file-v3/)
+
+### Commands
+- `docker-compose -v` або `docker compose version` - перевірити версію **Docker Compose**;
+- `docker -v` - перевірити версію Docker (Docker engine);
+- `docker-compose` - надасть перелік і опис команд;
+
 ### docker-compose.yaml
 
 Це файл на основі якого буде створений контейнер з усіма образами (images).
 
-Якщо вказаний просто ім'я певного образу (`image: mongo-express`), тоді буде завантажиться остання версія - latest.
+Якщо вказано просто ім'я певного образу (`image: mongo-express`), тоді буде завантажиться остання версія - latest.
 Якщо потрібна інша версія - `image: mongo-express:0.54.0`
 
 ```yaml
@@ -424,6 +522,50 @@ docker compose up -d
 docker compose stop
 docker compose start
 ```
+
+### Приклад створення
+1. Спочатку потрібно створити файл `docker-compose.yaml` і додати конфігурацію, наприклад:
+    ```yaml
+    version: "3.9"
+    services:
+      recorder:
+        build:
+          context: ./recorder
+          dockerfile: Dockerfile
+        volumes:
+          - sharedVolume:/home/app1
+        image: my-recorder
+        container_name: dc-rec
+      reader:
+        build:
+          context: ./reader
+          dockerfile: Dockerfile
+        volumes:
+          - sharedVolume:/home/app2
+        ports:
+          - 8081:8000
+        image: my-reader
+        container_name: dc-read
+    volumes:
+      sharedVolume:
+    ```
+
+2. Далі потрібно зібрати **images** командою:
+    ```yaml
+    docker-compose build
+    ```
+
+3. Запускаємо створені **images** командою:
+    ```yaml
+    docker-compose up -d my-recorder my-reader
+    ```
+
+4. Для зупинки **containers** використовуємо команду:
+    ```yaml
+    docker-compose down
+    ```
+    Контейнери автоматично видаляться, як при опції `--rm`.
+
 
 ## Articles
 > [Полное практическое руководство по Docker: с нуля до кластера на AWS](https://habr.com/ru/post/310460/)

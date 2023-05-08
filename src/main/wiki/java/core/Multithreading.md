@@ -18,27 +18,53 @@
 > потом поток ставится на паузу и начинает или продолжает выполнение другое задание... 
 
 > Метод `join()` говорит, чтобы поток в котором он был вызван (не **на** котором, а именно **в**) - подождал выполнения потока на котором был вызван.
-> В перегруженный метод `join()` можно передать время ожидания потока, по прошествии которого, если ожидаемый поток не пришел, тогда главный поток продолжит свою работу.
-
-***
-
-Потоки існують у кількох станах. Нижче наведені ці стани:
-- Новий (**New**) - Коли ми створюємо примірник класу Thread, потік знаходиться в новому стані.
-- В процесі (**Runnable**) - Java потік знаходиться у стані експлуатації.
-- Призупинено (**Suspended**) – працюючий поток може бути призупинено, він тимчасово припиняє свою діяльність. 
-«Підвішений» потік потім можна відновити, дозволяючи йому повернутися на місце, де він був.
-- Заблоковано (**Blocked**) – роботу потоку Java можна заблокувати, коли чекає на ресурс.
-- Припинено (**Terminated**) - потік можна припинити, що припиняє його виконання негайно в будь-який момент часу.
-Після завершення потоку його не можна відновити.
+> В перегруженный метод `join()` можно передать время ожидания потока, по прошествии которого, если ожидаемый поток не пришел, 
+тогда главный поток продолжит свою работу.
 
 ***
 
 
+## ThreadLocal
+* [ScopedValue vs ThreadLocal. Новий крок в еволюції Java](https://dou.ua/forums/topic/43126/)
 
-***
+Головне призначення **ThreadLocal** — зберігання змінних з областю видимості (scope) у поточному потоці.
 
-## Способы создания потоков
+Всі значення зберігаються не в самому **ThreadLocal**, а в самому потоці.
 
+> Значення **ThreadLocal** буде видно лише на конкретному потоці!
+
+> ThreadLocal можна відключити для поточного потоку! 
+> Для цього є спеціальна бітова маска, яку потрібно вказати при створенні потоку (в його характеристиках):
+> 
+> `static final int NO_THREAD_LOCALS = 1 << 1;`
+>
+> У такому разі метод get() завжди повертає початкове значення.`
+
+
+## Як працюють потоки
+
+### Platform threads
+* Кожний екземпляр `java.lang.Thread` в **JDK** є платформеним потоком.
+  Такий потік запускає **Java** код, що лежить в основі ОС, і захоплює потік ОС протягом усього життя коду.
+* Кількість потоків платформи обмежена кількістю потоків ОС.
+* Дороговартісні потоки треба об'єднувати.
+
+### Virtual threads
+* [Вступ до Project Loom. Частина 1: Virtual Threads](https://dou.ua/forums/topic/38676/)
+
+**Віртуальний потік (virtual thread)** - це екземпляр `java.lang.Thread` який запускає **Java** код, що лежить в основі ОС, 
+але НЕ захоплює потік ОС протягом усього життя коду.
+Це означає, що багато віртуальних потоків можуть запускати свій Java код на одному потоці ОС, ефективно розділяючи його.
+
+* Платформений потік монополізує дорогоцінний потік ОС, віртуальний потокік цього не робить.
+* Кількість віртуальних потоків може бути набагато більшою, аніж кількість потоків ОС.
+* Віртуальні потоки не швидкі - вони не виконують код швидше, аніж платформені потоки.
+  Вони існують для забезпечення масштабування (більшої пропускної здатності), а не швидкості (меншої затримки).
+* Віртуальні потоки допомагають поліпшити пропускну здатність типових серверних додатків саме тому, 
+  що такі програми складаються з великої кількості одночасних завдань, які витрачають більшу частину свого часу на очікування.
+
+
+## Способи створення потоків Thread
 
 ### 1 вариант создания потока:
 
@@ -50,14 +76,14 @@ MyThread2 myThread2 = new MyThread2();
 myThread1.start();
 myThread2.start();
 
-// Создание:
+// створення:
 class MyThread extends Thread { 
     public void run() { 
-        /*some code*/ 
+        /* some code */ 
     } 
 }
     
-// Запуск:
+// запуск:
 new MyThread().start();
 ```
 
@@ -67,14 +93,14 @@ new MyThread().start();
 Использование интерфейса `Runnable`, который содержит метод `run` (который нужно реализовать):
 
 ```java
-// Создание:
+// створення:
 class MyRunnableImpliments Runnable {
     public void run() {
         /*some code*/
     }
 }
     
-// Запуск:
+// запуск:
 new Thread(new MyRunnableImpl()).start();
 ```
 
@@ -110,17 +136,16 @@ new Thread(() -> System.out.println("Hello2")).start();
 Установить или узнать приоритет можно вызвав на потоке методы `setPriority()` и `getPriority()` соответственно.
 
 
-### Thread states = Состояния потока
-Посмотреть состояние потока можно вызвав на нем метод `getState()`.
+### Thread states = Стани потока
+Подивитися стан потоку можна викликав на ньому метод `getState()`.
 
-У потока может быть 3 состояния:
-
-- `NEW` = когда поток создан, но ещё не запущен методом `start()`;
-- `RUNNABLE` = когда поток уже запущен методом `start()`; Делится ещё на 2 состояния:
-    - Ready = поток ожидает запуска операционной системой;
-    - Running = поток выполняет работу. Сменяется с Ready.
-- `TERMINATED` = поток закончил работу.
-
+Потоки існують у 6-ти станах (у класі `Thread` є **enum** `State`):
+- **NEW** (Новий): коли потік був створений, але ще не було викликано метод `start()`, який запускає потік на виконання.
+- **RUNNABLE** (Запущений): коли потік був запущений або він готовий до виконання, але може бути призупинений системою для виконання іншого потоку.
+- **BLOCKED** (Заблокований): роботу потоку можна заблокувати, коли він чекає на ресурс (очікує на отримання монітора для входу у роботу).
+- **WAITING** (Чекає): Потік у цьому стані чекає на спеціальний сигнал від іншого потоку про завершення певної операції.
+- **TIMED_WAITING** (Чекає з таймаутом): Потік у цьому стані чекає на спеціальний сигнал від іншого потоку з певним таймаутом.
+- **TERMINATED** (Закінчений): Потік завершив своє виконання і більше не буде виконуватися.
 
 ### Определения
 - **Concurrency** - совпадение или согласованность. Выполнение сразу нескольких задач, но не обязательно в одно и то же время.
@@ -136,8 +161,8 @@ new Thread(() -> System.out.println("Hello2")).start();
 >__*Для синхронизации значения переменной между потоками ключевое слово `volatile` используется тогда, 
 когда только один поток может изменять значение этой переменной, а остальные потоки могут его только читать.*__
 
-* `volatile` переменные не хранятся в кеше, они хранятся в памяти.
-* `volatile` переменные работают медленнее за обычные переменные, но правильнее.
+* значення `volatile` змінної завжди буде зчитуватися з основної пам'яті, а не з кеш-пам'яті потока;
+* `volatile` змінні працюють повільніше за звичайні змінні.
 
 
 ### Data race
@@ -187,29 +212,93 @@ public class SynchronizedBlock {
 }
 ```
 
-Пример синхронизации пары методов. 
-Нужно использовать 1 объект для синхронизации нужных методов.
+Шаблон синхронізації пари методів за одним об'єктом.
 ```java
 static final Object lock = new Object();
+public void abc() { // method body
+  synchronized(lock) { block body } // method body 
+}
+```
+<details>
+<summary>Приклад сінхронізації монітору одного і тогож об'єкту</summary>
 
-void mobileCall(){
+```java
+// основна логіка
+public class SynchronizedBlocksExample {
+
+  // конкретний об'єкт на якому буде концентруватися синхронізація
+  private static final Object lock = new Object();
+
+  public static void main(String[] args) {
+    Thread thread1 = new Thread(new RunnableMobileCall());
+    Thread thread2 = new Thread(new RunnableSkypeCall());
+    Thread thread3 = new Thread(new RunnableWhatsappCall());
+    thread1.start();
+    thread2.start();
+    thread3.start();
+  }
+
+  protected void mobileCall() {
     synchronized (lock) {
-        System.out.println("Mobile call starts");
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        System.out.println("Mobile call ends");
+      System.out.println("Mobile call starts!");
+      try {
+        Thread.sleep(3000);
+      } catch (InterruptedException e) {
+        throw new RuntimeException(e);
+      }
+      System.out.println("Mobile call ends!");
     }
+  }
+
+  protected void skypeCall() {
+    synchronized (lock) {
+      System.out.println("Skype call starts!");
+      try {
+        Thread.sleep(5000);
+      } catch (InterruptedException e) {
+        throw new RuntimeException(e);
+      }
+      System.out.println("Skype call ends!");
+    }
+  }
+
+  protected synchronized void whatsappCall() {
+    synchronized (lock) {
+      System.out.println("WhatsApp call starts!");
+      try {
+        Thread.sleep(7000);
+      } catch (InterruptedException e) {
+        throw new RuntimeException(e);
+      }
+      System.out.println("WhatsApp call ends!");
+    }
+  }
+}
+```
+```java
+// три класи реалізатори Runnable
+class RunnableMobileCall implements Runnable {
+  @Override
+  public void run() {
+    new SynchronizedBlocksExample().mobileCall();
+  }
 }
 
-void skypeCall(){
-    synchronized (lock) {
-        System.out.println("Skype call starts");
-        try { 
-            ...
+class RunnableSkypeCall implements Runnable {
+  @Override
+  public void run() {
+    new SynchronizedBlocksExample().skypeCall();
+  }
+}
+
+class RunnableWhatsappCall implements Runnable {
+  @Override
+  public void run() {
+    new SynchronizedBlocksExample().whatsappCall();
+  }
+}
 ```
+</details>
 
 ### Методы wait и notify
 Для извещения потоком других потоков о своих действиях часто используются следующие методы:
@@ -225,19 +314,23 @@ void skypeCall(){
 - __Lock starvation__ – ситуация, когда менее приоритетные потоки ждут долгое время или всё время для того, чтобы могли запуститься.
 
 ### Lock и ReentrantLock
-`ReentrantLock` - классом, который имплементирует `Lock` интерфейс.
-Цель - чтобы только один поток работал в один момент времени, а остальные потоки ждали.
+Основна відмінність між `synchronized` і `ReentrantLock` полягає в тому, що `synchronized` - це ключове слово, яке автоматично надає синхронізацію методам та блокам коду.
 
-Так же как и ключевое слова `synchronized`, **Lock** нужен для достижения синхронизации между потоками.
+`ReentrantLock` є класом з пакету `java.util.concurrent.locks` та надає більш гнучкий інтерфейс для управління блокуванням.
+Для того, щоб його використовувати, потрібно створити новий об'єкт ReentrantLock. Блокування виконується методом `lock()`, а розблокування - `unlock()`.
 
-Метод `lock()` - поток будет ждать пока освободится место.
-Метод `tryLock()` - поток посмотрит, если свободно будет работать, а если нет - займется другими делами.
-Метод `unlock()` - поток завершил работу и освободил место. 
+Також `ReentrantLock` надає можливість встановлювати рівень справедливості блокування (**Fair**, **Non-Fair**) та можливість встановлювати таймаути блокування.
 
-Плюс `synchronized` конструкции в том, что нам не нужно заботиться о закрытии lock, здесь же нужно использовать
-методы `lock()` и `unlock()`:
+Але водночас, використання `ReentrantLock` може вимагати більшої кількості коду та бути менш ефективним за часом виконання, ніж `synchronized`.
+
+* Метод `lock()` - потік чекатиме поки звільниться місце.
+* Метод `tryLock()` - потік подивиться, якщо вільно працюватиме, а якщо ні – займеться іншими справами.
+* Метод `unlock()` - потік завершив роботу та звільнив місце.
+
+Плюс `synchronized` конструкції в тому, що нам не потрібно дбати про закриття lock, тут же потрібно використовувати
+методи `lock()` і `unlock()`:
 ```java
-// создаём потоки
+// створюємо потоки
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -269,12 +362,12 @@ public class LockExample {
 }
 ```
 ```java
-// синхронизация на основе Lock
+// синхронізація на основі Lock
 class Call {
     private Lock lock = new ReentrantLock();
 
     void mobileCall() {
-        lock.lock(); // работает как synchronized
+        lock.lock(); // працює як synchronized
         try {
             System.out.println("Mobile call starts");
             Thread.sleep(3000);
@@ -287,7 +380,7 @@ class Call {
     }
 
     void skypeCall() {
-        lock.lock(); // работает как synchronized
+        lock.lock(); // працює як synchronized
         try {
             System.out.println("Skype call starts");
             Thread.sleep(5000);
@@ -300,7 +393,7 @@ class Call {
     }
 
     void whatsappCall() {
-        lock.lock(); // работает как synchronized
+        lock.lock(); // працює як synchronized
         try {
             System.out.println("Whatsapp call starts");
             Thread.sleep(7000);
@@ -325,6 +418,7 @@ class Call {
 - `isInterrupted()` проверка на прерывание потока.
 
 
+
 ## Thread pool
 При создании потока под капотом происходит множество операций в JVM и ОС, и управлять отдельно созданными потоками неудобно...
 На помощь приходит механизм Thread pool. 
@@ -332,6 +426,7 @@ class Call {
 __Thread pool__ – это множество потоков, каждый из которых предназначен для выполнения той или иной задачи.
 
 В Java с thread pool-ами нужно работать через объект `Execute`. Удобнее всего работать посредством интерфейса `ExecutorService`.
+
 
 ### ExecutorService
 Напрямую, Thread pool, практически никогда не создают:
@@ -372,20 +467,116 @@ class RunnableImpl00 implements Runnable {
 }
 ```
 
+
 #### *execute()*
 Запуск Thread pool'a происходит через метод `execute`, в который передается объект имплементируемый `Runnable`:
 ```java
 executorService.execute(new RunnableImpl100());
 ```
 
+
 #### *shutdown()*
 После выполнения метода `shutdown`, `ExecutorService` понимает, что новых заданий больше не будет и, выполнив поступившие до этого задания, прекращает работу.
+
 
 #### *awaitTermination()*
 Метод `awaitTermination` принуждает поток в котором он вызвался подождать до тех пор, пока не выполнится одно из двух событий: 
 либо `ExecutorService` прекратит свою работу, либо пройдёт время, указанное в параметре метода `awaitTermination`. Работает подобно методу `join`.
 __Метод `awaitTermination` вызывается всегда после `shutdown`.__
 
+
+#### Приклади
+
+> <details>
+> <summary>Приклад роботи ExecutorService з Runnable через метод execute</summary>
+>
+> Мінус `Runnable` у тому, що не можна викинути **exception** та метод `run()` нічого не повертає.
+> ```java
+> // код вираховує факторіал числа
+> public class FactorialByRunnable {
+> 
+>   protected static int factorialResult;
+> 
+>   public static void main(String[] args) throws InterruptedException {
+>     ExecutorService executorService = Executors.newSingleThreadExecutor();
+>     FactorialByRunnableImpl factorial = new FactorialByRunnableImpl(5);
+>     executorService.execute(factorial);
+>     executorService.shutdown();
+>     executorService.awaitTermination(10, TimeUnit.SECONDS);
+>     System.out.println(factorialResult);
+>   }
+> }
+> 
+> class FactorialByRunnableImpl implements Runnable {
+>   private final int f;
+> 
+>   public FactorialByRunnableImpl(int f) {
+>     this.f = f;
+>   }
+> 
+>   @Override
+>   public void run() {
+>     if (f <= 0) {
+>       System.out.println("You enter wrong number");
+>       return;
+>     }
+>     int result = 1;
+>     for (int i = 1; i <= f; i++) {
+>       result *= i;
+>     }
+>     FactorialByRunnable.factorialResult = result;
+>   }
+> }
+> ```
+> </details>
+
+
+> <details>
+> <summary>Приклад роботи ExecutorService з Callable через метод submit</summary>
+> 
+> ```java
+> public class FactorialByCallable {
+> 
+>   protected static int factorialResult;
+> 
+>   public static void main(String[] args) {
+>     ExecutorService executorService = Executors.newSingleThreadExecutor();
+>     FactorialByCallableImpl factorial = new FactorialByCallableImpl(-1);
+>     Future<Integer> future = executorService.submit(factorial);
+>     try {
+>       factorialResult = future.get();
+>     } catch (InterruptedException e) {
+>       throw new RuntimeException(e);
+>     } catch (ExecutionException e) {
+>       System.out.println(e.getCause());
+>     } finally {
+>       executorService.shutdown();
+>     }
+>     System.out.println(factorialResult);
+>   }
+> }
+> 
+> class FactorialByCallableImpl implements Callable<Integer> {
+>   private final int f;
+> 
+>   public FactorialByCallableImpl(int f) {
+>     this.f = f;
+>   }
+> 
+>   @Override
+>   public Integer call() throws Exception {
+>     if (f <= 0) {
+>       throw new Exception("You enter wrong number");
+>     }
+>     int result = 1;
+>     for (int i = 1; i <= f; i++) {
+>       result *= i;
+>     }
+>     return result;
+>   }
+> }
+> ```
+> </details>
 
 
 ## ScheduledExecutorService
@@ -399,67 +590,217 @@ __Метод `awaitTermination` вызывается всегда после `sh
 `ExecutorService executorService = Executors.newCachedThreadPool();`
 
 ### Callable
-Интерфейс `Callable`, так же как и интерфейс `Runnable`, представляет собой определённое задание, которое выполняется потоком.
-В отличие от класса `RunnableCallable`:
-- имеет **return type** не `void`;
-- может **выбрасывать** `Exception`.
+Інтерфейс `Callable`, як і інтерфейс `Runnable`, є певним завданням, яке виконується потоком.
+На відміну від класу `Runnable`, `Callable`:
+- має **return type** (ні `void`);
+- може **викидати** `Exception`.
 
-> - `submit` - В `ExecutorService`, чтобы запустить таску, вместо метода `execute` для `Callable` нужно запустить `submit`.
-Метод `submit` передаёт наше задание (task)в thread pool, для выполнения его одним из потоков, и возвращает тип `Future`, в котором и хранится результат выполнения нашего задания.
-> - `get` - Метод `get` позволяет получить результат выполнения нашего задания из объекта `Future`.
-> - `Future.isDone()` - Проверяет завершена ли таска у объекта `Future`.
+> `Runnable` можна використовувати як з `ExecuteService` та і з окремим створенням `Thread`, 
+> `Callable` можна використовувати тільки з `ExecuteService`.
+> 
+> `Callable` треба використовувати коли потрібно повертати результат, інакше викорустовуй `Runnable`. 
 
-
-## Синхронизатор Semaphore
-`Semaphore` – это синхронизатор, позволяющий ограничить доступ к какому-то ресурсу. 
-В конструктор Semaphore нужно передавать количество потоков, которым Semaphore будет разрешать одновременно использовать этот ресурс.
-Часто используется в программировании.
-
-`acquire()` - Попытка получить разрешение от Semaphore. Данный метод заблокирует поток, пока ресурс не будет доступен для нас.
-
-
-## Синхронизатор CountDownLatch (замок с обратным отсчетом)
-**CountDownLatch** – это синхронизатор, позволяющий любому количеству потоков ждать пока не завершится определённое количество операций. 
-В конструктор CountDownLatch нужно передавать количество операций, которые должны завершится, чтобы потоки продолжили свою работу.
-
-`await()` - Если счетчик больше 0, поток будет заблокирован до тех пор, пока счетчик не будет равен 0.
+> **Як працювати з Callable:**
+> - `submit`: у `ExecutorService`, щоб запустити завдання (task), замість метода `execute` для `Callable` потрібно використовувати метод `submit`.
+Цей метод передає наше завдання у thread pool, для виконання його одним із потоків, і повертає об'єкт типу `Future`, 
+у якому зберігається результат виконання нашого завдання.
+>   - `get`: метод позволяет получить результат выполнения нашего задания из объекта `Future`.
+>   - `Future.isDone()`: перевіряє чи завершене завдання у об'єкта `Future`.
 
 
-## Синхронизатор Exchanger
-**Exchanger** – это синхронизатор, позволяющий обмениваться данными между двумя потоками, обеспечивает то, что оба потока получат информацию друг от друга одновременно.
 
-### AtomicInteger
-**AtomicInteger** – это класс, который предоставляет возможность работать с целочисленным значением int, используя атомарные операции.
+## Синхронізатори 
+Це високорівневі рішення (механізми) які використовують під капотом низько рівневі механізми (`Lock`, `synchronized`...).
 
-### Synchronized collections
-**Synchronized collections** достигают потокобезопасности благодаря тому что, используют лок через synchronized блоки для всех методов.
+***
 
-`synchronizedList()` - Синхронизированная обертка для нового листа, пример:
+### Синхронізатор Semaphore
+`Semaphore` – це синхронізатор, що дозволяє обмежити доступ до якогось ресурсу.
+У конструктор Semaphore потрібно передавати кількість потоків, яким Semaphore дозволятиме одночасно використовувати цей ресурс.
+
+* `acquire()` - спроба отримати дозвіл від **семафора**. Даний метод заблокує потік, доки ресурс не буде доступним для нас.
+* `release()` - звільняємо дозвіл **семафора**, тим самим звільшується _counter_ у семафора на 1.
+
+> <details>
+> <summary>ПРИКЛАД Semaphore</summary>
+> 
+> ```java
+> // 5 людей телефонують по 2 телефонам
+> public class SemaphoreExample {
+>   public static void main(String[] args) {
+>     Semaphore callBox = new Semaphore(2);
+> 
+>     new Person("Bob", callBox);
+>     new Person("Carl", callBox);
+>     new Person("Mina", callBox);
+>     new Person("Kate", callBox);
+>     new Person("Ted", callBox);
+>   }
+> }
+> 
+> class Person extends Thread {
+>   private final String name;
+>   private final Semaphore callBox;
+> 
+>   Person(String name, Semaphore callBox) {
+>     this.name = name;
+>     this.callBox = callBox;
+>     this.start();
+>   }
+> 
+>   @Override
+>   public void run() {
+>     try {
+>       System.out.println(name + " - 1 - WAIT");
+>       callBox.acquire();
+>       System.out.println(name + " - 2 - USE");
+>       sleep(2000);
+>       System.out.println(name + " - 3 - END");
+>     } catch (InterruptedException e) {
+>       e.printStackTrace();
+>     } finally {
+>       callBox.release();
+>     }
+>   }
+> }
+> ```
+> </details>
+
+***
+
+### Синхронізатор CountDownLatch (замок із зворотним відліком)
+**CountDownLatch** – це синхронізатор, що дозволяє будь-якій кількості потоків чекати доки не завершиться певна кількість операцій.
+У конструктор `CountDownLatch` потрібно передавати кількість операцій, які мають завершитись, щоб потоки продовжили свою роботу.
+
+* `await()` - якщо лічильник більше `> 0`, потік буде заблокований доти, поки лічильник не дорівнюватиме `0`.
+
+> <details>
+> <summary>ПРИКЛАД Semaphore</summary>
+>
+> ```java
+> public class CountDownLatchExample {
+>   static CountDownLatch countDownLatch = new CountDownLatch(3);
+> 
+>   private static void marketStaffIsOnPlace() throws InterruptedException {
+>     Thread.sleep(2000);
+>     System.out.println("Market staff came to work");
+>     countDownLatch.countDown();
+>     System.out.println("countDownLatch = " + countDownLatch);
+>   }
+> 
+>   private static void everythingIsReady() throws InterruptedException {
+>     Thread.sleep(3000);
+>     System.out.println("Everything is ready, so let's open market");
+>     countDownLatch.countDown();
+>     System.out.println("countDownLatch = " + countDownLatch);
+>   }
+> 
+>   private static void openMarket() throws InterruptedException {
+>     Thread.sleep(4000);
+>     System.out.println("Market is opened");
+>     countDownLatch.countDown();
+>     System.out.println("countDownLatch = " + countDownLatch);
+>   }
+> 
+>   public static void main(String[] args) throws InterruptedException {
+>     new Friend("Bob", countDownLatch);
+>     new Friend("Carl", countDownLatch);
+>     new Friend("Ted", countDownLatch);
+>     new Friend("Mina", countDownLatch);
+>     new Friend("Helga", countDownLatch);
+> 
+>     marketStaffIsOnPlace();
+>     everythingIsReady();
+>     openMarket();
+>   }
+> }
+> 
+> class Friend extends Thread {
+>   private final String name;
+>   private final CountDownLatch countDownLatch;
+> 
+>   public Friend(String name, CountDownLatch countDownLatch) {
+>     this.name = name;
+>     this.countDownLatch = countDownLatch;
+>     this.start();
+>   }
+> 
+>   @Override
+>   public void run() {
+>     try {
+>       countDownLatch.await();
+>       System.out.println(name + " shopping");
+>     } catch (InterruptedException e) {
+>       e.printStackTrace();
+>     }
+>   }
+> }
+> ```
+> </details>
+
+***
+
+### Синхронізатор Exchanger
+**Exchanger** – це синхронізатор, що дозволяє обмінюватися даними між двома потоками, забезпечує те, що обидва потоки отримають інформацію один від одного одночасно.
+
+
+
+## AtomicInteger
+**AtomicInteger** – это класс, который предоставляет возможность работать с целочисленным значением `int`, используя атомарные операции.
+
+***
+
+## Synchronized collections
+> По суті, це синхронізована обертка для ново створенної колекції.
+> 
+> Concurrent колекції працюють швидше за синхрозінозані колекції.
+
+**Synchronized collections** досягають потокобезпеки завдяки тому, що використовують лок через synchronized блоки для всіх методів.
+
+`synchronizedList()` - синхронізована обгортка для нового листа, приклад:
 ```java
 List<Integer> syncList = Collections.synchronizedList(new ArrayList<>());
 ```
 
-### ConcurrentHashMap
-**ConcurrentHashMap** имплементирует интерфейс ConcurrentMap, который в свою очередь происходит от интерфейса Map.
+***
 
-- В ConcurrentHashMap ни key, ни value не могут быть null.
-- В ConcurrentHashMap, благодаря его сегментированию, при изменении какого-либо элемента блокируется только bucket, в котором он находится.
+### ConcurrentHashMap
+`ConcurrentHashMap` - це багатопотокова версія **мапи**, яка імплементує інтерфейс `ConcurrentMap`, який своєю чергою походить від інтерфейсу `Map`.
+- використовує **fail-save** ітератор який не викидає `ConcurrentModificationException`.
+- будь-яка кількість потоків може читати елементи, не блокуючи його;
+- завдяки його сегментуванню (діленню на частини), при зміні якогось елемента блокується тільки **bucket**, в якому він знаходиться;
+- під капот сігменти використовують `ReentrantLock`;
+- ані **key**, ані **value** не можуть бути `null`.
+
+***
 
 ### CopyOnWriteArrayList
-**CopyOnWriteArrayList** имплементирует интерфейс List. Следует использовать тогда, когда вам нужно добиться потокобезопасности, у вас небольшое количество операций по изменению элементов и большое количество по их чтению.
+**CopyOnWriteArrayList** имплементирует интерфейс List. Следует использовать тогда, когда вам нужно добиться потокобезопасности, 
+у вас небольшое количество операций по изменению элементов и большое количество по их чтению.
+
+Що разу при видалені чи запису елементів створюється копія колекції в потоці.
+В такому випадку колекція fail-save!
+
+
+***
 
 ### ArrayBlockingQueue
-**ArrayBlockingQueue** – потокобезопасная очередь с ограниченным размером (capacity restricted).
+**ArrayBlockingQueue** – потокобезпечна черга з обмеженим розміром елементів (capacity restricted).
 ```java
 ArrayBlockingQueue<Integer> queue = new ArrayBlockingQueue<>(4);
 ```
-Обычно один или несколько потоков добавляют элементы в конец очереди, а другой или другие потоки забирают элементы из начала очереди.
+* Максимальна кількість елементів, які вона може містити, задається при створенні.
+* Всі операції додавання та видалення елементів будуть блокуючими, якщо черга досягне свого максимального розміру.
 
-- `add` - Если очередь полная выбросит ошибку.
-- `offer` - Если очередь полная НЕ выбросит ошибку, и в очередь ничего не добавит.
+Зазвичай один або кілька потоків додають елементи у кінець черги, а інший або інші потоки забирають елементи з початку черги.
+
+- `add` - викине помилку `Queue full`, якщо черга повна.
+- `offer` - НЕ викине помилку якщо черга повна, і нічого не додасть у чергу.
 
 
-##[Running Delayed or Periodic Tasks](https://www.baeldung.com/java-start-thread)
+
+
+## [Running Delayed or Periodic Tasks](https://www.baeldung.com/java-start-thread)
 Java has few tools that can help us to run delayed or recurring operations:
 - `java.util.Timer`
 - `java.util.concurrent.ScheduledThreadPoolExecutor`

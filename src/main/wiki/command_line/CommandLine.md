@@ -1,4 +1,5 @@
 # Command line
+* [Setting up Windows Subsystem for Linux with zsh + oh-my-zsh + ConEmu](https://blog.joaograssi.com/windows-subsystem-for-linux-with-oh-my-zsh-conemu/)
 * [Написание HTTP-запросов с помощью Curl](http://rus-linux.net/lib.php?name=/MyLDP/internet/curlrus.html)
 * [How to set JAVA_HOME on Windows 10?](https://mkyong.com/java/how-to-set-java_home-on-windows-10/)
 * [How to install Maven on Windows](https://mkyong.com/maven/how-to-install-maven-in-windows/)
@@ -12,6 +13,13 @@
 
 > [Соответствие консольных команд Windows и Linux](https://white55.ru/cmd-sh.html) 
 
+> Задаємо свою зміну оточення `PATH_TO_SAVE`:
+> 
+> ```shell
+> export PATH_TO_SAVE=C:\\idea_projects\\tt_modules-writer-reader-docker\\recorder\\build\\libs\\data\\forecast.txt
+> ```
+
+
 ## Commands
 Клавиша `TAB` будет дописывать названия файлов, адреса...
 
@@ -19,7 +27,6 @@
 * `ls -lah` - отображает скрытые файлы и папки с подробной инфой.
 * `ls -all` - отображает список доступных файлов в данном каталоге командной строки.
 * `cd src/main` - переходим во внутырь каталога main.
-* `pwd` - показывает адрес директории где ты сейчас находишся.
 * `cd /` - перемещаешся в корень.
 * `cd ..` - перемещаешся в уровень назад.
 * `cd /d C:\dev` - переключиться на нужный адресс/папку.
@@ -30,12 +37,77 @@
 * `whoami` - name of your computer (username).
 * `dir` - return the list of non-hidden files and folders in your current directory. If you want to view hidden files use `dir /A`.
 * `C:\users\student> help cd` - command can take any command as a parameter and return all the available options.
-* `mkdir -p src/main/java/hello` - создаст иерархию папок, очень полезно использовать в терминале IntelliJ IDEA.
+* `mkdir myfolder` - створює 1 теку.
+* `mkdir -p src/main/java/hello` - створює ієрархію тек, необхідна опція `-p`.
+* `rm -rf myfolder` (використовуються опції `-r` та `-f`) - видаляє певну теку з внутрішньою ієрархією без підтвердження.
+* `mv example-3 example` - переміщає теку example-3 у теку example.
 * `more` - дозволяє показувати контент файлу, `more docker-compose.yaml`.
 
-### Сокращения
-* `-d` for `--data`.
-* `-H` for `--header`.
+from course Terminal, [Bash & VIM Essentials by Amigoscode](https://amigoscode.com/courses/enrolled/855076):
+* `man` - надає повний опис команди: `man man`, `man find`, `man grep`, `man ls`... 
+* `clear` or `CTRL + L` - очистить термінал від виводу.
+* `CTRL + A` - переміщає курсор на початок строки;
+* `CTRL + E` - переміщає курсор у кінець строки;
+* `ALT + B` - переміщає курсор на одне слово назад;
+* `ALT + E` - переміщає курсор на одне слово уперед;
+* `ALT + BACKSPACE` - видаляє від курсора до пробіла ліворуч;
+* `ALT + D` - видаляє від курсора до пробіла праворуч;
+* `SPACE` - дозволяє пролистувати сторінки, особливо коли скрол на миші не працює;
+* `man` (`man cal`, `man man`) - це документація про додаток; 
+* `pwd` (**present working directory**) - показує шлях теки в котрій знаходимося;
+* `ls` - показує всім теперішнього каталогу;
+* `ls -a` (`ls --all`) - показує вміст теперішнього каталогу;
+* `ls -al` - показує вміст теперішнього каталогу з додатковою інфою;
+  - якщо строка починається з `d` (`drwxr-xr-x`), тоді це тека. А якщо `-` - файл:
+  ```shell
+  [10:52:08] serhiy :: DESKTOP-3D6FM5E  ➜  ~ » ls -al
+  total 292
+  drwxr-x---  5 serhiy serhiy   4096 Mar 24 10:54 .
+  drwxr-xr-x  3 root   root     4096 Mar 23 14:45 ..
+  -rw-------  1 serhiy serhiy     49 Mar 23 16:20 .bash_history
+  -rw-r--r--  1 serhiy serhiy    220 Mar 23 14:45 .bash_logout
+  -rw-r--r--  1 serhiy serhiy   3844 Mar 23 16:20 .bashrc
+  -rw-r--r--  1 serhiy serhiy   3846 Mar 23 16:20 .bashrc.save
+  -rw-r--r--  1 serhiy serhiy  10374 Mar 23 18:42 .dircolors
+  -rw-------  1 serhiy serhiy     20 Mar 24 10:50 .lesshst
+  drwxr-xr-x  3 serhiy serhiy   4096 Mar 23 15:53 .local
+  -rw-r--r--  1 serhiy serhiy      0 Mar 23 14:45 .motd_shown
+  drwxr-xr-x 12 serhiy serhiy   4096 Mar 23 14:51 .oh-my-zsh
+  -rw-r--r--  1 serhiy serhiy    807 Mar 23 14:45 .profile
+  -rw-r--r--  1 serhiy serhiy     10 Mar 23 15:36 .shell.pre-oh-my-zsh
+  -rw-r--r--  1 serhiy serhiy      0 Mar 23 14:47 .sudo_as_admin_successful
+  -rw-r--r--  1 serhiy serhiy  49076 Mar 23 14:50 .zcompdump
+  -rw-r--r--  1 serhiy serhiy  50441 Mar 23 18:25 .zcompdump-DESKTOP-3D6FM5E-5.8.1
+  -r--r--r--  1 serhiy serhiy 116864 Mar 23 18:25 .zcompdump-DESKTOP-3D6FM5E-5.8.1.zwc
+  -rw-------  1 serhiy serhiy   2119 Mar 24 10:54 .zsh_history
+  -rw-r--r--  1 serhiy serhiy   3918 Mar 23 18:53 .zshrc
+  -rw-r--r--  1 serhiy serhiy     31 Mar 23 14:50 .zshrc.pre-oh-my-zsh
+  -rw-r--r--  1 serhiy serhiy   3866 Mar 23 16:29 .zshrc.save
+  drwxr-xr-x 35 serhiy serhiy   4096 Mar 23 16:30 fonts
+  ```
+* `tree myfolder` - відображає ієрархію теки - потрібно встановити додаток **brew**: `sudo apt-get install build-essential` 
+* `cat`, `less`, `head`, `tail` - `tail myfile.sql` - читає файл - увесь, частину, згори, знизу.
+* `mv hello words` - перейменовує теку з **hello** на **words**.
+* `mv query.sql /words` - переміщує файл **query.sql** у теку **words**.
+* `touch query.sql` - створює файл **query.sql**.
+* `rm query.sql` - видаляє файл **query.sql**.
+* `rm query-*.sql` - видаляє усі файли котрі починаються з **query** і закінчуються **.sql**. 
+  Example: **query-test.sql**, **query-1.sql**... 
+* `echo "select * from customers;"` - виводить текст на екран **select * from customers;**.
+* `echo "select * from customers;" > query.sql` - записує текст **select * from customers;** у файл **query.sql**.
+* `echo "select * from orders;" >> query.sql` - додає текст **select * from orders;** у кінець файла **query.sql**.
+* `cat query.sql` - виводить на екран вміст файлу **query.sql**.
+* `cp query.sql query-copy.sql` - копіює вміст файлу **query.sql** у новий файл **query-copy.sql**.
+* `find . -name query.sql` - шукає за ім'ям файл або теку **query.sql** у нинішній теці і у всіх вкладених.
+  - `find . -type f -name query.sql` - шукає по типу (`f` - файл, `d` - тека)  за ім'ям **query.sql** у нинішній теці і у всіх вкладених.
+  - `-iname` - дозволяє ігнорувати капс, а `-name` - реагує на капс.
+  - `find . -type f -iname "query*.sql"` - шукає за маскою. 
+  - `find . -empty` - шукає порожні теки та файли.
+  - `find . -type f -iname "QUERY-co*.sql" -delete` - видаляє файли за вказаним пошуком
+* `grep -rn "order" example` - шукає текст у файлах за патерном.
+  - `r` - рекурсивно виконує пошук у кожній кладеній теці.
+  - `n` - вказує номер строки.
+* `grep -rni -A 1 -B 1 "customer" .` - шукає текст у файлах за патерном, але видає на 1 строку раніше `-B 1 ` і одну строку пізніше `-A 1`.
 
 ## HotKeys
 * `Ctrl + D` - выход. Иногда может глючить - не реагирует. 
@@ -180,3 +252,4 @@ curl http://localhost:8080/nbu | iconv -t utf-8 > myJson.json
 |createWithLocation | /rest/meals        | `curl -X POST http://localhost:8080/topjava/rest/meals -H "content-type:application/json" -d "{ \"dateTime\":\"2021-12-01T11:30:00\",\"description\":\"BLA\",\"calories\":\"555\"}"` |
 |update             | /rest/meals/100011 | `curl -X PUT http://localhost:8080/topjava/rest/meals/100011 -H "content-type:application/json" -d "{ \"id\":\"100011\",\"dateTime\":\"2021-12-01T11:30:00\",\"description\":\"BLA\",\"calories\":\"666\"}"` |
 |getBetween         | /rest/meals/filter | `curl -v http://localhost:8080/topjava/rest/meals/filter?start=2020-01-30T00:15:30&end=2020-01-30T23:15:30` |
+

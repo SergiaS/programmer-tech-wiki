@@ -96,7 +96,6 @@ String s = String.join("=", strArr); // "d=e=z"
 ```
 
 
-
 ## StringBuilder
 * `StringBuilder` отличается от `String` тем, что он mutable (т.е. изменяемый).
 * Первоначальная вместимость `StringBuilder` по умолчанию составляет 16 символом. Размер можно указать самому `new StringBuilder(50)`.

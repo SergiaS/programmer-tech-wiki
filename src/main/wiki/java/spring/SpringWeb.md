@@ -255,7 +255,7 @@ name to `DispatcherServlet`, instead it write the output directly to the HTTP re
 
 ## CORS
 <u>Один из вариантов</u> - это [добавление аннотации](https://www.baeldung.com/spring-cors) `@CrossOrigin` над
-метод-ом/ами или над классом. По умолчанию All origins are allowed.
+метод-ом/ами или над классом. По умолчанию **All origins are allowed**.
 
 ***
 
@@ -538,8 +538,6 @@ public class RestFulController {
 
 ### @ModelAttribute()
 В зависимости от места использования (над методом или перед аргументом метода) данная аннотация выполняет разные функции:
-
-<br>
 
 #### Над методом
 > Це використовується, коли необхідно мати в моделі всіх методів контролера якусь пару ключ:значенням.

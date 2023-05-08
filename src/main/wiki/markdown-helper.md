@@ -95,9 +95,15 @@ Use next code:
 # Markdown for GitHub
 > **Note**
 > This is a note
+> ```text
+> **Note**
+> ```
 
 > **Warning**
 > This is a warning
+> ```text
+> **Warning**
+> ```
 
 
 # Emoji

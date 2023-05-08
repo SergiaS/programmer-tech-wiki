@@ -164,7 +164,30 @@ String s1 = Arrays.stream(word1)
     .map(StringBuilder::new)
     .collect(Collectors.joining(""));
 ```
-
+### Example 6
+Приклади групування:
+```java
+// підрахунок однакових значень
+public void groupingAndCounting() throws Exception {
+  List<String> names = List.of(
+          "John",
+          "John",
+          "Mariam",
+          "Alex",
+          "Mohammado",
+          "Mohammado",
+          "Vincent",
+          "Alex",
+          "Alex"
+  );
+  Map<String, Long> map = names.stream()
+          .collect(Collectors.groupingBy(
+                  Function.identity(),
+                  Collectors.counting())
+          );
+  System.out.println(map);
+}
+```
 
 
 # Lambda
@@ -199,8 +222,6 @@ runner.run(new Executable() {
         });
 ```
 
-***
-
 ### Example 2:
 `{}` - при описании нескольких действий/операций, нужно ставить точку с запятой `;`.
 ```java
@@ -223,8 +244,6 @@ runner.run(new Executable() {
         });
 ```
 
-***
-
 ### Example 3:
 Нельзя переприсваивать локальную переменную (менять ей значение) до или после лямбд, иначе будет ошибка.
 Значение должно быть константной (постоянным).
@@ -246,9 +265,6 @@ int a = 1;
 runner.run((x, y) ->  x + y + a);
 a = 2; // нельзя переприсваивать до / после
 ```
-
-
-***
 
 ### Example 4:
 У лямбда выражений нет своего scope (своей области видимости).
@@ -275,8 +291,6 @@ public int execute(int x, int y) {
     }
 });
 ```
-
-***
 
 ### Example 5:
 ```java
@@ -305,6 +319,21 @@ list.sort(new Comparator<String>() {
       }
    }
 });
+```
+
+
+### Example 6:
+```java
+// Приклад розбіру collect 
+List<String> emails = MockData.getPeople().stream()
+    .map(Person::getEmail)
+    .collect(
+        ArrayList::new,   // () -> new ArrayList<String>(),
+        ArrayList::add,   // (strings, e) -> strings.add(e),
+        ArrayList::addAll // (strings, c) -> strings.addAll(c)
+    );
+
+emails.forEach(System.out::println);
 ```
 
 

@@ -214,7 +214,6 @@ This web application is 100% pure Java and you did not have to deal with configu
 
 > <details>
 > <summary>ПРИКЛАД ВІД DAN VEGA</summary>
->
 > 
 > ```java
 > // клас/рекорд з властивостями
@@ -240,6 +239,7 @@ This web application is 100% pure Java and you did not have to deal with configu
 > 
 > </details>
 
+Щоб IDEA побачила нові зміни, треба зібрати проєкт - `Build > Build project`. 
 
 
 ## Application .properties / .yaml settings files
@@ -440,7 +440,14 @@ Spring Boot дозволяє заповнити БД своїми даними �
 # For population non-embedded db - turn on data.sql
 spring.sql.init.mode=always
 ```
-Потім створити файл `data.sql` і додати свої інсерти. 
+Потім створити файл `data.sql` і додати свої інсерти.
+
+> Можливо необхідно буде додати додаткові налаштування:
+> ```properties
+> # Spring Boot will automatically detect beans of the following types that depends upon database initialization
+> # https://docs.spring.io/spring-boot/docs/current/reference/html/howto.html#howto.data-initialization.dependencies.depends-on-initialization-detection
+> spring.jpa.defer-datasource-initialization=true
+> ```
 
 
 

@@ -606,7 +606,7 @@ export class Form extends React.Component {
 <details>
 <summary>ПРИКЛАД простої валідації по виходу з поля (onBlur)</summary>
 
-Функція `test()` відноситьс я до інтерфейсу **RegExp** - перевірка `email` по заданній регулярці:
+Функція `test()` відноситься до інтерфейсу **RegExp** - перевірка `email` по заданній регулярці:
 ```jsx
 import React from "react";
 

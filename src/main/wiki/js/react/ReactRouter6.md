@@ -308,6 +308,7 @@ const setActive = ({isActive}) => isActive ? 'active-link' : '';
 
 
 ## Хук useNavigate - керування історією браузера
+* [YouTube - Пояснення Navigate з location](https://youtu.be/oUZjO00NkhY?t=725)
 * [using history with react-router-dom v6](https://stackoverflow.com/questions/63471931/using-history-with-react-router-dom-v6)
 
 > **Note**<br> 
@@ -370,8 +371,8 @@ const setActive = ({isActive}) => isActive ? 'active-link' : '';
 В об'єкті `to` обов'язково повинні встановлюватися змінна стан `state` і змінна `pathname` - це кінцева точка URL.
 ```json
 {
-"pathname": "url",
-"state": {
+  "pathname": "url",
+  "state": {
     "yourstatevar": "value"
   }
 }

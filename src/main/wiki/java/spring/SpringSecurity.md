@@ -187,7 +187,33 @@ public class AdminService {
 
 По-простому: є об'єкти, котрі потребують інших об'єктів - **Spring Security** складається з ланцюга фільтрів.
 
-`Authentication`, котрий створюється, наприклад, з логіну і паролю, що передаються в запиті. Далі цей об'єкт передається до `AuthenticationManager` (наприклад, `ProviderManager`)<br>
+Розглянемо приклад, коли юзер робить запит з `username` та `password`:
+1. **BasicAuthenticationFilter**<br>
+Спочатку HTTP запит оброблюється фільтром `BasicAuthenticationFilter`.
+Цей запит має містити header Basic  `Authorization` (Base64-encoded username/password token).
+З отриманих даних `username` та `password` буде створений `Authentication` об'єкт, ще називають authentication token,
+зазвичай використовується реалізація `UsernamePasswordAuthenticationToken` котра імплементує інтерфейс `Authentication`.
+2. **AuthenticationManager**<br>
+Далі, після створення об'єкта `Authentication` передається до однієї з реалізацій `AuthenticationManager` -
+Менеджер аутентифікації не обов'язково налаштовувати у конфігурації - за замовчуванням автоматично буде задіяна реалізація
+`ProviderManager`.
+Реалізація на основі `AuthenticationManager` повинна перевизначати метод `Authentication authenticate(Authentication authentication) throws AuthenticationException;`.
+Можна додавати декілька провайдерів - працюють як фільтри.
+3. **AuthenticationProvider**<br>
+Потім об'єкт `Authentication` передається до провайдера - `DaoAuthenticationProvider`, `JwtAuthenticationProvider`...
+За замовчуванням `DaoAuthenticationProvider` дефолтна реалізація при обраному менеджері `ProviderManager`.
+Якщо аутентифікація успішна - повернеться об'єкт `Authentication` (його реалізація).
+
+Загалом вибір фільтрів, менеджерів аутентифікації, провайдерів аутентифікації... залежить від способу аутентифікації.
+
+Наприклад, `UserDetailsService` використовується провайдером `DaoAuthenticationProvider`. 
+Цей сервіс потрібен для отримання інфи про з БД для перевірки введених даних користувачем.
+Інший провайдер буде використовувати інший спосіб перевірки даних (без 'UserDetailsService').
+
+
+
+`Authentication`, котрий створюється, наприклад, з логіну і паролю, що передаються в запиті. 
+Далі цей об'єкт передається до `AuthenticationManager` (наприклад, `ProviderManager`)<br>
 
 `>` `AuthenticationManager`<br>
 
@@ -300,6 +326,7 @@ Note that an `AuthenticationManager` instantiation automatically takes place by 
 >
 > </details>
 
+> `AuthenticationManager` в Spring Security передає об'єкт `Authentication` до `AuthenticationProvider` для виконання логіки аутентифікації.
 
 ### [Authentication Mechanisms](https://docs.spring.io/spring-security/reference/servlet/authentication/index.html#servlet-authentication-mechanisms)
 * **Username and Password** - how to authenticate with a username/password.
@@ -325,14 +352,14 @@ Real authentication happens when an `Authentication` object has been authenticat
 
 The `Authentication` object (the authentication token) actually, can be either **un-authenticated** or **authenticated**.
 
-When the `BasicAuthenticationFilter` processes and extracts the _username_ and _password_ it creates an instance of the 
+When the `BasicAuthenticationFilter` (цей фільтр виконує аутентифікацію на основі HTTP Basic Authentication) processes and extracts the _username_ and _password_ it creates an instance of the 
 `UsernamePasswordAuthenticationToken` class which actually is un-authenticated and puts it in the **SecurityContext** (using the `SecurityContextHolder`).
 
 ```java
 UsernamePasswordAuthenticationToken authenticationToken = 
     new UsernamePasswordAuthenticationToken(username, password);
 
-SecurityCOntextHolder.getContext()
+SecurityContextHolder.getContext()
     .setAuthentication(authenticationToken);
 ```
 The `UsernamePasswordAuthenticationToken` class, (which implements the Authentication interface), is a well-known and widely used class.
@@ -411,10 +438,9 @@ override 2 contract methods.
 >     if (uname.equals(existingUserName) && upassw.equals(existingPassword)) {
 >       UsernamePasswordAuthenticationToken authenticationToken;
 >       authenticationToken = new UsernamePasswordAuthenticationToken(uname, null, getAuthorities());
->     return authenticationToken;
->     } else {
->       return null;
+>       return authenticationToken;
 >     }
+>     return null;
 >   }
 > 
 >   @Override
@@ -771,6 +797,9 @@ protected void configure(HttpSecurity http) throws Exception {
 
 ## CSRF
 * [Using Spring Security CSRF Protection](https://docs.spring.io/spring-security/reference/servlet/exploits/csrf.html#servlet-csrf-using)
+
+> **Warning**<br>
+> Never disable CSRF protection while leaving session management enabled! Doing so will open you up to a Cross-Site Request Forgery attack.
 
 > **Note**<br>
 > За замовчуванням у **Spring Security** увімкнутий захист **CSRF** (він вимагає передавати у кожному запиті **CSRF** токен - 

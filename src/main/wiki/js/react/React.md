@@ -1717,18 +1717,55 @@ FallbackComponent={ErrorFallback} // own component
 * [Modify React to handle CSRF and be identity-aware](https://developer.okta.com/blog/2022/06/17/simple-crud-react-and-spring-boot#modify-react-to-handle-csrf-and-be-identity-aware)
 * [React JWT Authentication (without Redux) example](https://www.bezkoder.com/react-jwt-auth/#Role-based_Pages) || [GitHub](https://github.com/bezkoder/react-jwt-auth)
 
-> **CORS**. Контекс наступний: React у ролі фронтенду відмальовує REST API бекенду Spring.
-> Щоб усе працювало між серверами багато не потрібно.
-> 
-> На стороні бекенду Spring (:8080) треба вліпити над своїм REST-контролером анотацію `@CrossOrigin` без будь-яких налаштувань.
-> За дефолтом дозволяє усе.
-> 
-> Наразі React спроможний читати дані, але не записувати (змінювати/додавати).
-> 
-> Тепер налаштовуємо фронтенд React (:3000).
-> 
-> Не потрібно додавати будь-які **headers**, через axios так точно, а Spring зрозуміє `.json`.
-> 
-> Необхідно створити проксі - додавши до `package.json` строку `"proxy": "http://localhost:8080"`.
-> 
-> Все.
+
+### Рішення проблем з **CORS**
+***
+#### ВАРІАНТ 1:
+
+**CORS**. Контекст наступний: React у ролі фронт-енду відмальовує REST API бек-енду Spring.
+Щоб усе працювало між серверами багато не потрібно.
+
+На стороні бек-енду Spring (:8080) треба вліпити над своїм REST-контролером анотацію `@CrossOrigin` без будь-яких налаштувань.
+За дефолтом дозволяє усе.
+
+Наразі React спроможний читати дані, але не записувати (змінювати/додавати).
+
+Тепер налаштовуємо фронт-енд React (:3000).
+
+Не потрібно додавати будь-які **headers**, через axios так точно, а Spring зрозуміє `.json`.
+
+Необхідно створити проксі - додавши до `package.json` строку `"proxy": "http://localhost:8080"`.
+
+Все.
+
+***
+#### ВАРІАНТ 2:
+* На бек-енді Spring ставимо над контролером (в конфізі Spring Security нічого не змінюємо):
+  ```java
+  @CrossOrigin(origins = {"http://localhost:3000"}, allowCredentials = "true")
+  ```
+* На фронт-енді React, налаштовуємо Axios:
+  ```jsx
+  import axios from "axios";
+  
+  export default axios.create({
+    baseURL: 'http://localhost:8080',
+    headers: {
+      'Access-Control-Allow-Origin': '*', // * або ваш домен
+      'Access-Control-Allow-Methods': 'GET, PUT, POST, DELETE',
+      'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
+    }
+  });
+  ```
+  ```jsx
+  // some handler
+  const response = await axios.post(LOGIN_URL,
+     JSON.stringify({username: user, password: pwd}),
+     {
+       headers: {'Content-Type': 'application/json'},
+       withCredentials: true
+     }
+   );
+  ```
+
+

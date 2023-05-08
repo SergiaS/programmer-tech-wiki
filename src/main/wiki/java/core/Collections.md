@@ -254,7 +254,7 @@ public class Note1 {
 - Time Complexity - Most ArrayDeque operations run in amortized constant time. 
   Amortized constant time operation means most of the time the operation cost will `O(1)`, except possibly in some cases, for eg. when the ArrayDeque needs to be resized:
   - `O(1)` для методів offer, peak, poll, size;  
-  - `O(n)` для методу remove;  
+  - `O(n)` для методу remove;
 
 
 ## Map interface
@@ -559,6 +559,57 @@ while(it.hasNext()){
 - Методи класу `HashTable` синхронізовані, що призводить до зниження продуктивності, а `HashMap` - ні;
 - `Hashtable` не може містити ключи та елементи `null`, тоді як HashMap може містити один ключ `null` і будь-яку кількість значень `null`;
 - `Iterator` у HashMap, на відміну від `Enumeration` у HashTable, працює за принципом `fail-fast` (видає виключення за будь-якої неузгодженості даних).
+
+
+> <details>
+> <summary>Приклад fail-fast з HashMap і fail-save з ConcurrentHashMap</summary>
+> 
+> Для перевірки **fail-save** просто зміни у двох місцях `HashMap` на `ConcurrentHashMap`.
+> ```java
+> // приклад fail-fast ітератора з HashMap
+> public static void main(String[] args) throws InterruptedException {
+>   HashMap<Integer, String> map = new HashMap<>();
+>   map.put(1, "Bob");
+>   map.put(2, "Carl");
+>   map.put(3, "Mina");
+>   map.put(4, "Chuck");
+>   map.put(5, "Moris");
+>   System.out.println(map);
+> 
+>   Runnable runnable1 = () -> {
+>     Iterator<Integer> iterator = map.keySet().iterator();
+>     while (iterator.hasNext()) {
+>       try {
+>         Thread.sleep(100);
+>       } catch (InterruptedException e) {
+>         throw new RuntimeException(e);
+>       }
+>       Integer i = iterator.next();
+>       System.out.println(i + " : " + map.get(i));
+>     }
+>   };
+> 
+>   Runnable runnable2 = () -> {
+>     try {
+>       Thread.sleep(300);
+>     } catch (InterruptedException e) {
+>       e.printStackTrace();
+>     }
+>     map.put(6, "Jina");
+>   };
+> 
+>   Thread t1 = new Thread(runnable1);
+>   Thread t2 = new Thread(runnable2);
+>   t1.start();
+>   t2.start();
+>   t1.join();
+>   t2.join();
+> 
+>   System.out.println(map);
+> }    
+> ```
+> </details>
+
 
 ***
 

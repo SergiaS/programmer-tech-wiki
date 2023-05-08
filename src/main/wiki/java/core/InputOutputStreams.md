@@ -1,4 +1,4 @@
-# Input Output Java Streams / Потоки ввода вывода
+# Input Output Java Streams
 > Входящие и выходящие потоки делятся на байтовые и символьные.
 
 > По сути, потоки оборачиваются друг в друга - передаются в конструктор другого. 
@@ -11,31 +11,8 @@
 > ```
 
 
-<details>
-<summary>SHOW MENU</summary>
-
-- [Для работы с файлами](#для-работы-с-файлами)
-  - [Закрытие файлов](#закрытие-файлов)
-  - [Адрес файла](#адрес-файла)
-- [FileWriter и FileReader](#filewriter-и-filereader)
-  - [FileWriter](#filewriter)
-    - [Добавление к данным в файле - Append](#добавление-к-данным-в-файле---append)
-  - [FileReader](#filereader)
-- [BufferedReader и BufferedWriter](#bufferedreader-и-bufferedwriter)
-  - [Пример чтения и записи 1 - посимвольно](#пример-чтения-и-записи-1---посимвольно) 
-  - [Пример чтения и записи 2 - построчно](#пример-чтения-и-записи-2---построчно) 
-- [FileInputStream и FileOutputStream](#fileinputstream-и-fileoutputstream)
-  - [Пример копирования картинки](#пример-копирования-картинки)
-- [OutputStreamWriter](#outputstreamwriter)
-- [InputStreamReader](#inputstreamreader)
-- [Перемотка стримов (I/O поток)](#перемотка-стримов-io-поток)
-  - [Пример копирования картинки](#как-перематать-стрим)
-
-</details>
-
-
-## Для работы с файлами
-Лучше это знать, облегчит жизнь.
+## Для роботи з файлами
+Краще це знати - полегшить життя.
 
 > Чтобы узнать, куда смотрит файл (его адрес) вбей в Evaluate -> `file.getAbsolutePath()`. 
 
@@ -57,7 +34,8 @@
 > Reader inputStreamReader = new InputStreamReader(inputStream);
 > ```
 
-### Закрытие файлов
+
+### Закриття файлів
 > Никогда не забывай закрывать стримы ввода/вывода после использования!
 
 Чтобы не забывать это делать, лучше использовать конструкцию `try-with-resources` - в скобках `try` указываются ТОЛЬКО объекты 
@@ -67,7 +45,7 @@
 Другой вариант - использования блока `finally`.
 
 
-### Адрес файла
+### Шлях файлу
 > Внимание на слеш! `/` или `\\` - два слеша!
 > В java, в файлах с кодом, внутри строк символ `\` тоже нужно экранировать, т.к. он является управляющим как в регулярных выражениях.
 
@@ -81,9 +59,78 @@ src/main/java/
 C:\\java\\projects\\
 ```
 
+***
+
+Стосовно об'єкту `File()`:
+- якщо до конструктора передати шлях який починається на `\`, наприклад `\\myApp\\files` - тоді це буде шлях відносно системи
+  `C:\myApp\files\data.txt` :
+    > <details>
+    > <summary>EXAMPLE</summary>
+    > 
+    > ```java
+    > public static void recordData(String data) {
+    >   String pathToSave = System.getenv("PATH_TO_SAVE"); // \\myApp\\files
+    >   String fileName = System.getenv("RECORDER_FILE_NAME"); // data.txt
+    > 
+    >   File file;
+    >   if (pathToSave != null) {
+    >     File dir = new File(pathToSave);
+    >     dir.mkdirs();
+    > 
+    >     file = new File(dir, fileName == null ? "forecast.txt" : fileName + ".txt");
+    >   } else {
+    >     file = new File(fileName == null ? "forecast.txt" : fileName + ".txt");
+    >   }
+    > 
+    >   System.err.println("PATH >>> " + file.getAbsolutePath());
+    >   try (FileWriter writer = new FileWriter(file)) {
+    >     System.out.println(data);
+    >     writer.write(data);
+    >     System.out.println("DONE!");
+    >     System.out.println();
+    >   } catch (IOException e) {
+    >     throw new RuntimeException(e);
+    >   }
+    > }
+    > ```
+    > </details>
+
+- якщо до конструктора передати шлях який НЕ починається з `\`, наприклад `myApp\\files` - тоді це буде шлях відносно програми 
+  `C:\idea_projects\tt_modules-writer-reader-docker\myApp\files\data.txt` :
+    > <details>
+    > <summary>EXAMPLE</summary>
+    > 
+    > ```java
+    > // той самий код з іншим шляхом
+    > public static void recordData(String data) {
+    >   String pathToSave = System.getenv("PATH_TO_SAVE"); // myApp\\files
+    >   String fileName = System.getenv("RECORDER_FILE_NAME"); // data.txt
+    > 
+    >   File file;
+    >   if (pathToSave != null) {
+    >     File dir = new File(pathToSave);
+    >     dir.mkdirs();
+    > 
+    >     file = new File(dir, fileName == null ? "forecast.txt" : fileName + ".txt");
+    >   } else {
+    >     file = new File(fileName == null ? "forecast.txt" : fileName + ".txt");
+    >   }
+    > 
+    >   System.err.println("PATH >>> " + file.getAbsolutePath());
+    >   try (FileWriter writer = new FileWriter(file)) {
+    >     System.out.println(data);
+    >     writer.write(data);
+    >     System.out.println("DONE!");
+    >     System.out.println();
+    >   } catch (IOException e) {
+    >     throw new RuntimeException(e);
+    >   }
+    > }
+    > ```
+    > </details>
 
 
-## FileWriter и FileReader
+## FileWriter та FileReader
 `FileWriter` и `FileReader` используются для работы с текстовыми файлами.
 
 ### FileWriter
@@ -154,8 +201,8 @@ public class FileWriterEx {
 }
 ```
 
-### FileReader
 
+### FileReader
 ```java
 public class FileReaderEx {
     public static void main(String[] args) throws IOException {
@@ -303,38 +350,38 @@ public class ConvertFromWindows1251ToUTF8 {
 а `reset()` - откатывает курсор до этого места когда нужно.
 ```java
 public static void rewindStream() {
-    // Create input stream 'test.txt' for reading containing text "abcdefg"
-    FileInputStream inputStream = new FileInputStream("test.txt");
+  // Create input stream 'test.txt' for reading containing text "abcdefg"
+  FileInputStream inputStream = new FileInputStream("test.txt");
 
-    // Convert inputStream to bufferedInputStream
-    BufferedInputStream buffInputStr = new BufferedInputStream(inputStream);
+  // Convert inputStream to bufferedInputStream
+  BufferedInputStream buffInputStr = new BufferedInputStream(inputStream);
 
-    // Read and print characters one by one
-    System.out.println("Char : " + (char)buffInputStr.read());
+  // Read and print characters one by one
+  System.out.println("Char : " + (char)buffInputStr.read());
 
-    // Mark is set on the input stream
-    System.out.println("mark() called");
-    buffInputStr.mark(0);
+  // Mark is set on the input stream
+  System.out.println("mark() called");
+  buffInputStr.mark(0);
 
-    // Read and print characters
-    System.out.println("Char : " + (char)buffInputStr.read());
-    System.out.println("Char : " + (char)buffInputStr.read());
-    System.out.println("Char : " + (char)buffInputStr.read());
+  // Read and print characters
+  System.out.println("Char : " + (char)buffInputStr.read());
+  System.out.println("Char : " + (char)buffInputStr.read());
+  System.out.println("Char : " + (char)buffInputStr.read());
 
-    // Reset() is invoked
-    System.out.println("reset() called");
-    buffInputStr.reset();
+  // Reset() is invoked
+  System.out.println("reset() called");
+  buffInputStr.reset();
 
-    // Read and print characters
-    System.out.println("Char : " + (char)buffInputStr.read());
-    System.out.println("Char : " + (char)buffInputStr.read());
+  // Read and print characters
+  System.out.println("Char : " + (char)buffInputStr.read());
+  System.out.println("Char : " + (char)buffInputStr.read());
 
-    // Reset() is invoked
-    System.out.println("reset() called");
-    buffInputStr.reset();
+  // Reset() is invoked
+  System.out.println("reset() called");
+  buffInputStr.reset();
 
-    // Read and print characters
-    System.out.println("Char : " + (char)buffInputStr.read());
-    System.out.println("Char : " + (char)buffInputStr.read());
+  // Read and print characters
+  System.out.println("Char : " + (char)buffInputStr.read());
+  System.out.println("Char : " + (char)buffInputStr.read());
 }
 ```

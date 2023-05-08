@@ -364,12 +364,10 @@ JVM will be destroyed under 2 circumstances such as...
 
 
 
-
 ## [Java Memory Management](https://medium.com/geekculture/java-memory-management-8ff9bc202a58)
 
 Java objects are created at their instantiation and destroyed after they are dereferenced. static attributes and methods are created when their class is loaded by the classLoader, 
 and are only destroyed when the classLoader is itself picked up by the GC, for these reasons you need to use static fields/methods only when it’s convenient.
-
 
 
 
@@ -379,11 +377,6 @@ This picture illustrates how JVM internal memory looks like.
 Any newly created object first get into **Young Gen** and slowly moved to **Old Gen**. 
 We can customize the size dynamically using-XX command as mentioned in the image.
 
-
-
-
-## [Garbage Collector — An Introduction](https://medium.com/javarevisited/garbage-collection-an-introduction-169922e90c61)
-![img](https://miro.medium.com/max/770/1*JJClvb9nwTiIvDy7bmsqOg.png)
 
 
 
