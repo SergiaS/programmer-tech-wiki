@@ -3,7 +3,8 @@
 
 ***
 
-**In-place algorithm**. Не использовать (создавать) вспомогательные структуры данных - значит нужно решать через замену и обменивания элементов.
+**In-place algorithm**. Не использовать (создавать) вспомогательные структуры данных - 
+значит нужно решать через замену и обменивания элементов.
 
 ***
 
@@ -343,8 +344,9 @@ public class TwoPointer {
 ```
 
 ### Backtracking
-[22. Generate Parentheses](https://leetcode.com/problems/generate-parentheses/discuss/1545154/Java-or-TC%3A-O(4Nsqrt(N))-or-SC%3A-O(N)-or-Backtracking-and-Iterative-Solutions)
-
+<a href="https://leetcode.com/problems/generate-parentheses/discuss/1545154/Java-or-TC%3A-O(4Nsqrt(N))-or-SC%3A-O(N)-or-Backtracking-and-Iterative-Solutions">
+22. Generate Parentheses
+</a>
 
 ### Dynamic programming
 Своего рода оптимизация рекурсии. Эффективное манипулирование состоянием объекта.
@@ -375,6 +377,12 @@ public class TwoPointer {
     > Восходящее динамическое программирование: все подзадачи, которые впоследствии понадобятся для решения исходной задачи просчитываются заранее и затем используются для построения решения исходной задачи.
       Этот способ лучше нисходящего программирования в смысле размера необходимого стека и количества вызова функций, но иногда бывает нелегко заранее выяснить, решение каких подзадач нам потребуется в дальнейшем.
       <br>[wikipedia.org](https://ru.wikipedia.org/wiki/Динамическое_программирование)
+
+
+### Monotonic Queue
+[Гарне пояснення з візуалізацією](https://youtu.be/DfljaUwZsOk?t=506)
+Ще називають Increasing або Decreasing Queue.
+
 
 ***
 
@@ -479,6 +487,7 @@ public int longestCommonSubsequence(String text1, String text2) {
 > 105 : 3 | сумма цифер делится на 3 без остатка?<br>
 > 100 : 4 | число делится на 4 когда две последние цифры 00; и последние две цифры дают двухзначное число, которое делится на 4.<br>
 > 100 : 8 | число делится на 8 когда три последние цифры 00; и последние три цифры дают трехзначное число, которое делится на 4.
+
 
 
 # BFS (Breath-First-Search / Поиск в ширину)

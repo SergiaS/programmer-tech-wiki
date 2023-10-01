@@ -667,6 +667,18 @@ public class HealthController {
 ```
 
 ### @ExceptionHandler
+> Spring Security core exceptions such as `AuthenticationException` and `AccessDeniedException` are <u>runtime exceptions</u>. 
+> **_Since these exceptions are thrown by the authentication filters behind the_** `DispatcherServlet` **_and before invoking the 
+> controller methods_**, `@ControllerAdvice` won't be able to catch these exceptions.
+>
+> Spring Security exceptions can be directly handled by adding custom filters and constructing the response body. To
+> handle these exceptions at a global level via `@ExceptionHandler` and `@ControllerAdvice`, we need a custom implementation
+> of `AuthenticationEntryPoint`. `AuthenticationEntryPoint` _**is used to send an HTTP response that requests credentials from a
+> client.**_ Although there are multiple built-in implementations for the security entry point, we need to write a custom
+> implementation for sending a custom response message.
+> 
+> [baeldung.com](https://www.baeldung.com/spring-security-exceptionhandler)
+
 Аннотацией `@ExceptionHandler` отмечается метод, ответственный за обработку исключений.
 ```java
 @ExceptionHandler

@@ -431,6 +431,17 @@ public class RestConfig {
 > 
 > </details>
 
+### [Auto-configured Data JPA Tests](https://docs.spring.io/spring-boot/docs/3.2.x/reference/html/features.html#features.testing.spring-boot-applications.autoconfigured-spring-data-jpa)
+In-memory embedded databases generally work well for tests, since they are fast and do not require any installation.
+If, however, you prefer to run tests against a real database you can use the @AutoConfigureTestDatabase annotation
+```java
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = Replace.NONE)
+class MyRepositoryTests {
+    // ...
+}
+```
+
 
 ## Ініціалізація БД
 Spring Boot дозволяє заповнити БД своїми даними з файлу.

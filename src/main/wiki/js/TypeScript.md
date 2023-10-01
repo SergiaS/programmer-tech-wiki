@@ -1,6 +1,49 @@
 # TypeScript (TS)
 Це типізований JavaScript (JS) - суміш JavaScript з Java + свої особливості.
 
+> Про компіляцію `.ts` -> `.js`:<br>
+> * Деякі команди для `tsc` можуть виконуватися через `npx` - тобто замість `tsc main.js`, команда яка не виконується,
+>   треба писати `npx tsc main.js`
+> * Щоб постійно не перекомпільовувати таким чином файл, можна використати команду `npx tsc main.ts -w`, де `-w` це **watch** -
+>   таким чином дані компіляція буде робитися автоматично - **КОМАНДА ЗАХОПИТЬ ТЕРМІНАЛ!**
+> * Якщо потрібно щоб файли `.ts` та `.js` знаходилися у різних теках, тоді потрібно створити `tsconfig.json` командою `tsc --init` і
+>   налаштувати значення `rootDir` та `outDir` як вказано у налаштуваннях `tsconfig.json` нижче. І все що нам залишається
+>   запустити команду **watch** - `tsc -w` - typescript зрозуміє, що потрібно подивитися у налаштування `tsconfig.json` і
+>   прочитати значення полів `rootDir` та `outDir`.
+
+
+## Встановлення та запуск
+Щоб автоматично **TypeScript** компілювався у **JavaScript** код, треба запустити глобальну команду:
+```shell 
+# 1 варіант:
+npm install -g typescript
+# 2 варіант:
+npm i typescript -g
+```
+
+Після встановлення можна перевірити версію компілятора за командою:
+```shell
+tsc -v
+```
+
+Далі, відносно нашого `.ts` файлу запускаємо термінал і пишемо команду для компіляції у js...
+```shell
+tsc index.ts
+```
+...після чого з'явиться скомпільований наш файл з розширенням `.js`, який можна запустити командою:
+```shell
+node index.js
+```
+Але щоб не писати декілька команд після кожної зміни, можна встановити інший пакет глобально:
+```shell
+npm install -g ts-node
+```
+...і запустити команду:
+```shell
+ts-node index.ts
+```
+
+
 ## Debug
 * [Debugging TypeScript (Node.js) in IntelliJ IDEA](https://dev.to/yutro/debugging-typescript-node-js-in-intellij-idea-3e6d)
 
@@ -12,15 +55,36 @@
 
 > Щоб створити `tsconfig.json` треба в терміналі виконати команду `tsc --init` після котрої з'явиться файл.
 
+> Ignore any typescript file that are not in the source directory:
+> - scroll down into your tsconfig.ts and add:
+> ```json
+> ,
+> "include": [
+> 	"src"
+> ]
+> ```
+
 ***
 ### rootDir
 Щоб кожного разу не прописувати адресу до файлів через теки (`./src/script.ts`), 
 можна встановити голову теку використовуючи ключ `rootDir`.
+```json
+// tsconfig.json
+{
+  "rootDir": "./src",
+}
+```
 
 ***
 ### outDir
 Щоб зкомпілювати (ts => js) усі файли проєкту у вказану теку - використовуй `outDir`. 
 Для компіляції треба виконати команду `tsc`.
+```json
+// tsconfig.json
+{
+  "outDir": "./build/js",
+}
+```
 
 ***
 ### extends
@@ -64,37 +128,21 @@
 ```
 
 ***
+### noEmitOnError
+В режимі **watch**, коли автоматично `.ts` компілюється у `.js` файл, компілятор може повідомляти про помилку у `.ts` файлі,
+але все одно скомпілюється у `.js`. Ця опція запобігає компілюванню файлу, якщо компілятор бачить помилку у файлі `.ts`. 
+```json
+"noEmitOnError": true
+```
+або запустити команду з цим полем (яке перезапише значення у `tsconfig.json`), де дефолтне значення `true`:
+```shell
+tsc --noEmitOnError -w
+```
+
+***
 
 
 
-
-## Встановлення та запуск
-Щоб автоматично **TypeScript** компілювався у **JavaScript** код, треба запустити глобальну команду: 
-```commandline 
-npm install -g typescript
-```
-
-Після встановлення можна перевірити версію компілятора за командою:
-```commandline
-tsc -v
-```
-
-Далі, відносно нашого `.ts` файлу запускаємо термінал і пишемо команду для компіляції у js...
-```commandline
-tsc index.ts
-```
-...після чого з'явиться скомпільований наш файл з розширенням `.js`, який можна запустити командою:
-```commandline
-node index.js
-```
-Але щоб не писати декілька команд після кожної зміни, можно встановити інший пакет глобально:
-```commandline
-npm install -g ts-node
-```
-...і запустити команду:
-```commandline
-ts-node index.ts
-```
 
 ## Синтаксис
 
@@ -115,7 +163,7 @@ name2 = 'bob';
 let myScore: number | string;   // union
 ```
 Такий запис типу каже, що наша змінна динамічна, але вона контрольована в межах котрі ми встановлюємо при створенні - 
-в данному прикладі тільки два типи. Такий тип даних називається `union`.
+в даному прикладі тільки два типи. Такий тип даних називається `union`.
 
 
 ### Аліаси, псевдоніми змінних
@@ -146,7 +194,7 @@ const myScore: Score = 7;       // присвоюємо значення
         isOdd = true;
     }
     ```
-- коли ми хочемо, щоб тип був складносоставним і не визначався автоматично:
+- коли ми хочемо, щоб тип був складно складовим і не визначався автоматично:
     ```ts
     // складносоставний тип, TS за нас визначить тип змінної
     let myScore = 10;
@@ -276,6 +324,15 @@ interface MyObjectInterface {
 const obj3: MyObjectInterface = {
     a: 1,
     b: 2
+}
+```
+
+Також таким чином можна страхуватися, наприклад, коли значення може не бути і на ньому викликається якийсь-то метод, 
+але у такому випадку цей метод спрацює тільки якщо значення є:
+```ts
+// toUpperCase виконається тільки, якщо name не undefined
+const greenGuitarist = (guitarist: Guitarist) => {
+	return `Hello ${guitarist.name?.toUpperCase()}` 
 }
 ```
 
@@ -415,23 +472,52 @@ const devArr: FrontendDeveloper[] = [];
 ##### Типізація функцій
 ```ts
 const fn1 = (num: number): string => {
-    return String(num);
+  return String(num);
 }
 ```
 ...де `(num: number)` ім'я параметру та його тип, а після цього вказується повертаємий тип - `: string` 
 
-Необов'язкові параметри функції також помічаються `?`.
+Приклад зі звичайною функцією:
 ```ts
 // функція з callback параметром
 type Callback = (num: number) => string;
 
-function fn2(cb? : Callback) {
-    if (cb === undefined) {
-        cb = String;
-    }
-    cb(12);
+function fn2(cb? : Callback) { // необов'язкові параметри функції також помічаються `?`.
+  if (cb === undefined) {
+    cb = String
+  }
+  cb(12)
 }
 ```
+Приклад зі стрілковою функцією:
+```ts
+// перевикористовуємо тип функції через type
+type mathFunc = (a: number, b: number) => number
+
+let multiply: mathFunc = function (c, d) {
+  return c * d
+}
+
+let add: mathFunc = function (c, d) {
+  return c + d
+}
+```
+Приклад з інтерфейсом:
+```ts
+// перевикористовуємо тип функції через interface
+interface mathFunc {
+  (a: number, b: number): number
+}
+
+let multiply: mathFunc = function (c, d) {
+  return c * d
+}
+
+let add: mathFunc = function (c, d) {
+  return c + d
+}
+```
+
 
 Дефолтні значення в функціях можна записувати як і в JavaScript:
 ```ts
@@ -497,59 +583,445 @@ console.log(getCard([{suit: 'asd', card: 18}]));
 > TypeScript під назвою tsconfig.json і додати ключ `"noImplicitAny": false` - гугли приклади!
 
 
+### Assertions & Type Casting
+> `!` - non-null assertion - якщо немає значення у змінної далі не працює<br>
+> You do not need to use non-null assertion in combination with an `as` and the type:
+> ```ts
+> // 1 variant
+> const img = document.querySelector('img')!
+> ```
+> ```ts
+> // 2 variant
+> const img = document.querySelector('img') as HTMLImageElement
+> ```
+
+```ts
+// converting Types with Assertions
+type One = string
+type Two = string | number
+type Three = 'hello'
+
+let a: One = 'hello'
+let b = a as Two // less specific
+let c = a as Three // more specific
+
+// Angel brackets syntax instead of "as"
+let d = <One>'world'
+let e = <string | number>'world'
+```
+Деякі варіанти порівняння (**assertions**)
+```ts
+// The DOM
+const img = document.querySelector('img')!
+const myImg = document.getElementById('#img')  as HTMLImageElement
+// not work in TSX files for React:
+const nextImg = <HTMLImageElement>document.getElementById('#img')
+```
+
+#### Задача на порівняння
+Адаптуйте JS код для TS:
+```js
+// Original JS code
+const year = document.getElementById("year")
+const thisYear = new Date().getFullYear()
+year.setAttribute("datetime", thisYear)
+year.textContent = thisYear
+```
+
+> <details>
+> <summary>РІШЕННЯ</summary>
+> 
+> ```ts
+> // 1st variation
+> const year: HTMLElement | null = document.getElementById("year")
+> const thisYear: string = new Date().getFullYear().toString()
+> if (year) {
+>     year.setAttribute("datetime", thisYear)
+>     year.textContent = thisYear
+> }
+> ```
+> ```ts
+> // 2nd variation
+> const year = document.getElementById("year") as HTMLSpanElement
+> const thisYear: string = new Date().getFullYear().toString()
+> year.setAttribute("datetime", thisYear)
+> year.textContent = thisYear
+> ```
+> 
+> </details>
+
+
+## Класи
+> За замовчуванням усі поля та методи в класі `public`.
+
+***
+
+> <details>
+> <summary>Приклад коротшого запису класу</summary>
+> 
+> Просто використовуй `public` у аргументів конструктора:
+> ```ts
+> // звичайний запис
+> class Coder {
+>   name: string
+>   music: string
+>   age: number
+>   lang: string
+> 
+>   constructor(name: string, music: string, age: number, lang: string) {
+>     this.name = name;
+>     this.music = music;
+>     this.age = age;
+>     this.lang = lang;
+>   }
+> }
+> ```
+> ```ts
+> // коротший запис - той самий результат
+> class Coder {
+>   constructor(
+>           public readonly name: string,
+>           public music: string,
+>           private age: number,
+>           protected lang: string
+>   ) {
+>     this.name = name;
+>     this.music = music;
+>     this.age = age;
+>     this.lang = lang;
+>   }
+> }
+> ```
+> </details>
+
+> <details>
+> <summary>Приклад статичних полів і методів</summary>
+> 
+> ```ts
+> class Peeps {
+>   static count: number = 0
+> 
+>   static getCount(): number {
+>     return Peeps.count
+>   }
+> 
+>   public id: number
+> 
+>   constructor(public name: string) {
+>     this.name = name
+>     this.id = ++Peeps.count
+>   }
+> }
+> 
+> const Carl = new Peeps('Carl')
+> const Steve = new Peeps('Steve')
+> const Amy = new Peeps('Amy')
+> 
+> console.log(Carl.id)
+> console.log(Steve.id)
+> console.log(Amy.id)
+> console.log(Peeps.count)
+> ```
+> </details>
+
+
+> <details>
+> <summary>Приклад написання класу</summary>
+> 
+> ```ts
+> class Coder {
+>   constructor(
+>           public readonly name: string,
+>           public music: string,
+>           private age: number,
+>           protected lang: string = 'TypeScript'
+>   ) {
+>     this.name = name;
+>     this.music = music;
+>     this.age = age;
+>     this.lang = lang;
+>   }
+> 
+>   getAge() {
+>     return `Hello, I'm ${this.age}`;
+>   }
+> }
+> 
+> const Bob = new Coder('Bob', 'Rock', 29)
+> console.log(Bob.getAge())
+> // console.log(Bob.age)
+> // console.log(Bob.lang)
+> ```
+> ```ts
+> class WebDeb extends Coder {
+>   constructor(
+>       public computer: string,
+>       name: string,
+>       music: string,
+>       age: number
+>   ) {
+>     super(name, music, age);
+>     this.computer = computer;
+>   }
+> 
+>   public getLang() {
+>     return `I write ${this.lang}`
+>   }
+> }
+> 
+> const Sara = new WebDeb('Mac', 'Sara', 'Lofi', 25)
+> console.log(Sara.getLang())
+> // console.log(Sara.age)
+> // console.log(Sara.lang)
+> ```
+> </details>
+
+> <details>
+> <summary>Приклад Getters & Setters</summary>
+> 
+> ```ts
+> class Bands {
+>   private dataState: string[]
+> 
+>   constructor() {
+>     this.dataState = [];
+>   }
+> 
+>   public get data(): string[] {
+>     return this.dataState
+>   }
+> 
+>   public set data(value: string[]) {
+>     if (Array.isArray(value) && value.every(el => 'string')) {
+>       this.dataState = value
+>       return
+>     } else throw new Error('Param is not an array of strings')
+>   }
+> }
+> 
+> const MyBands = new Bands()
+> MyBands.data = ['Neil Young', 'Led Zep']
+> console.log(MyBands.data)
+> MyBands.data = [...MyBands.data, 'ZZ Top']
+> console.log(MyBands.data)
+> ```
+> </details>
+
+***
+
+### Динамічні індекси
+* [YouTube](https://www.youtube.com/watch?v=2eAqXLi8q70&list=PL0Zuz27SZ-6NS8GXt5nPrcYpust89zq_b&index=7)
+|| [Dave Gray - Index Signatures, keyof Assertions & the Record Utility Type](https://github.com/gitdagray/typescript-course/blob/main/lesson07/src/main.ts)
+
+> <details>
+> <summary>Приклад запису динамічних індексів - Index Signature</summary>
+> 
+> ```ts
+> // не працюючий варіант
+> interface TransactionObj {
+>   Pizza: number,
+>   Books: number,
+>   Job: number
+> }
+> 
+> const todaysTransactions: TransactionObj = {
+>   Pizza: -10,
+>   Books: -5,
+>   Job: 50
+> }
+> 
+> console.log(todaysTransactions.Pizza)
+> console.log(todaysTransactions['Pizza'])
+> 
+> let prop: string = 'Pizza'
+> console.log(todaysTransactions[prop]) // error: No index signature...
+> ```
+> ```ts
+> // працюючий варіант
+> interface TransactionObj {
+>   [index: string]: number
+> }
+> 
+> const todaysTransactions: TransactionObj = {
+>   Pizza: -10,
+>   Books: -5,
+>   Job: 50
+> }
+> 
+> console.log(todaysTransactions.Pizza)
+> console.log(todaysTransactions['Pizza'])
+> 
+> let prop: string = 'Pizza'
+> console.log(todaysTransactions[prop])
+> ```
+> </details>
+
+> <details>
+> <summary>Приклад запису динамічних індексів з undefined</summary>
+> 
+> ```ts
+> interface Student {
+>   [key: string]: string | number | number[] | undefined
+>   name: string,
+>   GPA: number,
+>   classes?: number[]
+> }
+> 
+> const student: Student = {
+>   name: "Doug",
+>   GPA: 3.5,
+>   classes: [100, 200]
+> }
+> 
+> console.log(student.test) 
+> ```
+> </details>
+
+> <details>
+> <summary>Приклад запису динамічних індексів при ітерації і функції (as keyof typeof)</summary>
+> 
+> Приклад якщо індекси не оголошені в інтерфейсі:
+> ```ts
+> interface Student {
+>   // [key: string]: string | number | number[] | undefined
+>   name: string,
+>   GPA: number,
+>   classes?: number[]
+> }
+> 
+> const student: Student = {
+>   name: "Doug",
+>   GPA: 3.5,
+>   classes: [100, 200]
+> }
+> 
+> // iterate by cycle
+> for (const key in student) {
+>   console.log(`${key}: ${student[key as keyof Student]}`)
+> }
+> 
+> // iterate in object
+> Object.keys(student).map(key => {
+>   console.log(student[key as keyof typeof student])
+> })
+> 
+> // in function
+> const logStudentKey = (student: Student, key: keyof Student): void => {
+>   console.log(`Student ${key}: ${student[key]}`)
+> }
+> logStudentKey(student, 'GPA')
+> ```
+> </details>
+
+
+## Інтерфейси
+
+> <details>
+> <summary>Приклад інтерфейсу і його реалізація</summary>
+> 
+> ```ts
+> interface Musician {
+>   name: string
+>   instrument: string
+>   play(action: string): string
+> }
+> 
+> class Guitarist implements Musician {
+>   name: string
+>   instrument: string
+> 
+>   constructor(name: string, instrument: string) {
+>     this.name = name
+>     this.instrument = instrument
+>   }
+> 
+>   play(action: string): string {
+>     return `${this.name} ${action} the ${this.instrument}`
+>   }
+> }
+> 
+> const John  = new Guitarist('John', 'guitar')
+> console.log(John.play('strums'))
+> ```
+> </details>
+
+
 ## Generics
+* [YouTube: Dave Gray - Typescript Generics | Beginners Tutorial with Examples](https://www.youtube.com/watch?v=RWG66gIo7PM&list=PL0Zuz27SZ-6NS8GXt5nPrcYpust89zq_b&index=8)
+|| [GitHub](https://github.com/gitdagray/typescript-course/blob/main/lesson08/src/main.ts)
+
 Більшість аналогічно до Java...
+
 ```ts
-// Дженерікі у класах
-class ArrayOfNumbers {
-    constructor(public collection: number[]) {}
-
-    get(index: number): number {
-        return this.collection[index];
-    }
-}
-class ArrayOfStrings {
-    constructor(public collection: string[]) {}
-
-    get(index: number): string {
-        return this.collection[index];
-    }
-}
-
-// замінюємо на дженерік замість класів вище
-class ArrayOfAnything<T> {
-    constructor(public collection: T[]) {}
-
-    get(index: number): T {
-        return this.collection[index];
-    }
-}
-
-console.log(new ArrayOfAnything<string>(['1','2','s']));
-console.log(new ArrayOfAnything<number>([0, 2, 3]));
+// без дженеріків
+const stringEcho = (arg: string): string => arg
+// з дженеріками
+const echo = <T>(arg: T): T => arg
 ```
-```ts
-// Дженерікі у функціях
-function printStrings(arr: string[]): void {
-    for (let i = 0; i < arr.length; i++) {
-        console.log(arr[i]);
-    }
-}
-function printNumbers(arr: number[]): void {
-    for (let i = 0; i < arr.length; i++) {
-        console.log(arr[i]);
-    }
-}
 
-// замінюємо на дженерік замість функцій вище
-function print<T>(arr: T[]): void {
-    for (let i = 0; i < arr.length; i++) {
-        console.log(arr[i]);
-    }
-}
-print<number>([1,4,6,7]); // по конвенції
-print([1,4,6,7]); // краще так не писати, хоча працює
-```
+> <details>
+> <summary>Дженерікі у класах</summary>
+> 
+> ```ts
+> // без дженеріків
+> class ArrayOfNumbers {
+>   constructor(public collection: number[]) {}
+> 
+>   get(index: number): number {
+>     return this.collection[index];
+>   }
+> }
+> class ArrayOfStrings {
+>   constructor(public collection: string[]) {}
+> 
+>   get(index: number): string {
+>     return this.collection[index];
+>   }
+> }
+> ```
+> ```ts
+> // замінюємо на дженерік замість класів вище
+> class ArrayOfAnything<T> {
+>   constructor(public collection: T[]) {}
+> 
+>   get(index: number): T {
+>     return this.collection[index];
+>   }
+> }
+> 
+> console.log(new ArrayOfAnything<string>(['1','2','s']));
+> console.log(new ArrayOfAnything<number>([0, 2, 3]));
+> ```
+> </details>
+
+> <details>
+> <summary>Дженерікі у функціях</summary>
+> 
+> ```ts
+> // без дженеріків
+> function printStrings(arr: string[]): void {
+>   for (let i = 0; i < arr.length; i++) {
+>     console.log(arr[i]);
+>   }
+> }
+> function printNumbers(arr: number[]): void {
+>   for (let i = 0; i < arr.length; i++) {
+>     console.log(arr[i]);
+>   }
+> }
+> ```
+> ```ts
+> // замінюємо на дженерік замість функцій вище
+> function print<T>(arr: T[]): void {
+>   for (let i = 0; i < arr.length; i++) {
+>     console.log(arr[i]);
+>   }
+> }
+> print<number>([1,4,6,7]); // по конвенції
+> print([1,4,6,7]); // краще так не писати, хоча працює
+> ```
+> </details>
+
 
 ### keyof
 Буде працювати тільки з ключами того об'єкта, котрого ми передаємо.
@@ -568,6 +1040,172 @@ const myObj = {
 getProperty(myObj, 'a');
 ```
 > Якщо передати ключ, якого немає в об'єкті - **TypeScript** повідомить про помилку
+
+
+## Допоміжні типи
+> TypeScript provides several utility types to facilitate common type transformations. These utilities are available globally.
+
+* [DOC: Utility Types](https://www.typescriptlang.org/docs/handbook/utility-types.html)
+* [YouTube: Dave Gray - Typescript Utility Types | TS Beginners Tutorial](https://www.youtube.com/watch?v=YN4RoihmVKM&list=PL0Zuz27SZ-6NS8GXt5nPrcYpust89zq_b&index=9)
+* [GitHub: Dave Gray - Examples](https://github.com/gitdagray/typescript-course/blob/main/lesson09/src/main.ts)
+
+> <details>
+> <summary>EXAMPLES of Typescript Utility Types by Dave Gray</summary>
+> 
+> Оригінал на сторінці GitHub Dave Gray вище 
+> ```ts
+> // Utility Types
+> 
+> /** Partial */
+> 
+> interface Assignment {
+>   studentId: string,
+>   title: string,
+>   grade: number,
+>   verified?: boolean,
+> }
+> 
+> const updateAssignment = (assign: Assignment, propsToUpdate: Partial<Assignment>) => {
+>   return { ...assign, ...propsToUpdate }
+> }
+> 
+> const assign1: Assignment = {
+>   studentId: "compsci123",
+>   title: "Final Project",
+>   grade: 0,
+> }
+> 
+> console.log(updateAssignment(assign1, { grade: 95 }))
+> const assignGraded: Assignment = updateAssignment(assign1, { grade: 95 })
+> // console.log(assignGraded)
+> 
+> 
+> /** Required and Readonly */
+> 
+> const recordAssignment = (assign: Required<Assignment>): Assignment => {
+>   // send to database, etc.
+>   return assign
+> }
+> 
+> const assignVerified: Readonly<Assignment> = { ...assignGraded, verified: true } // додаємо нове поле
+> 
+> // NOTE: assignVerified won't work with recordAssignment!
+> // Why? Try it and see what TS tells you :)
+> 
+> recordAssignment({ ...assignGraded, verified: true })
+> 
+> 
+> /** Record */
+> 
+> const hexColorMap: Record<string, string> = {
+>   red: "FF0000",
+>   green: "00FF00",
+>   blue: "0000FF",
+> }
+> 
+> 
+> type Students = "Sara" | "Kelly"
+> type LetterGrades = "A" | "B" | "C" | "D" | "U"
+> 
+> const finalGrades: Record<Students, LetterGrades> = { // типу список списків
+>   Sara: "B",
+>   Kelly: "U"
+> }
+> 
+> 
+> interface Grades {
+>   assign1: number,
+>   assign2: number,
+> }
+> 
+> const gradeData: Record<Students, Grades> = {
+>   Sara: { assign1: 85, assign2: 93 },
+>   Kelly: { assign1: 76, assign2: 15 },
+> }
+> 
+> 
+> /** Pick and Omit */
+> 
+> type AssignResult = Pick<Assignment, "studentId" | "grade"> // бачитиме лише ці поля
+> 
+> const score: AssignResult = {
+>   studentId: "k123",
+>   grade: 85,
+> }
+> 
+> 
+> type AssignPreview = Omit<Assignment, "grade" | "verified"> // вимикаємо поля - не бачитиме
+> 
+> const preview: AssignPreview = {
+>   studentId: "k123",
+>   title: "Final Project",
+> }
+> 
+> 
+> /** Exclude and Extract */
+> 
+> type adjustedGrade = Exclude<LetterGrades, "U">
+> 
+> type highGrades = Extract<LetterGrades, "A" | "B">
+> 
+> 
+> /** Nonnullable */
+> 
+> type AllPossibleGrades = 'Dave' | 'John' | null | undefined
+> type NamesOnly = NonNullable<AllPossibleGrades>
+> 
+> 
+> /** ReturnType */
+> 
+> //type newAssign = { title: string, points: number }
+> 
+> const createNewAssign = (title: string, points: number) => {
+>   return { title, points }
+> }
+> 
+> type NewAssign = ReturnType<typeof createNewAssign>
+> 
+> const tsAssign: NewAssign = createNewAssign("Utility Types", 100)
+> console.log(tsAssign)
+> 
+> 
+> /** Parameters */
+> 
+> type AssignParams = Parameters<typeof createNewAssign>
+> 
+> const assignArgs: AssignParams = ["Generics", 100]
+> 
+> const tsAssign2: NewAssign = createNewAssign(...assignArgs)
+> console.log(tsAssign2)
+> 
+> 
+> /** Awaited - helps us with the ReturnType of a Promise */
+> 
+> interface User {
+>   id: number,
+>   name: string,
+>   username: string,
+>   email: string,
+> }
+> 
+> const fetchUsers = async (): Promise<User[]> => {
+> 
+>   const data = await fetch(
+>       'https://jsonplaceholder.typicode.com/users'
+>   ).then(res => {
+>     return res.json()
+>   }).catch(err => {
+>     if (err instanceof Error) console.log(err.message)
+>   })
+>   return data
+> }
+> 
+> // type FetchUsersReturnType = ReturnType<typeof fetchUsers> // promise
+> type FetchUsersReturnType = Awaited<ReturnType<typeof fetchUsers>> // result from promise
+> 
+> fetchUsers().then(users => console.log(users))
+> ```
+> </details>
 
 
 

@@ -22,8 +22,18 @@
    або може бути явно ввімкнений за допомогою опції `-XX:+UseSerialGC`.
 
 2. **Parallel Collector**<br>
-   Паралельний збирач також відомий як збирач пропускної здатності, це колектор з моделлю на поколіннях. Він схожий на серійний колектор.
-   Основна відмінність між серійним і паралельним збирачами полягає в тому, що паралельний збирач має кілька потоків, які використовуються для прискорення збору сміття.
+   > The parallel collector (also referred to here as the throughput collector) is a generational collector similar to the serial collector.
+   > The primary difference between the serial and parallel collectors is that the parallel collector has multiple threads that are used 
+   > to speed up garbage collection.
+   > 
+   > **SOURCE:** [Oracle DOCS - The Parallel Collector](https://docs.oracle.com/en/java/javase/17/gctuning/parallel-collector1.html#GUID-DCDD6E46-0406-41D1-AB49-FB96A50EB9CE)
+
+   > Each garbage collection thread involved in a minor collection reserves a part of the old generation for promotions and 
+   > the division of the available space into these "promotion buffers" can cause a fragmentation effect.
+   > Reducing the number of garbage collector threads and increasing the size of the old generation will reduce this 
+   > fragmentation effect.
+   > 
+   > **SOURCE:** [Oracle DOCS - Number of Parallel Collector Garbage Collector Threads](https://docs.oracle.com/en/java/javase/17/gctuning/parallel-collector1.html#GUID-5A7866BE-59DF-44AD-B51A-274DE3F2BF59) 
    
    Паралельний збирач призначений для застосунків з середнього розміру до великого об'єму даних, які працюють на мультипроцесорних або багатопотокових пристроях.
    Ви можете увімкнути його за допомогою опції `-XX:+UseParallelGC`.
@@ -135,7 +145,8 @@
    java -XX:+UseG1GC -jar Application.java
    ```
 4. **ZGC (Z Garbage Collector).** Призначенний для забезпечення малої затримки (low latency) під час збору сміття великих об'ємів пам'яті.
-   У ZGC пам'ять поділяється на області (regions), які можуть бути збирані незалежно одна від одної. Кожна область має фіксований розмір та номер, що дозволяє збирачу легко відслідковувати використання пам'яті та стан областей.
+   У ZGC пам'ять поділяється на області (regions), які можуть бути збирані незалежно одна від одної. Кожна область має фіксований розмір та номер, 
+   що дозволяє збирачу легко відслідковувати використання пам'яті та стан областей.
    ZGC має можливість динамічно змінювати розмір пам'яті, що виділяється під збирач сміття, залежно від потреб додатку.
    ```shell
    # To enable the Z Garbage Collector:

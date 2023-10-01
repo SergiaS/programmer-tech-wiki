@@ -24,10 +24,11 @@ Mockito - це основа для модульних тестів у Java.
 * [Mocking Exception Throwing using Mockito](https://www.baeldung.com/mockito-exceptions) by Baeldung
 
 ### ...by Amigoscode software-testing course
+* [All examples](https://github.com/SergiaS/example_spring/tree/amigoscode_software-testing)
 
 > <details>
 > <summary>Ways to creating mocks</summary>
-> Це дає змогу використовувати дані тільки для тесту без маніпуляцій з зміни реальних даних
+> Це дає змогу використовувати дані тільки для тесту без маніпуляцій зі змінами реальних даних:
 > 
 > ```java
 > // 1st way

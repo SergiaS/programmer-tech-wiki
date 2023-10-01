@@ -1,4 +1,4 @@
-# String и всё что касается их
+# Усе про String
 Инфа о классах по работы со строками:
 * [String](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/java/core/String.md#string)
 * [StringBuilder](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/java/core/String.md#stringbuilder)
@@ -93,6 +93,18 @@ System.out.println(s.endsWith("sd"));       // true - privetpr0aSD
 ```java
 String[] strArr = {"d","e","z"};
 String s = String.join("=", strArr); // "d=e=z"
+```
+
+### Робота з символами - Characters, char
+Для перебору строки посимвольно можна скористатися методом `toCharArray()`.
+
+Приклад підрахунку символів
+```java
+String s = "abbaa";
+int[] hash = new int[26];
+for (int i = 0; i < s.length(); i++) {
+    hash[s.charAt(i)  - 'a']++;
+}
 ```
 
 

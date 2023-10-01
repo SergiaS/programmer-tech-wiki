@@ -432,6 +432,10 @@ Method hiding - это перекрытие static-методов из parent-к
 
 
 ## Отношения объектов
+> Об'єкт, який утримує у собі інші об'єкти - (відношення has-a) - це композиція - цей об'єкт не може існувати без цих внутрішніх об'єктів, а в агрегації  - може.
+>
+> Відношення is-a не має відношення до композиції чи агрегації, тут використовується наслідування.
+
 1. A "uses" B = **Aggregation** : B exists independently (conceptually) from A
 2. A "owns" B = **Composition** : B has no meaning or purpose in the system without A
 

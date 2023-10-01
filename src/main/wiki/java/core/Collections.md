@@ -253,8 +253,7 @@ public class Note1 {
 - Методы позволяют обращаться как к голове, так и к хвосту: `addFirst`/`addLast`, `getFirst`/`getLast`, `offerFirst`/`offerLast`...
 - Time Complexity - Most ArrayDeque operations run in amortized constant time. 
   Amortized constant time operation means most of the time the operation cost will `O(1)`, except possibly in some cases, for eg. when the ArrayDeque needs to be resized:
-  - `O(1)` для методів offer, peak, poll, size;  
-  - `O(n)` для методу remove;
+  - `O(1)` для методів `offer`, `peak`, `poll`, `size`, `remove`.  
 
 
 ## Map interface

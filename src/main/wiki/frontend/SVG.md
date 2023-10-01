@@ -1,5 +1,4 @@
 # SVG
-* База іконок /  
 
 
 ## Змінити колір
@@ -33,3 +32,29 @@ fill="#cedde3"
   filter: var(--svg-filter);
 }
 ```
+
+## Додаємо анімацію
+Анімація SVG створюється за допомогою блока `@keyframes` в `.css`, і потім ця анімація використовується в якомусь класі:
+```css
+.my-svg circle {
+  fill: none;
+  stroke-width: 5px;
+  stroke: #fafafa;
+  stroke-dasharray: 800;
+  stroke-dashoffset: 800;
+  animation: 4s circle-outline forwards;
+}
+
+@keyframes circle-outline {
+  from {
+    stroke-dashoffset: 800;
+    opacity: 0;
+  }
+  to {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+```
+
+

@@ -12,7 +12,7 @@
   * 08 - Самостоятельная Работа - Челлендж №1:
     [YouTube](https://www.youtube.com/playlist?list=PLcBbiWbF2bIxORYMi7R7t_Ga_SpTHTcmu) ||
     [GitHub](https://github.com/SergiaS/c_react_challenge/commits/main)
- 
+
 > Дізнатися версію **React** можна в терміналі командою `npm view react version`.
 
 > За допомогою **React** ми створюємо дерево компонентів.
@@ -1191,6 +1191,10 @@ class MyComponent extends React.Component {
 
 > Призначені для роботи з функціональними компонентами
 
+> [Only Call Hooks at the Top Level](https://legacy.reactjs.org/docs/hooks-rules.html)
+> <br>
+> Don’t call Hooks inside loops, conditions, or nested functions.
+
 Готовий функціонал присутній у **React**.
 Починаються зі слова **use**.
 Хуки працюють тільки всередині функції компонента - не може використовувати їх за межами компонента чи всередині функції.
@@ -1768,4 +1772,34 @@ FallbackComponent={ErrorFallback} // own component
    );
   ```
 
+## Packages
+* [CSSTransition](http://reactcommunity.org/react-transition-group/css-transition)
 
+* `react-anchor-link-smooth-scroll@1.0.12` - по кліку на nav-bar'у проскролить до потрібного місця;
+
+
+## Redux
+Якщо по **Redux** треба багато усього тримати в голові - можна використовувати розширення для Хром - Redux DevTools.
+
+### Особливості створення:
+[Гарне пояснення на прикладі - RUS](https://youtu.be/C0fBnil_Im4?t=3224)
+
+* **useDispatch** - дістаємо функцію диспечера, котра викликається та приймає в себе подію з набором даних (якщо потрібно). Дані приходять другим параметром у створений редюсер action.payload:
+  ```jsx
+  import { useDispatch } from "react-redux";
+  import { addTodo } from "./store/todoSlice.jsx";
+  
+  const dispatch = useDispatch();
+  
+  const addTask = () => {
+      dispatch(addTodo({text}))
+      setText('')
+    }
+  ```
+
+* **useSelector** - коли потрібні якісь дані з нашого глобального сховища, завжди приймає state:
+  ```jsx
+  import { useSelector } from "react-redux";
+  
+  const todos = useSelector(state => state.todos.todos);
+    ```

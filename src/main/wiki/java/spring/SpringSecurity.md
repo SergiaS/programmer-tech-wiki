@@ -920,7 +920,8 @@ spring.security.oauth2.client.registration.auth0.client-id=Rn6Jq8CouXqUmlxj1PZlU
 spring.security.oauth2.client.registration.auth0.client-secret=y5gqTBGBTA4Xi1SIYoNjserrsPGfV2bn8Y2SUK_f_ngW5wa4HNRaP7NPSKcAI5Nx
 ```
 В акаунті на сервісі `https://manage.auth0.com/` додай Application:
-provide a memorable name, and select Regular Web Application. Specify http://localhost:8080/login/oauth2/code/auth0 for the Callback URLs and http://localhost:3000,http://localhost:8080 for the Allowed Logout URLs.
+provide a memorable name, and select Regular Web Application.
+Specify `http://localhost:8080/login/oauth2/code/auth0` for the Callback URLs and `http://localhost:3000,http://localhost:8080` for the Allowed Logout URLs.
 
 запускай спрінг та реакт, і пробуй login/logout...
 
@@ -947,12 +948,12 @@ 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
 Також до конфігу security треба додати authorities:
 ```java
 @Bean
-  SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    http
-      // ...
-        .authorizeHttpRequests(authConfig ->{
-              authConfig.requestMatchers(HttpMethod.GET,"/user").hasAnyAuthority("ROLE_USER","OIDC_USER");
-      // ...
+SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+  http
+    // ...
+      .authorizeHttpRequests(authConfig ->{
+            authConfig.requestMatchers(HttpMethod.GET,"/user").hasAnyAuthority("ROLE_USER","OIDC_USER");
+    // ...
 }
 ```
 
@@ -974,7 +975,6 @@ public ApplicationListener<AuthenticationFailureBadCredentialsEvent> failureEven
   };
 }
 ```
-
 
 
 ## Questions

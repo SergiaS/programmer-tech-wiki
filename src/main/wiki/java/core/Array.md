@@ -65,11 +65,21 @@ Arrays.sort(strs, Collections.reverseOrder(String.CASE_INSENSITIVE_ORDER));
 ***
 
 ### How to convert int[] into List<Integer> in Java?
+* Source: [stackoverflow](https://stackoverflow.com/questions/1073919/how-to-convert-int-into-listinteger-in-java)
+
 There is no shortcut for converting from `int[]` to `List<Integer>` as `Arrays.asList` does not deal with boxing and will just create a `List<int[]>` which is not what you want. You have to make a utility method.
 
 All values of primitive types are stored in stack memory, but variables of reference types store addresses on objects located in heap memory.
 
-Source: [stackoverflow](https://stackoverflow.com/questions/1073919/how-to-convert-int-into-listinteger-in-java)
+One of the possible solution is use `Stream`:
+```java
+int[] nums = {1,2,3};
+
+List<Integer> list = Arrays.stream(nums)
+    .sorted()
+    .boxed()
+    .collect(Collectors.toList());
+```
 
 ***
 
