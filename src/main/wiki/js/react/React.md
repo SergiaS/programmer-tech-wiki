@@ -212,7 +212,7 @@ const API_KEY = process.env.REACT_APP_PROJECT_SHOWCASE_API_KEY;
 
 
 ## Збірка проекту
-* [ReactJS + github pages – разворачиваем проект deploy на GitHub](https://it-shpora.pp.ua/reactjs-github-pages-разворачиваем-проект-deploy-на-github/)
+* [ReactJS + github pages – deploy на GitHub](https://it-shpora.pp.ua/reactjs-github-pages-разворачиваем-проект-deploy-на-github/)
 * [package gh-pages](https://github.com/SergiaS/programmer-tech-wiki/blob/master/src/main/wiki/js/NodeJS.md#package-gh-pages)
 
 > `npm install gh-pages --save-dev` - це залежність для розробки. 

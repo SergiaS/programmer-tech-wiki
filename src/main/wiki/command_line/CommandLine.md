@@ -108,6 +108,15 @@ from course Terminal, [Bash & VIM Essentials by Amigoscode](https://amigoscode.c
   - `r` - рекурсивно виконує пошук у кожній кладеній теці.
   - `n` - вказує номер строки.
 * `grep -rni -A 1 -B 1 "customer" .` - шукає текст у файлах за патерном, але видає на 1 строку раніше `-B 1 ` і одну строку пізніше `-A 1`.
+  
+* `del /q/f/s %temp%\*` - Delete all Temp Files to Clear Space.
+* `nslookup` - Resolving DNS into IP.
+* `ipconfig/all` - Know your pc ip and all net details.
+* `driverquery` - Know about all installed drivers.
+* `systeminfo` - Information about your system.
+* `<command> | clip`, `help | clip` - Copy the results of a DOS command.
+* `NETSTAT -AN` - Show all connections.
+
 
 ## HotKeys
 * `Ctrl + D` - выход. Иногда может глючить - не реагирует. 

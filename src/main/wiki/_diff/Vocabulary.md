@@ -25,7 +25,7 @@
 Асинхронність також дозволяє більш ефективно використовувати ресурси, оскільки можна розподілити задачі між доступними ресурсами 
 (наприклад, процесорними ядрами) і виконувати їх паралельно.
 
-### Проектирование и повышение производительности работы
+## Проектирование и повышение производительности работы
 * [Что такое SDLC? Этапы, методология и процессы жизненного цикла программного обеспечения.](https://habr.com/ru/company/dcmiran/blog/521718/)
   Фреймворк `SDLC` существует для помощи в сокращении времени вывода продукта на рынок, обеспечении более качественной производительности, 
 экономии бюджета и повышения потенциальной пользы вашего продукта для заинтересованных сторон, о которых вы заботитесь. 
@@ -37,9 +37,9 @@
   В команде может быть около семи человек.
 
 
-### Література
+## Література
 
-#### JAVA
+### JAVA
 * `Java. Эффективное программирование`, Джошуа Блох.
 * `Рефакторинг. Улучшение проекта существующего кода`, Мартин Фаулер.
 * `Чистый код. Создание, анализ и рефакторинг`, Роберт Мартин.
@@ -61,123 +61,3 @@
 * `ASAP` - as soon as possible.
 * `AKA` - **also known as**, скор. від «також відомий як…» , псевдонім.
 
-
-### Читання формул, математика:
-* [Source - Baeldung: An Introduction to the Theory of Big-O Notation](https://www.baeldung.com/cs/big-o-notation)
-  
-  f(x) = O(g(x)), we say **f of x is big-O g of x**.
-
-* [Exponents](https://www.mathsisfun.com/exponent.html)
-  In 82 the "2" says to use 8 twice in a multiplication,
-  so 82 = 8 × 8 = 64
-  
-  In words: 82 could be called "8 to the power 2" or "8 to the second power", or simply "8 squared"
-  
-  Exponents are also called Powers or Indices.
-
-***
-
-* `2 * 3 = 6` читається як **two times three is six**;
-* `O(n2)` - **big O n square**;
-* `120` - **one twenty**;
-
-***
-
-Число яке переноситься при підрахунку у стовбчик з одного у інший, англійською називають **[carry](https://en.wikipedia.org/wiki/Carry_(arithmetic))**.
-
-***
-
-* Поділено на половини: `divided into halves`
-* Поділено на третини: `divided into thirds`
-* Поділено на четверті: `divided into fourths` 
-
-***
-
-Ціле число: `whole number`
-```text
-What whole number comes right before 110?
-```
-
-***
-
-Розрядність чисел: `place value`
-```text
-Why do we need to learn about place value?
-```
-
-***
-
-> Якщо число непарне, тоді сума цифр є число парне.
-> 
-> Якщо число парне, тоді добуток його цифр є парним числом.
-* Парні числа - `even numbers` - 2,4,6,8,10...
-  Can be split into two equal groups.
-* Непарні числа - `odd numbers` - 1,3,5,7,9...
-  Cannot be split into two equal groups.
-
-Парний добуток - `even product`
-
-```text
-Which of following have an even product?
-```
-
-
-Одиниця та десятки кожного заштрихованого числа в сумі кратна 9: 
-```text
-The ones digit and the tens digit of each shaded number add up to a multiple of 9
-```
-
-
-
-***
-
-Крайня ліва цифра - `leftmost digit`
-```text
-We usually start by looking at the leftmost digit.
-``` 
-
-***
-
-* Знак меньше `less` - `<`
-* Знак більше `greater` - `>`
-* Знак дорівнює `equal` - `=`
-* Знак приблизно дорівнює `squiggly equal` або `almost equal` - `≈`
-
-***
-
-
-#### [Multiplication](https://en.khanacademy.org/math/cc-third-grade-math/intro-to-multiplication/imp-properties-of-multiplication/a/intro-to-multiplication-faq)
-
-> Anything multiplied by `1` stays the same, anything multiplied by `0` is just `0`.
-
-`6 × 2 = 12` читається як: `six times two would be equal to twelve` або `six twos`, тобто шість двійок,
-- де `12` це добуток або `product`.
-- `factor` - множник.
-
-***
-
-
-#### [Division](https://en.khanacademy.org/math/cc-third-grade-math/intro-to-division/imp-division-facts/a/intro-to-division-faq) 
-> The first number in a division equation is the dividend, or the number we're dividing up. 
-> The second number is the divisor, or the number of parts we're breaking the dividend into. 
-> The answer to a division equation is called the quotient.
-
-* `quotient` - частка.
-* розділені порівну - `divided evenly`
-* `6 ÷ 2` divided by, 2 means we are dividing 6 into 2 equal parts.
-
-***
-
-
-#### [Fractions](https://en.khanacademy.org/math/cc-third-grade-math/imp-fractions/imp-fractions-and-whole-numbers/a/understand-fractions-faq)
-> `fraction` - дріб, `fractions` - дроби
-
-> Верхнє число називається чисельником `numerator`, а нижнє - знаменником `denominator`.
-
-* [Intro to fractions](https://en.khanacademy.org/math/cc-third-grade-math/imp-fractions/imp-fractions-intro/v/fraction-basics)
-
-> **Note**<br>
-> Знизу наведені приклади, які можуть записуватися як ділення з закінченням `1/4th`, але це для простоти запису дробей
-
-* `1/3rd`,  `1 thirds` - читається як `one third of the whole` або `one third of the entire fraction` або `one of the three sections`. 
-* `one whole` - одне ціле.

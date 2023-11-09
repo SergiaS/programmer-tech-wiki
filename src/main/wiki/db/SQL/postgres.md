@@ -23,6 +23,11 @@
 > );
 > ```
 
+> Тестові дані для практики - [Northwind database for Postgres](https://github.com/pthom/northwind_psql)
+> 
+> Достатньо створити БД через **pgAdmin** -> завантажити файл `northwind.sql` -> відкрити його в **pgAdmin** та виконати.  
+
+
 ## INDEX
 * [Topjava - Сравнение времени выполнения для разных индексов](https://github.com/JavaWebinar/topjava/blob/doc/doc/meals_index.md)
 * [Оптимизация запросов. Основы EXPLAIN в PostgreSQL](https://habr.com/ru/post/203320/)
@@ -66,6 +71,69 @@ FROM actor
          JOIN movie
               ON actor_movie.movie_id = movie.movie_id;
 ```
+
+***
+
+Цей код прихначений для тестів JOIN:
+
+> <details>
+> <summary>Код створення БД та популяції даних</summary>
+>
+> ```sql
+> DROP TABLE IF EXISTS employees;
+> DROP TABLE IF EXISTS departments;
+> 
+> DROP SEQUENCE IF EXISTS departments_department_id_seq;
+> DROP SEQUENCE IF EXISTS employees_employee_id_seq;
+> 
+> -- Створення таблиці departments
+> CREATE TABLE departments (
+>   department_id SERIAL PRIMARY KEY,
+>   department_name VARCHAR(255) NOT NULL
+> );
+> 
+> -- Додавання даних до таблиці departments - #5
+> INSERT INTO departments (department_name) VALUES
+>   ('HR'),
+>   ('IT'),
+>   ('Finance'),
+>   ('Marketing'),
+>   ('Sales');
+> 
+> -- Створення таблиці employees
+> CREATE TABLE employees (
+>   employee_id SERIAL PRIMARY KEY,
+>   first_name VARCHAR(255) NOT NULL,
+>   last_name VARCHAR(255) NOT NULL,
+>   department_id INT,
+>   hire_date DATE
+> );
+> 
+> -- Додавання даних до таблиці employees - #20
+> INSERT INTO employees (first_name, last_name, department_id, hire_date) VALUES
+>   ('John', 'Doe', 2, '2021-01-15'),
+>   ('Alice', 'Smith', NULL, '2019-05-20'),
+>   ('Bob', 'Johnson', 3, '2022-11-30'),
+>   ('Eva', 'Wilson', 4, NULL),
+>   ('Michael', 'Brown', 5, '2023-02-18'),
+>   ('Laura', 'Miller', 2, '2018-09-05'),
+>   ('Sam', 'Davis', NULL, '2021-12-10'),
+>   ('Olivia', 'Martinez', 3, '2017-04-22'),
+>   ('William', 'Lee', 4, '2016-08-07'),
+>   ('Sophia', 'Clark', 2, NULL),
+>   ('Daniel', 'Hall', 2, '2019-10-28'),
+>   ('Emma', 'Harris', 1, '2018-06-03'),
+>   ('Joseph', 'White', NULL, NULL),
+>   ('Mia', 'Turner', 4, '2022-03-08'),
+>   ('James', 'Moore', 3, '2017-09-16'),
+>   ('Chloe', 'Jackson', 1, '2021-08-22'),
+>   ('William', 'Evans', 2, NULL),
+>   ('Liam', 'Thomas', NULL, '2019-01-02'),
+>   ('Charlotte', 'Walker', 4, '2015-12-04'),
+>   ('Benjamin', 'Anderson', NULL, '2018-07-29');
+> ```
+> </details>
+
 
 ## CASCADE
 * [GitHub - Приклади](https://github.com/SergiaS/example_spring/blob/31ef68542bdcdb8fee9b5548ebc97af6b88e11bd/src/main/resources/CASCADE_lesson.sql)

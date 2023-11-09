@@ -3,7 +3,7 @@
 
 > В Java 9 появилась возможность использовать `private` методы в интерфейсах.
 
-## Functional Interface (Функциональный интерфейс)
+## Functional Interface
 Функциональный интерфейс — это интерфейс, содержащий один нереализованный (абстрактный) метод, других методов (статических или дефолтных) может быть любое кол-во.
 
 - Методы с модификатором `default` позволяют добавлять новые методы в интерфейсы, не нарушая их существующую реализацию.
@@ -36,12 +36,34 @@ public class Note {
 
 The `java.util.function` package contains more than 40 functional interfaces and they are organized into 4 categories.
 
+* <u>**Predicate** (переклад Фільтр, Перевірка):</u> 
+  Функціональні інтерфейси категорії `Predicate` приймають на вхід один аргумент і повертають значення типу `boolean`. 
+  Ці інтерфейси використовуються для перевірки деякого критерію.
+  * `Predicate<T>`: Приймає на вхід об'єкт типу `T` і повертає значення типу boolean.
+  * `BiPredicate<T, U>`: Приймає на вхід два об'єкти, один типу `T` і один типу `U`, і повертає значення типу `boolean`. 
+* <u>**Function** (переклад Перетворювач, Функція):</u> 
+  Функціональні інтерфейси категорії `Function` приймають на вхід один аргумент і повертають значення іншого типу. 
+  Ці інтерфейси використовуються для перетворення одного значення в інше.
+  * `Function<T, R>`: Приймає на вхід об'єкт типу `T` і повертає значення типу `R`.
+  * `BiFunction<T, U, R>`: Приймає на вхід два об'єкти, один типу `T` і один типу `U`, і повертає значення типу `R`.
+* <u>**Consumer** (переклад Операція, Обробник):</u> 
+  Функціональні інтерфейси категорії `Consumer` приймають на вхід один аргумент і не повертають значення. 
+  Ці інтерфейси використовуються для обробки одного значення.
+  * `Consumer<T>`: Приймає на вхід об'єкт типу `T` і не повертає значення.
+  * `BiConsumer<T, U>`: Приймає на вхід два об'єкти, один типу `T` і один типу `U`, і не повертає значення.
+* <u>**Supplier** (переклад Провайдер, Поставник/Постачальник):</u> 
+  Функціональні інтерфейси категорії `Supplier` не приймають на вхід аргументи і повертають значення. 
+  Ці інтерфейси використовуються для створення нового значення.
+  * `Supplier<T>`: Не приймає на вхід аргументи і повертає значення типу `T`.
+  * `BooleanSupplier`: Не приймає на вхід аргументи і повертає значення типу `boolean`.
+
 ***
 
-### `Function<T,R>`
-`Function<T,R>` computes the argument type `T` and returns the type `R`. It contains an abstract method `R apply(T t)`.
+### `Function<T, R>`
+`Function<T, R>` computes the argument type `T` and returns the type `R`. 
+It contains an abstract method `R apply(T t)`.
 
-Функциональный интерфейс `Function<T,R>` представляет функцию перехода от объекта типа `T` к объекту типа `R`.
+Функциональный интерфейс `Function<T, R>` представляет функцию перехода от объекта типа `T` к объекту типа `R`.
 ```java
 // Инкремент через интерфейс Function<T, R>
 public static void main(String[] args) {
@@ -54,7 +76,7 @@ static Function<Integer,Integer> incrementByOneFunction = number -> number + 1;
 
 ***
 
-### `BiFunction<T,U,R>`
+### `BiFunction<T, U, R>`
 Потребляет `T` и `U`, возвращает `R`. Вызов через метод `apply(T t, U u)`:
 ```java
 incrementByOneAndMultiplyBiFunction.apply(1, 1);
@@ -74,9 +96,9 @@ static int incrementByOneAndMultiply(int number, int numToMultiplyBy) {
 ***
 
 ### `Consumer<T>`
-`Consumer<T>` processes the argument type `T` and doesn’t return anything. It contains an abstract method `void accept(T t)`.
+`Consumer<T>` processes the argument type `T` and doesn’t return anything. 
+It contains an abstract method `void accept(T t)`.
 
-`Consumer<T>` выполняет некоторое действие над объектом типа `T`, при этом ничего не возвращая.
 ```java
 // Функция через интерфейс Consumer<T>
 static Consumer<Customer> greetCustomerConsumer = customer ->
@@ -124,8 +146,8 @@ Supplier это поставщик, он ничего не берёт, он то
 // Функция через интерфейс Supplier<T>
 System.out.println(getDBConnectionUrlSupplier.get());
 
-static Supplier<String> getDBConnectionUrlSupplier = ()
-            -> "jdbc://localhost:5432/users";
+static Supplier<String> getDBConnectionUrlSupplier = 
+        () -> "jdbc://localhost:5432/users";
 ```
 ```java
 // Аналог функции интерфейса Supplier<T>

@@ -1,7 +1,7 @@
 # Telegram
 Here I note - how I can create a telegram bot.
 
-* [Java library to create bots using Telegram Bots API](https://github.com/rubenlagus/TelegramBots)
+* [Java library to create bots using Telegram Bots API](https://github.com/rubenlagus/TelegramBots) ДОКа на вкладці Wiki
   * [telegrambots-spring-boot-starter](https://github.com/rubenlagus/TelegramBots/tree/master/telegrambots-spring-boot-starter) 
 * [GitHub - Демонстрирует многих возможностей телеграмм бота](https://github.com/kobyzau/mjc-sandbox)
     || [YouTube - Телеграм-бот на Java протягом 1 години](https://www.youtube.com/watch?v=IX3B87hqF4Y)

@@ -28,7 +28,7 @@ Stream<String> namesStream = Stream.of("Amigoscode", "Alex", "Zara");
 ```
 
 
-## Операторы стрима
+## Оператори Stream
 > Терминальный оператор в цепочке может быть только один, а промежуточных - много.
 
 > Обработка не начнётся до тех пор, пока не будет вызван терминальный оператор. 
@@ -57,6 +57,76 @@ List<Integer> list = students.stream()
                 .boxed()
                 .collect(Collectors.toList());
 ```
+
+## Collectors
+Колектори в Java Stream API - це спеціальні об'єкти, які використовуються для збору та обробки даних під час операцій над потоками. 
+Колектори визначають, які дії виконувати з елементами потоку та як результат цих дій зберегти.
+
+Колектори допомагають зручно обробляти дані у потоках та збирати результати в зручний формат, такий як списки, мапи або рядки.
+Вони є потужним інструментом для операцій зі стрімами в Java.
+
+<u>Ось декілька популярних колекторів і їх функції:</u>
+
+***
+
+`toList()` - цей колектор збирає всі елементи потоку в список.
+```java
+List<String> names = people.stream()
+    .map(Person::getName)
+    .collect(Collectors.toList());
+```
+
+***
+
+`toSet()` - збирає унікальні елементи потоку в множину (Set).
+```java
+Set<Integer> uniqueNumbers = numbers.stream()
+    .collect(Collectors.toSet());
+```
+
+***
+
+`toMap()` - створює карту (Map) з потоку, де ви можете задати, як ключі і значення пов'язані.
+```java
+Map<String, Integer> nameToAge = people.stream()
+    .collect(Collectors.toMap(Person::getName, Person::getAge));
+```
+
+***
+
+`joining()` - збирає рядки потоку в один рядок, об'єднуючи їх.
+```java
+String combinedNames = people.stream()
+    .map(Person::getName)
+    .collect(Collectors.joining(", ")); // Об'єднати імена через кому та пробіл
+```
+
+***
+        
+`groupingBy()` - групує елементи потоку за заданим критерієм та повертає карту, де ключами є критерії, а значеннями - списки відповідних елементів.
+```java
+Map<String, List<Person>> peopleByCountry = people.stream()
+    .collect(Collectors.groupingBy(Person::getCountry));
+```
+
+***
+
+`summarizingInt(), summarizingLong(), summarizingDouble()` - 
+збирають статистичну інформацію щодо числових значень в потоці (середнє, максимальне, мінімальне значення, тощо).
+```java
+IntSummaryStatistics stats = numbers.stream()
+    .collect(Collectors.summarizingInt(Integer::intValue));
+```
+
+***
+
+`reducing()` - дозволяє задати власну функцію акумуляції для збирання значень.
+```java
+int sum = numbers.stream()
+    .collect(Collectors.reducing(0, (a, b) -> a + b)); // Знайдемо суму чисел
+```
+
+
 
 ## Примеры стримов
 
@@ -96,12 +166,27 @@ for (int i = 0; i < 10; i++) {
 ***
 
 ### Example 2:
-* `reduce()` (уменьшение) - метод берет набор данных и сжимает его в какой-то один элемент, например можно подсчитать сумму элементов, произведение... (арифметические операции).
+* `reduce()` (уменьшение) - метод берет набор данных и сжимает его в какой-то один элемент, 
+  например можно подсчитать сумму элементов, произведение... (арифметические операции).
 
-```java
-int sum1 = Arrays.stream(arr3).reduce((acc, b) -> acc + b).getAsInt();
-int sum2 = list3.stream().reduce((acc, b) -> acc * b).get();
-```
+  ```java
+  // Обчислення мінімального значення всіх цілих чисел у списку:
+  List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+
+  int min = numbers.stream()
+        .reduce(Integer.MAX_VALUE, (a, b) -> Math.min(a, b));
+  
+  System.out.println(min); // 1
+  ```
+  ```java
+  // Зведення всіх елементів потоку до одного значення:
+  List<String> strings = Arrays.asList("Hello", "World!");
+
+  String joined = strings.stream()
+        .reduce("", (a, b) -> a + b);
+  
+  System.out.println(joined); // HelloWorld!
+  ```
 где:
 * `acc` (аккумулятор / накопитель) временная переменная, а `b` текущий элемент набора.
 * `.getAsInt()` - приведение к целому числу.

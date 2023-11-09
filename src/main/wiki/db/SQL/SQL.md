@@ -62,7 +62,7 @@ One-to-Many
 ## JOIN'ы
 * [Visual Representation of SQL Joins](https://www.codeproject.com/Articles/33052/Visual-Representation-of-SQL-Joins)
 * [Приклади з малюнку на coderoad.ru](https://coderoad.ru/5706437/В-чем-разница-между-INNER-JOIN-LEFT-JOIN-RIGHT-JOIN-и-FULL-JOIN#28719292)
-  * `INNER JOIN`: возвращает строки, когда есть совпадение в обеих таблицах.
+  * `INNER JOIN`: повертає рядки, коли є збіг в обох таблицях. Не повертає строки з другої таблиці, якщо там primary_key NULL.
   * `LEFT JOIN`: возвращает все строки из левой таблицы, даже если нет совпадений в правой таблице.
   * `RIGHT JOIN`: возвращает все строки из правой таблицы, даже если нет совпадений в левой таблице.
   * `FULL JOIN`: объединяет результаты как левого, так и правого внешних джоинов.
