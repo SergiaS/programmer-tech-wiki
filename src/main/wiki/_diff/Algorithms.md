@@ -387,7 +387,7 @@ public class TwoPointer {
 ***
 
 
-## Примеры
+## Приклади
 
 ### [509. Fibonacci Number](https://leetcode.com/problems/fibonacci-number/)
 Подход Bottom-up. Оперирование с двумя числами:
@@ -473,6 +473,41 @@ public int longestCommonSubsequence(String text1, String text2) {
 }
 ```
 
+
+### [931. Minimum Falling Path Sum](https://leetcode.com/problems/minimum-falling-path-sum)
+```java
+class Solution {
+    public int minFallingPathSum(int[][] matrix) {
+        int n = matrix.length;
+        int[][] dp = new int[n][n];
+        // Initialize the first row of dp with the first row of matrix
+        for (int j = 0; j < n; j++) {
+            dp[0][j] = matrix[0][j];
+        }
+        // Iterate over the remaining rows of dp
+        for (int i = 1; i < n; i++) {
+            // For each column of dp, find the minimum sum of the previous row's adjacent cells
+            for (int j = 0; j < n; j++) {
+                // The left cell is dp[i-1][j-1] if j > 0, otherwise it is Integer.MAX_VALUE
+                int left = (j > 0) ? dp[i-1][j-1] : Integer.MAX_VALUE;
+                // The middle cell is dp[i-1][j]
+                int middle = dp[i-1][j];
+                // The right cell is dp[i-1][j+1] if j < n-1, otherwise it is Integer.MAX_VALUE
+                int right = (j < n-1) ? dp[i-1][j+1] : Integer.MAX_VALUE;
+                // The minimum sum is the minimum of left, middle and right plus the current cell value
+                dp[i][j] = Math.min(left, Math.min(middle, right)) + matrix[i][j];
+            }
+        }
+        // The answer is the minimum value in the last row of dp
+        int ans = Integer.MAX_VALUE;
+        for (int j = 0; j < n; j++) {
+            ans = Math.min(ans, dp[n-1][j]);
+        }
+        return ans;
+    }
+}
+
+```
 
 
 # Математика

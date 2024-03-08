@@ -61,6 +61,8 @@ What whole number comes right before 110?
 ***
 
 Розрядність чисел: `place value`
+* [Decimal place value review](https://en.khanacademy.org/math/cc-fifth-grade-math/imp-place-value-and-decimals/imp-decimal-place-value-intro/a/decimal-place-value-review)
+* [Decimals in expanded form review](https://en.khanacademy.org/math/cc-fifth-grade-math/imp-place-value-and-decimals/imp-decimals-in-expanded-form/a/decimals-in-expanded-form-review)
 
 > EN:<br>
 > What are some common mistakes to watch out for when multiplying 2-digit numbers?
@@ -103,7 +105,7 @@ We usually start by looking at the leftmost digit.
 
 ***
 
-* Знак меньше `less` - `<`
+* Знак менше `less` - `<`
 * Знак більше `greater` - `>`
 * Знак дорівнює `equal` - `=`
 * Знак приблизно дорівнює `squiggly equal` або `almost equal` - `≈`
@@ -157,6 +159,8 @@ We usually start by looking at the leftmost digit.
 
 ## [Fractions](https://en.khanacademy.org/math/cc-third-grade-math/imp-fractions/imp-fractions-and-whole-numbers/a/understand-fractions-faq)
 * [Add and subtract fractions](https://en.khanacademy.org/math/cc-fourth-grade-math/imp-fractions-2/imp-decomposing-fractions/a/add-and-subtract-fractions-faq)
+* [Multiply fractions](https://en.khanacademy.org/math/cc-fifth-grade-math/5th-multiply-fractions/imp-multiplying-fractions-word-problems/a/multiply-fractions-faq-2)
+* [Divide fractions: FAQ](https://en.khanacademy.org/math/cc-fifth-grade-math/divide-fractions/imp-dividing-fractions-and-whole-numbers-word-problems/a/divide-fractions-faq)
 
 > `fraction` - дріб, `fractions` - дроби
 
@@ -196,6 +200,10 @@ We usually start by looking at the leftmost digit.
 
 
 ## Decimal
+* [Video - Decimals in written form (hundredths)](https://en.khanacademy.org/math/cc-fifth-grade-math/imp-place-value-and-decimals/imp-decimals-in-written-form/v/decimal-place-value-2)
+* [Video - Decimals in written form (thousandths)](https://en.khanacademy.org/math/cc-fifth-grade-math/imp-place-value-and-decimals/imp-decimals-in-written-form/v/writing-out-a-decimal-in-words)
+* [Article - Decimals in written form review](https://en.khanacademy.org/math/cc-fifth-grade-math/imp-place-value-and-decimals/imp-decimals-in-written-form/a/decimals-in-written-form-review)
+
 Як читаються десятині числа:
 * **0.24** - `two tenths and four hundredths` (0.2 + 0.04) = `twenty hundredths and four hundredths` (20/100 + 4/100) = `twenty-four hundredths` (24/100);
 * **0.17** - `1 tenth and 7 hundredths` або `10 hundredths and 7 hundredths` або `17 hundredths`;
@@ -256,11 +264,31 @@ Summary of angle sizes
 
 
 ### Американські одиниці виміру
+*  [US Customary units of weight review (oz & lb)](https://en.khanacademy.org/math/cc-fourth-grade-math/imp-measurement-and-data-2/imp-converting-units-of-mass/a/us-customary-units-of-mass-review)
+   > In the customary system of measurement, the most common units of weight are the ounce (oz) and pound (lb).
+
 
 #### [U.S. customary units: fluid volume](https://en.khanacademy.org/math/cc-fourth-grade-math/imp-measurement-and-data-2/imp-estimating-volume/v/us-customary-fluid-volume)
+* [US Customary units of volume review (c, pt, qt, & gal)](https://en.khanacademy.org/math/cc-fourth-grade-math/imp-measurement-and-data-2/imp-converting-units-of-volume/a/us-customary-units-of-volume-review)
+* [Converting US customary units of volume](https://en.khanacademy.org/math/cc-fourth-grade-math/imp-measurement-and-data-2/imp-converting-units-of-volume/v/converting-us-fluid-volume)
+
+| gallons<br>gal | quarts<br>qt | pints<br>pt | cups<br>c | fluid ounces<br>fl oz |
+|:------------|:-----------|:----------|:----------|:-----------------|
+| x1	         | x4	        | x2	       | x2        | x8	              |
+| 1 gal =     | 4 qt =     | 8 pt =    | 16 c =    | 128 fl oz        |
+| 2 gal =     | 8 qt =     | 16 pt =   | 32 c =    | 256 fl oz        |
+
+> 4 tons = ? ounces 
+> 
+> * 1 ton = 2000 pounds
+> * 4 tons = 4 x 2000 pounds = 8000 pounds
+> * 1 pound = 16 ounces
+> * 8000 pounds * 16 ounces = 128000 ounces
+> 
+> SOURCE: [How to convert kg to mg and T to oz](https://en.khanacademy.org/math/cc-fourth-grade-math/imp-measurement-and-data-2/imp-converting-units-of-mass/v/converting-weight)
 
 * `3x teaspoons` = `tablespoon`
-* `2x tablespoons` = `fluid ounce`, 1 pound (фунт = 0.45 кг) = 1/16 ounce (унція = 28.34 г)
+* `2x tablespoons` = `fluid ounce`, 1 pound (фунт, lb = 0.45 кг) = 1/16 ounce (унція, oz = 28.34 г)
 * `8x fluid ounces` = `cup`
 * `2x cups` = `pint` (напр., кухоль пива)
 * `2 pints` = `quart` (напр., пакет молока)
@@ -278,10 +306,20 @@ Summary of angle sizes
 
 
 #### [U.S. customary units: distance](https://en.khanacademy.org/math/cc-fourth-grade-math/imp-measurement-and-data-2/imp-estimating-length/v/us-customary-distance)
+* [US Customary units of length review (in, ft, yd, & mi)](https://en.khanacademy.org/math/cc-fourth-grade-math/imp-measurement-and-data-2/imp-converting-units-of-length/a/us-customary-units-of-length-review)
+
+| Inches<br>in | Feet<br>ft | Yards<br>yd | Miles<br>mi   |
+|:----------|:-----|:------|:--------|
+| 63360     | 5280 | 1760  | 1       |
+| 36        | 3    | 1     | 1/1760  |
+| 12        | 1    | 1/3   | 1/5280  |
+| 1         | 1/12 | 1/36  | 1/63360 |
 
 * `foot/feet (ft) = 12 inches (in)`, ex: 5 feet 8 inches = 5'9" (зріст людини, висота будівлі, земельна ділянка)
 * `yard (yd) = 3 feet = 36 inches` (довжина футбольного поля з американського футболу)
-* `mile (mi) = 5280 feet` (розміри малих тварин)
+* `mile (mi) = 1760 yards = 5280 feet` (розміри малих тварин)
+
+
 
 
 

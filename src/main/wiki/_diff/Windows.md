@@ -17,3 +17,7 @@ Windows дозволяє створити робочі простори, як у
 * `WINDOWS + 1/2/3...` - перемикатися між відкритими програмами, як між вкладками в Opera.
 * `WINDOWS + LEFT/RIGHT` - розбиває екран на двоє. Натискаючи цю комбінацію каже, програма буде ліворуч/праворуч.
 * `WINDOWS + +/-` - користування лупою.
+
+### DNS servers
+* [How to change DNS settings on your PC running Windows 10](https://www.windowscentral.com/how-change-your-pcs-dns-settings-windows-10)
+

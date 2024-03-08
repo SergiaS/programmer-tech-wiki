@@ -1068,6 +1068,121 @@ public class RootControllerTest extends AbstractControllerTest {
 обработан ответ контроллера.
 
 
+## Retrieve Json
+Існує декілька способів отримати json.
+Дані способи призначені для отримання дерева Json, а не отримання json з сериалізацією у конкретну модель.
+
+```java
+// option 1:
+RestTemplate restTemplate = new RestTemplate();
+
+ResponseEntity<JsonNode> response = restTemplate.getForEntity(
+       "https://russianwarship.rip/api/v2/statistics/" + date.toString(), JsonNode.class);
+
+JsonNode jsonNode = response.getBody();
+```
+
+```java
+// option 2:
+RestTemplate restTemplate = new RestTemplate();
+
+String jsonStr = restTemplate.getForObject("https://russianwarship.rip/api/v2/statistics/" + date.toString(), String.class);
+
+try {
+    JsonNode tree = objectMapper.readTree(jsonStr);
+} catch (JsonProcessingException e) {
+    throw new RuntimeException(e);
+}
+```
+
+
+<details>
+<summary>What to do with JsonNode</summary>
+
+```java
+package dev.sk.jsondemo.post;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.asm.TypeReference;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+@Component
+public class DataLoader implements CommandLineRunner {
+
+  private final ObjectMapper objectMapper;
+  private final PostRepository postRepository;
+
+  public DataLoader(ObjectMapper objectMapper, PostRepository postRepository) {
+    this.objectMapper = objectMapper;
+    this.postRepository = postRepository;
+  }
+
+  @Override
+  public void run(String... args) throws Exception {
+    List<Post> posts = new ArrayList<>();
+    JsonNode json;
+
+    try (InputStream inputStream = TypeReference.class.getResourceAsStream("/data/blog-posts.json")) {
+      json = objectMapper.readValue(inputStream, JsonNode.class);
+    } catch (IOException e) {
+      throw new RuntimeException("Failed to read JSON data", e);
+    }
+
+    JsonNode edges = getEdges(json); // get from 'edges' in json file
+    for (JsonNode edge : edges) {
+      posts.add(createPostFromNode(edge));
+    }
+
+    postRepository.saveAll(posts);
+  }
+
+  private Post createPostFromNode(JsonNode edge) {
+    JsonNode node = edge.get("node");
+    String id = node.get("id").asText();
+    String title = node.get("title").asText();
+    String slug = node.get("slug").asText();
+    String date = node.get("date").asText();
+    int timeToRead = node.get("timeToRead").asInt();
+    String tags = executeTags(node);
+
+    return new Post(id, title, slug, LocalDate.parse(date, DateTimeFormatter.ofPattern("MM/dd/yyyy")), timeToRead, tags, null);
+  }
+
+  private String executeTags(JsonNode node) {
+    JsonNode tags = node.get("tags");
+    StringBuilder sb = new StringBuilder();
+
+    for (JsonNode tag : tags) {
+      sb.append(tag.get("title").asText());
+      sb.append(",");
+    }
+    return sb.toString();
+  }
+
+  private JsonNode getEdges(JsonNode json) {
+    return Optional.ofNullable(json)
+        .map(j -> j.get("data"))
+        .map(j -> j.get("allPost"))
+        .map(j -> j.get("edges"))
+        .orElseThrow(() -> new IllegalArgumentException("Invalid JSON Object"));
+  }
+}
+```
+
+</details>
+
+
+
 ## Internationalization i18n, Localization
 * [TopJava - добавление смены локали](https://github.com/JavaWebinar/topjava/blob/doc/doc/lesson11.md#-2-hw10-optional-change-locale)
 * [Spring MVC internationalization example](https://mkyong.com/spring-mvc/spring-mvc-internationalization-example/)

@@ -24,6 +24,8 @@ Use this token to access the HTTP API:
 5294223061:AAEGqg38dtOogYYAYitmUxN48bgHCMtBm_U
 ```
 
+### [Керування токенами бота](https://github.com/rubenlagus/TelegramBots/wiki/Handling-Bot-Tokens)
+Опис стосується роботи змінних середовища ОС та IntelliJ.
 
 
 ## Перевірка роботи бота
@@ -131,10 +133,14 @@ https://api.telegram.org/bot5294223061:AAEGqg38dtOogYYAYitmUxN48bgHCMtBm_U/sendM
 }
 ```
 
-## Як додати команди до свого бота
-В `BotFather` пишемо команду `/setcommands` і вибираємо нашого бота в форматі `command1 - Description`, наприклад:
-`set_currency - Set original and target currency`.
-Тепер ця команда є у нашого бота - `/set_currency`.
+## Bot settings
+Для налаштування дефолтного повідомлення ідемо до `@BotFather` і набираємо команду `/setdescription`.
+
+Для налаштування повідомлення в профілі бота ідемо до `@BotFather` і набираємо команду `/setabouttext`.
+
+Для налаштування іконки в профілі бота ідемо до `@BotFather` і набираємо команду `/setuserpic`.
+
+
 
 
 ## WebHook and Long Pooling
@@ -155,7 +161,7 @@ https://api.telegram.org/bot5294223061:AAEGqg38dtOogYYAYitmUxN48bgHCMtBm_U/sendM
 **long pooling** вважається більш простішим, а **webhook** - більш дешевим з точки зору ресурсів.
 
 
-## Клас TelegramLongPollingBot
+### Клас TelegramLongPollingBot
 Використовуючи клас `TelegramLongPollingBot` наш бот стає свого роду слухачем (listener), і коли він отримує повідомлення, 
 то уся необхідна інфа прийде у об'єкті `Update` методу `onUpdateReceived`. 
 У даному прикладі бот відповість лише на текстове повідомлення:
@@ -210,7 +216,15 @@ public class TestBot extends TelegramLongPollingBot {
 }
 ```
 
-### Додавання команд
+
+## Як додати команди до свого бота
+
+### Спосіб 1:
+В `BotFather` пишемо команду `/setcommands` і вибираємо нашого бота в форматі `command1 - Description`, наприклад:
+`set_currency - Set original and target currency`.
+Тепер ця команда є у нашого бота - `/set_currency`.
+
+#### Приклад
 Спочатку, в **BotFather** треба встановити цю команду - переходимо до нього і набираємо `/setcommands`.
 Далі нам необхідно ввести команду або лист з різних команд за наданим прикладом:
 ```txt
@@ -303,4 +317,145 @@ public class TestBot extends TelegramLongPollingBot {
         }
     }
 }
+```
+
+***
+### Спосіб 2:
+Через створення команд наслідуючи клас `BotCommand` - [приклад ](https://github.com/SergiaS/t_telegrambot/blob/tg_test_bot/src/main/java/dev/sk/testbot/bot/commands/StartCommandHandler.java)
+
+> **Пояснення по прикладу:** якщо юзер зробить запит `/start`, тоді бот відповість тим що вказано в методі `execute`.
+> Також всі команди, як от [IBotCommand](https://github.com/SergiaS/t_telegrambot/blob/tg_test_bot/src/main/java/dev/sk/testbot/bot/commands/BaseTextCommand.java)
+> треба зареєструвати через [InitializingBean](https://github.com/SergiaS/t_telegrambot/blob/tg_test_bot/src/main/java/dev/sk/testbot/bot/configuration/TelegramBotCommandInitializer.java),
+> де `IBotCommand... botCommands` приймає усі створені нами команди.
+
+Тут насправді є дві реалізації:
+
+<details>
+<summary>Використовуючи @EventListener({ContextRefreshedEvent.class})</summary>
+
+* [ПРИКЛАД](https://github.com/DmitrijsFinaskins/simple-telegram-bot/blob/main/src/main/java/io/proj3ct/SpringDemoBot/config/BotInitializer.java)
+```java
+@Component
+public class TelegramBotCommandInitializer implements InitializingBean {
+  private final ICommandRegistry commandBot;
+  private final IBotCommand[] botCommands;
+
+  public TelegramBotCommandInitializer(ICommandRegistry commandBot, IBotCommand... botCommands) {
+    this.commandBot = commandBot;
+    this.botCommands = botCommands;
+  }
+
+  @Override
+  public void afterPropertiesSet() throws Exception {
+    this.commandBot.registerAll(botCommands);
+  }
+}
+```
+</details>
+
+
+<details>
+<summary>Використовуючи InitializingBean</summary>
+
+```java
+@Component
+public class TelegramBotCommandInitializer implements InitializingBean {
+  private final ICommandRegistry commandBot;
+  private final IBotCommand[] botCommands;
+
+  public TelegramBotCommandInitializer(ICommandRegistry commandBot, IBotCommand... botCommands) {
+    this.commandBot = commandBot;
+    this.botCommands = botCommands;
+  }
+
+  @Override
+  public void afterPropertiesSet() throws Exception {
+    this.commandBot.registerAll(botCommands);
+  }
+}
+```
+</details>
+
+
+> Вибір між @EventListener({ContextRefreshedEvent.class}) та InitializingBean залежить від того, коли вам потрібно зареєструвати команди бота.
+> 
+> Якщо вам потрібно зареєструвати команди одразу після того, як всі залежності бота були встановлені, ви можете використовувати InitializingBean. 
+> Це корисно, якщо команди бота не залежать від інших бінів або якщо ви хочете зареєструвати команди якомога швидше.
+> 
+> З іншого боку, якщо вам потрібно зареєструвати команди після того, як всі біни були створені та ініціалізовані, ви можете використовувати @EventListener({ContextRefreshedEvent.class}). 
+> Це корисно, якщо команди бота залежать від інших бінів, які можуть бути ініціалізовані пізніше.
+> 
+> У вашому випадку, якщо команди бота залежать від інших бінів, я б рекомендував використовувати @EventListener({ContextRefreshedEvent.class}). 
+> Якщо команди бота не залежать від інших бінів, ви можете використовувати InitializingBean. Обидва підходи дозволять вам автоматично зареєструвати команди бота після ініціалізації.
+> 
+> **SOURCE: Bing/ChatGPT**
+
+***
+### Спосіб 3:
+Найпростіший варіант просто перевіряючи строку. Наприклад: `if(message.getText().equals("/get_data"))`. 
+
+
+## MessageSender
+Дозволяє відправляти будь-яку кількість повідомлень на будь-якому етапі.
+
+### Add HTML to message
+Щоб повідомлення було в якості HTML, додаємо `.parseMode("HTML")`.
+
+На смартфоні, текст який обернений у тег `<code>`, при натиску буде автоматично скопійований.
+
+```java
+SendMessage testMsg = SendMessage.builder()
+        .text("""
+              <b>Bold</b> 
+              <i>Italic</i> 
+              <code>mono</code> 
+              <a href=\"google.com\">Google</a>
+            """)
+        .parseMode("HTML")
+        .chatId(message.getChatId())
+        .build();
+```
+
+
+## MarkUp
+Телеграм має два типи клавіатур: **Reply Markup** та **Inline Markup**.
+
+* Reply Markup - відправляє тільки текст (кнопки-заготовки).
+* Inline Markup - під капотом відправляє якісь дані.
+
+### ReplyKeyboardMarkup
+
+* `setResizeKeyboard(true)` - метод розтягує клавіатуру по ширині екрану телефона/монітора;
+* `setOneTimeKeyboard(true)` - метод ховає клавіатуру після натискання (на практиці не дуже працює);
+
+## SendMessage
+
+### MessageEntity
+Приклад відправки повідомлення з хештегом
+```java
+SendMessage sendMessage = SendMessage.builder()
+    .chatId(userProfile.getId())
+    .text("Here are some hashtags: #новости #спорт #погода")
+    .entities(List.of(
+        MessageEntity.builder()
+            .type("hashtag")
+            .text("#news")
+            .offset(0)
+            .length(7)
+            .build(),
+        MessageEntity.builder()
+            .type("hashtag")
+            .text("#sport")
+            .offset(8)
+            .length(5)
+            .build(),
+        MessageEntity.builder()
+            .type("hashtag")
+            .text("#weather")
+            .offset(13)
+            .length(6)
+            .build()
+    ))
+    .build();
+
 ```
